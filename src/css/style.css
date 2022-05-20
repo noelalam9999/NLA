@@ -3073,6 +3073,7 @@ header .theme-title h1 span {
   position: absolute;
   top: 0;
   left: -305px;
+  z-index:1;
   /* Scrollbar Styling */
 }
 
@@ -3196,4 +3197,3 @@ header .theme-title h1 span {
   margin-left: 15px;
   color: #14b3a7;
 }
-/*# sourceMappingURL=style.css.map */
