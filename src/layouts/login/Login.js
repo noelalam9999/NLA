@@ -1,9 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/Northlight_Analytics_Final_Logo.png";
 import video from "../../assets/images/video_login_page.mp4";
 import "../../css/style.css";
 const Login = () => {
+  const history = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const handleChange = (e) => {
+    setLoginState({ ...loginState, [e.target.name]: e.target.value });
+  };
+  const [loginState, setLoginState] = useState({
+    username: "",
+    password: "",
+  });
+  const loginHandlerSub = async () => {
+    try {
+      setLoading(true);
+      console.log("SAASK");
+      // let token = JSON.parse(localStorage.getItem("CVLyZeAuth"));
+      // const { user } = token;
+      // const config = {
+      //   headers: {
+      //     Authorization: `${user.token_type} ${user.access_token}`,
+      //   },
+      // };
+      const api = `https://nla-backend.herokuapp.com/api/login `;
+      var res = await axios.get(api, loginState);
+      console.log(res);
+
+      if (res.status === 200) {
+        console.log(res);
+        // setRecruiters(res.data ? res.data : res.data);
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log("Error", error.response);
+    }
+  };
+  const loginHandler = (e) => {
+    e.preventDefault();
+    loginHandlerSub();
+  };
   return (
     <>
       {/* <!-- Header Start --> */}
@@ -60,20 +100,26 @@ const Login = () => {
                   analytics and business decision making.
                 </p>
                 <div className="login-form-block">
-                  <form>
+                  <form onSubmit={loginHandler}>
                     <div className="row align-items-center">
                       <div className="col-lg-12 col-md-12">
                         <input
                           type="text"
                           className="form-control"
                           placeholder="Username"
+                          name="username"
+                          onChange={handleChange}
+                          required
                         />
                       </div>
                       <div className="col-lg-12 col-md-12">
                         <input
-                          type="email"
+                          type="password"
                           className="form-control"
                           placeholder="Password"
+                          name="password"
+                          onChange={handleChange}
+                          required
                         />
                       </div>
                       <div className="col-6 nla_top-spacing">
@@ -84,7 +130,7 @@ const Login = () => {
                         />
                       </div>
                       <div className="col-6 text-end nla_top-spacing">
-                        <a href="javascrip:void(0)" className="nla_forgot_psw">
+                        <a href="" className="nla_forgot_psw">
                           Forgot Password?
                         </a>
                       </div>
