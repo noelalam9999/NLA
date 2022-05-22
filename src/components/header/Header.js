@@ -1,7 +1,23 @@
-import React from "react";
+import React, { useState, useRef } from "react";
+import { useClickAway } from "react-use";
 import logo from "../../assets/images/Northlight_Analytics_Final_Logo.png";
 import placeHoldImg from "../../assets/images/placeholde_100.png";
+import { Link } from "react-router-dom";
 const Header = () => {
+  const [notifState, notifSetState] = useState(false);
+  const authData = JSON.parse(localStorage.getItem("auth"));
+  const notifHandler = () => {
+    if (notifState === true) {
+      notifSetState(false);
+    } else {
+      notifSetState(true);
+    }
+  };
+  // Closes Notification dropDown When Clicked outside
+  const ref = useRef(null);
+  useClickAway(ref, () => {
+    notifSetState(false);
+  });
   return (
     <div>
       {/* <!-- Header Start --> */}
@@ -41,34 +57,46 @@ const Header = () => {
                     id="profile_dropdown"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
+                    onClick={notifHandler}
                   >
-                    John Doe
+                    {authData?.username ? authData?.username : "John Doe"}
                   </button>
-                  <ul
-                    className="dropdown-menu"
-                    aria-labelledby="profile_dropdown"
-                  >
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Profile
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Dark Mode
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Clients
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Logout
-                      </a>
-                    </li>
-                  </ul>
+                  {notifState === true ? (
+                    <>
+                      <ul
+                        ref={ref}
+                        className="dropdown-menu show"
+                        aria-labelledby="profile_dropdown"
+                        style={{
+                          position: "absolute",
+                          inset: "0px auto auto 0px",
+                          margin: "0px",
+                          transform: "translate3d(-124px, 21px, 0px)",
+                        }}
+                      >
+                        <li>
+                          <a className="dropdown-item" href="#">
+                            Profile
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="#">
+                            Dark Mode
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="#">
+                            Clients
+                          </a>
+                        </li>
+                        <li>
+                          <Link className="dropdown-item" to="/login">
+                            Logout
+                          </Link>
+                        </li>
+                      </ul>
+                    </>
+                  ) : null}
                 </div>
               </div>
             </div>
