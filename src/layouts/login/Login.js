@@ -6,8 +6,11 @@ import logo from "../../assets/images/Northlight_Analytics_Final_Logo.png";
 import video from "../../assets/images/video_login_page.mp4";
 import "../../css/style.css";
 const Login = () => {
-  const history = useNavigate();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  // const [response, setResponse] = useState([]);
   const handleChange = (e) => {
     setLoginState({ ...loginState, [e.target.name]: e.target.value });
   };
@@ -18,26 +21,45 @@ const Login = () => {
   const loginHandlerSub = async () => {
     try {
       setLoading(true);
-      console.log("SAASK");
+      // console.log("SAASK");
       // let token = JSON.parse(localStorage.getItem("CVLyZeAuth"));
       // const { user } = token;
-      // const config = {
-      //   headers: {
-      //     Authorization: `${user.token_type} ${user.access_token}`,
-      //   },
-      // };
-      const api = `https://nla-backend.herokuapp.com/api/login `;
-      var res = await axios.get(api, loginState);
-      console.log(res);
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      // console.log("Before api", loginState);
 
-      if (res.status === 200) {
-        console.log(res);
-        // setRecruiters(res.data ? res.data : res.data);
+      // const jsonData = JSON.stringify(loginState);
+      // console.log("JSON DATA: ", username, password);
+
+      // const api = `http://localhost:5000/api/login`;
+      // var res = await axios.post(api, { loginState }, config);
+
+      const { data } = await axios.post(
+        "https://nla-backend.herokuapp.com/api/login",
+        // "http://localhost:5000/api/login",
+        {
+          username,
+          password,
+        },
+        config
+      );
+
+      // console.log(data);
+      // console.log("After api");
+
+      if (data.code === 200) {
+        navigate("/dashboard");
+        // console.log(data);
+        localStorage.setItem("auth", JSON.stringify(data.data));
         setLoading(false);
       }
     } catch (error) {
       setLoading(false);
       console.log("Error", error.response);
+      alert(error?.response?.data?.msg);
     }
   };
   const loginHandler = (e) => {
@@ -108,7 +130,8 @@ const Login = () => {
                           className="form-control"
                           placeholder="Username"
                           name="username"
-                          onChange={handleChange}
+                          // onChange={handleChange}
+                          onChange={(e) => setUsername(e.currentTarget.value)}
                           required
                         />
                       </div>
@@ -118,10 +141,12 @@ const Login = () => {
                           className="form-control"
                           placeholder="Password"
                           name="password"
-                          onChange={handleChange}
+                          // onChange={handleChange}
+                          onChange={(e) => setPassword(e.currentTarget.value)}
                           required
                         />
                       </div>
+
                       <div className="col-6 nla_top-spacing">
                         <input
                           type="submit"
@@ -129,6 +154,7 @@ const Login = () => {
                           className="btn btn-primary"
                         />
                       </div>
+
                       <div className="col-6 text-end nla_top-spacing">
                         <a href="" className="nla_forgot_psw">
                           Forgot Password?

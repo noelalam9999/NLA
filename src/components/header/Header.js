@@ -2,6 +2,8 @@ import React from "react";
 import logo from "../../assets/images/Northlight_Analytics_Final_Logo.png";
 import placeHoldImg from "../../assets/images/placeholde_100.png";
 const Header = () => {
+  const authData = JSON.parse(localStorage.getItem("auth"));
+
   return (
     <div>
       {/* <!-- Header Start --> */}
@@ -42,7 +44,7 @@ const Header = () => {
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    John Doe
+                    {authData?.username ? authData?.username : "John Doe"}
                   </button>
                   <ul
                     className="dropdown-menu"
