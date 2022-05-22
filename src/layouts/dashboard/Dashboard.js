@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import "../../css/style.css";
 import { Link } from "react-router-dom";
@@ -12,7 +12,28 @@ import openPencil from "../../assets/images/open-pencil.svg";
 import share from "../../assets/images/feather-share.svg";
 import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
+import createImg from "../../assets/images/new_project_create_image.png";
+import Modal from "react-bootstrap/Modal";
 const Dashboard = () => {
+  const [show, setShow] = useState(false);
+  const [showCancelProject, setShowCancelProject] = useState(false);
+
+  const handleClose = () => {
+    setShow(false);
+    setShowCancelProject(true);
+  };
+  const handleCloseCancel = () => {
+    setShow(true);
+    setShowCancelProject(false);
+  };
+  const handleCloseCancelClose = () => {
+    setShow(false);
+    setShowCancelProject(false);
+  };
+  const handleShow = () => {
+    setShow(true);
+  };
+
   return (
     <div>
       <Header />
@@ -125,18 +146,14 @@ const Dashboard = () => {
                   </div>
                   <div className="col-lg-7 text-end">
                     <div className="nla_add_new_project_btn">
-                      <a
-                        href="#"
-                        data-bs-toggle="modal"
-                        data-bs-target="#createNewProject"
-                      >
+                      <div onClick={handleShow} style={{ cursor: "pointer" }}>
                         <p>
                           <span>
                             <img src={plusCircle} alt="Create New Project" />
                           </span>
                           Create New Project
                         </p>
-                      </a>
+                      </div>
                       <a href="#">
                         <img src={feather} alt="" />
                       </a>
@@ -693,6 +710,141 @@ const Dashboard = () => {
               </select>
             </div>
           </div>
+          {/* <!-- Create new project Modal Start --> */}
+          <Modal
+            show={show}
+            id="createNewProject"
+            onHide={handleClose}
+            animation={true}
+            centered
+          >
+            <Modal.Header>
+              <Modal.Title>Create New Project</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="nla_modal_banenr">
+                <img src={createImg} alt="placeholder" className="img-fluid" />
+              </div>
+              <form>
+                <div className="">
+                  <div className="nla_form_project_name position-relative nla_form_field_block">
+                    <i className="fa fa-share-alt" aria-hidden="true"></i>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="projectName"
+                      placeholder="Enter Project Name*"
+                    />
+                  </div>
+                  <div className="nla_form_select_type position-relative nla_form_field_block">
+                    <i className="fa-solid fa-code-merge"></i>
+                    <input
+                      className="form-control"
+                      list="selectType"
+                      id="exampleDataList"
+                      placeholder="Select Type"
+                    />
+                    <datalist id="selectType">
+                      <option value="Pricing" />
+                      <option value="Optimization" />
+                      <option value="Forecasting" />
+                      <option value="Other" />
+                    </datalist>
+                  </div>
+                  <div className="nla_form_select_client position-relative nla_form_field_block">
+                    <i className="fa-solid fa-user"></i>
+                    <select className="form-select" aria-label="Select Client">
+                      <option selected>Select Client</option>
+                      <option value="1">One</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                    </select>
+                  </div>
+                  <div className="nla_form_select_product position-relative nla_form_field_block">
+                    <i className="fa-brands fa-unity"></i>
+                    <select className="form-select" aria-label="Select Product">
+                      <option selected>Select Product</option>
+                      <option value="1">One</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                    </select>
+                  </div>
+                  <div className="nla_form_version position-relative nla_form_field_block">
+                    <i className="fa-solid fa-box"></i>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="version"
+                      placeholder="Version 1"
+                    />
+                  </div>
+                  <div className="nla_form_file_upload position-relative nla_form_field_block">
+                    <i className="fa-solid fa-images"></i>
+                    <label htmlFor="formFile">Upload Company Logo</label>
+                    <input className="form-control" type="file" id="formFile" />
+                  </div>
+                </div>
+              </form>
+            </Modal.Body>
+            <Modal.Footer>
+              <button
+                type="button"
+                className="btn btn-outline-danger"
+                data-bs-toggle="modal"
+                data-bs-target="#cancelProject"
+                onClick={handleClose}
+              >
+                Cancel
+              </button>
+              <button type="button" className="btn btn-primary">
+                Create
+              </button>
+            </Modal.Footer>
+          </Modal>
+          {/* <!-- Create new project Modal End --> */}
+          {/* <!-- Cancel Project Modal Start --> */}
+          <Modal
+            show={showCancelProject}
+            onHide={handleClose}
+            id="cancelProject"
+            centered
+          >
+            <Modal.Header>
+              <Modal.Title>Cancel Project</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div class="nla_modal_banenr">
+                <img src={createImg} alt="placeholder" class="img-fluid" />
+              </div>
+              <div class="nla_modal_body_title text-center">
+                <h5>Are you Sure?</h5>
+                <p>
+                  Hitting yes will delete all the relevant data and output for
+                  the project.
+                </p>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                data-bs-toggle="modal"
+                data-bs-target="#createNewProject"
+                onClick={handleCloseCancel}
+              >
+                No
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-dismiss="modal"
+                onClick={handleCloseCancelClose}
+              >
+                Yes
+              </button>
+            </Modal.Footer>
+          </Modal>
+          {/* <!-- Cancel Project Modal End --> */}
         </div>
         {/* <!-- Pagination End --> */}
       </div>
