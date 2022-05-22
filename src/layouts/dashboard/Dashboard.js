@@ -153,7 +153,7 @@ const Dashboard = () => {
                     <div className="nla_pin-icon">
                       <i className="fa-solid fa-thumbtack"></i>
                     </div>
-                    <h3>Covid Demand Forecasting</h3>
+                    <h3>Covid Demand Forecastings</h3>
                     <div className="nla_shared_link_block">
                       <a
                         href="#"
