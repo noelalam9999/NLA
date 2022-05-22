@@ -18,21 +18,12 @@ const Login = () => {
   const loginHandlerSub = async () => {
     try {
       setLoading(true);
-      console.log("SAASK");
-      // let token = JSON.parse(localStorage.getItem("CVLyZeAuth"));
-      // const { user } = token;
-      // const config = {
-      //   headers: {
-      //     Authorization: `${user.token_type} ${user.access_token}`,
-      //   },
-      // };
       const api = `https://nla-backend.herokuapp.com/api/login `;
       var res = await axios.get(api, loginState);
       console.log(res);
 
       if (res.status === 200) {
         console.log(res);
-        // setRecruiters(res.data ? res.data : res.data);
         setLoading(false);
       }
     } catch (error) {
