@@ -18,6 +18,9 @@ const Header = () => {
   useClickAway(ref, () => {
     notifSetState(false);
   });
+  const logoutHandler = () => {
+    localStorage.removeItem("auth");
+  };
   return (
     <div>
       {/* <!-- Header Start --> */}
@@ -90,7 +93,11 @@ const Header = () => {
                           </a>
                         </li>
                         <li>
-                          <Link className="dropdown-item" to="/login">
+                          <Link
+                            className="dropdown-item"
+                            to="/login"
+                            onClick={logoutHandler}
+                          >
                             Logout
                           </Link>
                         </li>
