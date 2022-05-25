@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import "../../css/style.css";
 import { Link } from "react-router-dom";
@@ -14,9 +14,117 @@ import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
 import createImg from "../../assets/images/new_project_create_image.png";
 import Modal from "react-bootstrap/Modal";
+import axios from "axios";
+import qs from "qs";
+
 const Dashboard = () => {
   const [show, setShow] = useState(false);
   const [showCancelProject, setShowCancelProject] = useState(false);
+
+  const [projectName, setProjectName] = useState("");
+  const [type, setType] = useState("");
+  const [client, setClient] = useState("");
+  const [product, setProduct] = useState("");
+  const [version, setVersion] = useState();
+  const [companyLogo, setCompanyLogo] = useState("");
+
+  // console.log(projectName, type, client, product, version, companyLogo);
+
+  // ------------------------------------------------------------------
+
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    async function fetchProduct() {
+      const { data } = await axios.get(
+        "https://nla-backend.herokuapp.com/api/projects"
+      );
+      setProjects(data);
+    }
+
+    fetchProduct();
+  }, []);
+
+  // console.log(projects);
+
+  // ------------------------------------------------------------------
+
+  const createProject = async () => {
+    try {
+      console.log("In Create Project");
+      const formData = new FormData();
+
+      formData.append("user_id", 21);
+      formData.append("project_name", projectName);
+      formData.append("slug", "project");
+      formData.append("type_of_project", type);
+      formData.append("client_name", client);
+      formData.append("product_name", product);
+      formData.append("project_version", version);
+      formData.append("company_logo", companyLogo);
+      formData.append("pin_project", 1);
+
+      // const formData = {
+      //   user_id: 3,
+      //   project_name: projectName,
+      //   slug: "project",
+      //   type_of_project: type,
+      //   client_name: client,
+      //   product_name: product,
+      //   project_version: 2,
+      //   company_logo: companyLogo,
+      //   pin_project: 1,
+      // };
+
+      console.log("Form Data", formData);
+
+      const config = {
+        // headers: formData.getHeaders(),
+        headers: { "content-type": "multipart/form-data" },
+      };
+
+      const { data } = await axios
+        .post(
+          "https://nla-backend.herokuapp.com/api/add/project",
+          // "http://localhost:5000/api/login",
+          // qs.stringify(formData),
+          // {
+          //   user_id: 3,
+          //   project_name: projectName,
+          //   slug: "project",
+          //   type_of_project: type,
+          //   client_name: client,
+          //   product_name: product,
+          //   project_version: 2,
+          //   company_logo: companyLogo,
+          //   pin_project: 1,
+          // },
+          formData,
+          config
+        )
+        .then(function (response) {
+          //handle success
+          console.log(response);
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+        });
+
+      console.log("Form Data", formData);
+
+      console.log("Data: ", data);
+
+      if (data.code === 200) {
+        alert("Project created Successfully");
+      }
+    } catch (error) {
+      console.log("Error", error.response);
+      // alert(error?.response?.data?.msg);
+    }
+  };
+
+  // ------------------------------------------------------------------
 
   const handleClose = () => {
     setShow(false);
@@ -162,62 +270,64 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className="nla_grid_view_wrapper">
-                <div
-                  className="nla_item_box_col first-nla-itembox"
-                  data-position="right"
-                >
-                  <div className="nla_item_box">
-                    <div className="nla_pin-icon">
-                      <i className="fa-solid fa-thumbtack"></i>
-                    </div>
-                    <h3>Covid Demand Forecasting</h3>
-                    <div className="nla_shared_link_block">
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Share"
-                        data-bs-target="#shareProject"
-                      >
-                        <i className="fa-solid fa-share-nodes"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Duplicate"
-                      >
-                        <i className="fa-regular fa-copy"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Download"
-                      >
-                        <i className="fa-solid fa-download"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Edit"
-                      >
-                        <i className="fa-solid fa-pen"></i>
-                      </a>
-                    </div>
-                    <div className="nla_additional_links">
-                      <a href="#">
-                        Design Studio <i className="fa-solid fa-pencil"></i>
-                      </a>
-                      <a href="#">
-                        Insights <i className="fa-solid fa-eye"></i>
-                      </a>
+                {projects?.map((x) => (
+                  <div
+                    className="nla_item_box_col first-nla-itembox"
+                    data-position="right"
+                  >
+                    <div className="nla_item_box">
+                      <div className="nla_pin-icon">
+                        <i className="fa-solid fa-thumbtack"></i>
+                      </div>
+                      <h3>{x.project_name}</h3>
+                      <div className="nla_shared_link_block">
+                        <a
+                          href="#"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="Share"
+                          data-bs-target="#shareProject"
+                        >
+                          <i className="fa-solid fa-share-nodes"></i>
+                        </a>
+                        <a
+                          href="#"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="Duplicate"
+                        >
+                          <i className="fa-regular fa-copy"></i>
+                        </a>
+                        <a
+                          href="#"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="Download"
+                        >
+                          <i className="fa-solid fa-download"></i>
+                        </a>
+                        <a
+                          href="#"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="Edit"
+                        >
+                          <i className="fa-solid fa-pen"></i>
+                        </a>
+                      </div>
+                      <div className="nla_additional_links">
+                        <a href="#">
+                          Design Studio <i className="fa-solid fa-pencil"></i>
+                        </a>
+                        <a href="#">
+                          Insights <i className="fa-solid fa-eye"></i>
+                        </a>
+                      </div>
                     </div>
                   </div>
-                </div>
+                ))}
 
-                <div className="nla_item_box_col">
+                {/* <div className="nla_item_box_col">
                   <div className="nla_item_box">
                     <div className="nla_pin-icon">
                       <i className="fa-solid fa-thumbtack"></i>
@@ -266,210 +376,7 @@ const Dashboard = () => {
                       </a>
                     </div>
                   </div>
-                </div>
-
-                <div className="nla_item_box_col">
-                  <div className="nla_item_box">
-                    <div className="nla_pin-icon">
-                      <i className="fa-solid fa-thumbtack"></i>
-                    </div>
-                    <h3>Covid Demand Forecasting</h3>
-                    <div className="nla_shared_link_block">
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Share"
-                      >
-                        <i className="fa-solid fa-share-nodes"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Duplicate"
-                      >
-                        <i className="fa-regular fa-copy"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Download"
-                      >
-                        <i className="fa-solid fa-download"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Edit"
-                      >
-                        <i className="fa-solid fa-pen"></i>
-                      </a>
-                    </div>
-                    <div className="nla_additional_links">
-                      <a href="#">
-                        Design Studio <i className="fa-solid fa-pencil"></i>
-                      </a>
-                      <a href="#">
-                        Insights <i className="fa-solid fa-eye"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="nla_item_box_col">
-                  <div className="nla_item_box">
-                    <div className="nla_pin-icon">
-                      <i className="fa-solid fa-thumbtack"></i>
-                    </div>
-                    <h3>Covid Demand Forecasting</h3>
-                    <div className="nla_shared_link_block">
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Share"
-                      >
-                        <i className="fa-solid fa-share-nodes"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Duplicate"
-                      >
-                        <i className="fa-regular fa-copy"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Download"
-                      >
-                        <i className="fa-solid fa-download"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Edit"
-                      >
-                        <i className="fa-solid fa-pen"></i>
-                      </a>
-                    </div>
-                    <div className="nla_additional_links">
-                      <a href="#">
-                        Design Studio <i className="fa-solid fa-pencil"></i>
-                      </a>
-                      <a href="#">
-                        Insights <i className="fa-solid fa-eye"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="nla_item_box_col">
-                  <div className="nla_item_box">
-                    <div className="nla_pin-icon">
-                      <i className="fa-solid fa-thumbtack"></i>
-                    </div>
-                    <h3>Covid Demand Forecasting</h3>
-                    <div className="nla_shared_link_block">
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Share"
-                      >
-                        <i className="fa-solid fa-share-nodes"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Duplicate"
-                      >
-                        <i className="fa-regular fa-copy"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Download"
-                      >
-                        <i className="fa-solid fa-download"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Edit"
-                      >
-                        <i className="fa-solid fa-pen"></i>
-                      </a>
-                    </div>
-                    <div className="nla_additional_links">
-                      <a href="#">
-                        Design Studio <i className="fa-solid fa-pencil"></i>
-                      </a>
-                      <a href="#">
-                        Insights <i className="fa-solid fa-eye"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="nla_item_box_col">
-                  <div className="nla_item_box">
-                    <div className="nla_pin-icon">
-                      <i className="fa-solid fa-thumbtack"></i>
-                    </div>
-                    <h3>Covid Demand Forecasting</h3>
-                    <div className="nla_shared_link_block">
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Share"
-                      >
-                        <i className="fa-solid fa-share-nodes"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Duplicate"
-                      >
-                        <i className="fa-regular fa-copy"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Download"
-                      >
-                        <i className="fa-solid fa-download"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Edit"
-                      >
-                        <i className="fa-solid fa-pen"></i>
-                      </a>
-                    </div>
-                    <div className="nla_additional_links">
-                      <a href="#">
-                        Design Studio <i className="fa-solid fa-pencil"></i>
-                      </a>
-                      <a href="#">
-                        Insights <i className="fa-solid fa-eye"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
+                </div> */}
               </div>
             </div>
             {/* <!-- Grid view content end -->
@@ -725,7 +632,7 @@ const Dashboard = () => {
               <div className="nla_modal_banenr">
                 <img src={createImg} alt="placeholder" className="img-fluid" />
               </div>
-              <form>
+              <form method="post" enctype="multipart/form-data">
                 <div className="">
                   <div className="nla_form_project_name position-relative nla_form_field_block">
                     <i className="fa fa-share-alt" aria-hidden="true"></i>
@@ -734,6 +641,7 @@ const Dashboard = () => {
                       className="form-control"
                       id="projectName"
                       placeholder="Enter Project Name*"
+                      onChange={(e) => setProjectName(e.target.value)}
                     />
                   </div>
                   <div className="nla_form_select_type position-relative nla_form_field_block">
@@ -743,6 +651,7 @@ const Dashboard = () => {
                       list="selectType"
                       id="exampleDataList"
                       placeholder="Select Type"
+                      onChange={(e) => setType(e.target.value)}
                     />
                     <datalist id="selectType">
                       <option value="Pricing" />
@@ -753,35 +662,49 @@ const Dashboard = () => {
                   </div>
                   <div className="nla_form_select_client position-relative nla_form_field_block">
                     <i className="fa-solid fa-user"></i>
-                    <select className="form-select" aria-label="Select Client">
+                    <select
+                      className="form-select"
+                      aria-label="Select Client"
+                      onChange={(e) => setClient(e.target.value)}
+                    >
                       <option selected>Select Client</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
+                      <option value="one">One</option>
+                      <option value="two">Two</option>
+                      <option value="three">Three</option>
                     </select>
                   </div>
                   <div className="nla_form_select_product position-relative nla_form_field_block">
                     <i className="fa-brands fa-unity"></i>
-                    <select className="form-select" aria-label="Select Product">
+                    <select
+                      className="form-select"
+                      aria-label="Select Product"
+                      onChange={(e) => setProduct(e.target.value)}
+                    >
                       <option selected>Select Product</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
+                      <option value="one">One</option>
+                      <option value="two">Two</option>
+                      <option value="three">Three</option>
                     </select>
                   </div>
                   <div className="nla_form_version position-relative nla_form_field_block">
                     <i className="fa-solid fa-box"></i>
                     <input
-                      type="text"
+                      type="number"
                       className="form-control"
                       id="version"
                       placeholder="Version 1"
+                      onChange={(e) => setVersion(e.target.value)}
                     />
                   </div>
                   <div className="nla_form_file_upload position-relative nla_form_field_block">
                     <i className="fa-solid fa-images"></i>
                     <label htmlFor="formFile">Upload Company Logo</label>
-                    <input className="form-control" type="file" id="formFile" />
+                    <input
+                      className="form-control"
+                      type="file"
+                      id="formFile"
+                      onChange={(e) => setCompanyLogo(e.target.value)}
+                    />
                   </div>
                 </div>
               </form>
@@ -796,7 +719,11 @@ const Dashboard = () => {
               >
                 Cancel
               </button>
-              <button type="button" className="btn btn-primary">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={createProject}
+              >
                 Create
               </button>
             </Modal.Footer>
