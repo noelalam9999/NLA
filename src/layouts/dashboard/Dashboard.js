@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import "../../css/style.css";
 import { Link } from "react-router-dom";
@@ -18,6 +18,7 @@ import axios from "axios";
 import qs from "qs";
 
 const Dashboard = () => {
+  const imageRef = useRef();
   const [show, setShow] = useState(false);
   const [showCancelProject, setShowCancelProject] = useState(false);
 
@@ -34,16 +35,21 @@ const Dashboard = () => {
 
   const [projects, setProjects] = useState([]);
 
+  const authData = JSON.parse(localStorage.getItem("auth"));
+  const userID = authData?.id;
+
+  // console.log(userID);
+
   useEffect(() => {
     async function fetchProduct() {
       const { data } = await axios.get(
-        "https://nla-backend.herokuapp.com/api/projects"
+        `https://nla-backend.herokuapp.com/api/projects/${userID}`
       );
       setProjects(data);
     }
 
     fetchProduct();
-  }, []);
+  }, [projects]);
 
   // console.log(projects);
 
@@ -51,10 +57,13 @@ const Dashboard = () => {
 
   const createProject = async () => {
     try {
-      console.log("In Create Project");
       const formData = new FormData();
 
-      formData.append("user_id", 21);
+      // console.log(companyLogo);
+
+      // console.log("imageRef.files[0]", imageRef.files[0]);
+
+      formData.append("user_id", userID);
       formData.append("project_name", projectName);
       formData.append("slug", "project");
       formData.append("type_of_project", type);
@@ -64,62 +73,34 @@ const Dashboard = () => {
       formData.append("company_logo", companyLogo);
       formData.append("pin_project", 1);
 
-      // const formData = {
-      //   user_id: 3,
-      //   project_name: projectName,
-      //   slug: "project",
-      //   type_of_project: type,
-      //   client_name: client,
-      //   product_name: product,
-      //   project_version: 2,
-      //   company_logo: companyLogo,
-      //   pin_project: 1,
-      // };
-
-      console.log("Form Data", formData);
+      // for (var pair of formData.entries()) {
+      //   console.log(pair[0] + ", " + pair[1]);
+      // }
 
       const config = {
-        // headers: formData.getHeaders(),
         headers: { "content-type": "multipart/form-data" },
       };
 
       const { data } = await axios
         .post(
           "https://nla-backend.herokuapp.com/api/add/project",
-          // "http://localhost:5000/api/login",
-          // qs.stringify(formData),
-          // {
-          //   user_id: 3,
-          //   project_name: projectName,
-          //   slug: "project",
-          //   type_of_project: type,
-          //   client_name: client,
-          //   product_name: product,
-          //   project_version: 2,
-          //   company_logo: companyLogo,
-          //   pin_project: 1,
-          // },
+          // "http://localhost:5000/api/add/project",
           formData,
           config
         )
         .then(function (response) {
-          //handle success
-          console.log(response);
+          setShow(false);
         })
         .catch(function (response) {
-          //handle error
           console.log(response);
         });
 
-      console.log("Form Data", formData);
-
-      console.log("Data: ", data);
-
-      if (data.code === 200) {
-        alert("Project created Successfully");
+      if (data.status === 200) {
+        setShow(false);
+        // alert("Project created Successfully");
       }
     } catch (error) {
-      console.log("Error", error.response);
+      console.log("Error from catch", error.response);
       // alert(error?.response?.data?.msg);
     }
   };
@@ -269,6 +250,7 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
+
               <div className="nla_grid_view_wrapper">
                 {projects?.map((x) => (
                   <div
@@ -703,7 +685,8 @@ const Dashboard = () => {
                       className="form-control"
                       type="file"
                       id="formFile"
-                      onChange={(e) => setCompanyLogo(e.target.value)}
+                      // ref={imageRef}
+                      onChange={(e) => setCompanyLogo(e.target.files[0])}
                     />
                   </div>
                 </div>
