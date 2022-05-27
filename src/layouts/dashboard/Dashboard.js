@@ -15,7 +15,7 @@ import Header from "../../components/header/Header";
 import createImg from "../../assets/images/new_project_create_image.png";
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
-import qs from "qs";
+// import qs from "qs";
 
 const Dashboard = () => {
   const imageRef = useRef();
