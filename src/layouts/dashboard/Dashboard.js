@@ -21,6 +21,11 @@ const Dashboard = () => {
   const [columnState, setColumnState] = useState();
   const [show, setShow] = useState(false);
   const [showCancelProject, setShowCancelProject] = useState(false);
+
+  //Search
+  const [project_name, setSearchByProjectName] = useState("");
+  const [project_date, setProjectDate] = useState("");
+
   const [projectName, setProjectName] = useState("");
   const [type, setType] = useState("");
   const [client, setClient] = useState("");
@@ -29,7 +34,7 @@ const Dashboard = () => {
   const [companyLogo, setCompanyLogo] = useState("");
   const [projects, setProjects] = useState([]);
   const authData = JSON.parse(localStorage.getItem("auth"));
-  const userID = authData?.id;
+  const userID = authData?.user_id;
   const customTabHandlerPinnedProjects = () => {
     setCustomTabPinnedProject(true);
     setCustomTabRecentProject(false);
@@ -44,13 +49,14 @@ const Dashboard = () => {
   useEffect(() => {
     async function fetchProduct() {
       const { data } = await axios.get(
-        `https://nla-backend.herokuapp.com/api/projects/${userID}`
+        `https://nla-backend-1.herokuapp.com/api/projects/${userID}`
+        // `http://localhost:5000/api/projects/${userID}`
       );
       setProjects(data);
     }
 
     fetchProduct();
-  }, [projects]);
+  }, []);
 
   const createProject = async () => {
     try {
@@ -69,7 +75,7 @@ const Dashboard = () => {
       };
       const { data } = await axios
         .post(
-          "https://nla-backend.herokuapp.com/api/add/project",
+          "https://nla-backend-1.herokuapp.com/api/add/project",
           // "http://localhost:5000/api/add/project",
           formData,
           config
@@ -88,6 +94,60 @@ const Dashboard = () => {
       console.log("Error from catch", error.response);
     }
   };
+
+  const search = async () => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    if (project_name && project_date) {
+      console.log("Project Name & Date: ", project_name, project_date);
+
+      const { data } = await axios.post(
+        "https://nla-backend-1.herokuapp.com/api/project/search",
+        // "http://localhost:5000/api/project/date",
+        {
+          project_name,
+          project_date,
+        },
+        config
+      );
+
+      console.log("Data: ", data);
+    } else if (project_name) {
+      console.log(project_name);
+
+      const { data } = await axios.post(
+        "https://nla-backend-1.herokuapp.com/api/project/name",
+        // "http://localhost:5000/api/project/name",
+        {
+          project_name,
+        },
+        config
+      );
+
+      console.log("Data: ", data);
+    } else if (project_date) {
+      console.log("Project date: ", project_date);
+
+      const { data } = await axios.post(
+        "https://nla-backend-1.herokuapp.com/api/project/date",
+        // "http://localhost:5000/api/project/date",
+        {
+          project_date,
+        },
+        config
+      );
+
+      console.log("Data: ", data);
+    } else {
+      console.log("Invalid");
+    }
+  };
+
+  // ---------------------------------------------------
 
   const handleClose = () => {
     setShow(false);
@@ -180,6 +240,7 @@ const Dashboard = () => {
                   type="search"
                   className="form-control mb-0 ms-3"
                   placeholder="Search by Project Name"
+                  onChange={(e) => setSearchByProjectName(e.target.value)}
                 />
               </div>
             </div>
@@ -189,7 +250,8 @@ const Dashboard = () => {
                 <input
                   type="date"
                   className="form-control mb-0 ms-3"
-                  placeholder="Search by Project Name"
+                  onChange={(e) => setProjectDate(e.target.value)}
+                  // placeholder="Search by Project Name"
                 />
               </div>
             </div>
@@ -199,6 +261,7 @@ const Dashboard = () => {
                   type="submit"
                   value="Search"
                   className="btn btn-primary mb-0"
+                  onClick={search}
                 />
               </div>
             </div>

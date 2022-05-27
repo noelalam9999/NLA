@@ -39,7 +39,7 @@ const Login = () => {
       // var res = await axios.post(api, { loginState }, config);
 
       const { data } = await axios.post(
-        "https://nla-backend.herokuapp.com/api/login",
+        "https://nla-backend-1.herokuapp.com/api/login",
         // "http://localhost:5000/api/login",
         {
           username,
