@@ -22,7 +22,6 @@ const Login = () => {
   const loginHandlerSub = async () => {
     try {
       setLoading(true);
-      // console.log("SAASK");
       // let token = JSON.parse(localStorage.getItem("CVLyZeAuth"));
       // const { user } = token;
       const config = {
