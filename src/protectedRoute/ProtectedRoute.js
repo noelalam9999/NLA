@@ -5,6 +5,7 @@ const ProtectedRoute = (props) => {
   const auth = localStorage.getItem("auth");
   console.log();
   return <>{auth !== null ? <Component /> : <Navigate to="/login" />}</>;
+  // return <>{<Component />}</>;
 };
 
 export default ProtectedRoute;

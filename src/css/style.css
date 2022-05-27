@@ -680,7 +680,10 @@ header .theme-title h1 span {
   -webkit-transition: all ease-in-out 0.5s;
   transition: all ease-in-out 0.5s;
 }
-
+.leftSidebarSpanHide {
+  display: none;
+  transition: all ease-in-out 0.5s;
+}
 .left_sidebar .nla-toggle-line {
   background-color: #174f73b3;
   width: 4px;
@@ -3073,7 +3076,7 @@ header .theme-title h1 span {
   position: absolute;
   top: 0;
   left: -305px;
-  z-index:1;
+  z-index: 1;
   /* Scrollbar Styling */
 }
 

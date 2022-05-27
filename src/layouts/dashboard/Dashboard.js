@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import "../../css/style.css";
-import { Link } from "react-router-dom";
 import awUser from "../../assets/images/awesome-user-alt.svg";
 import list from "../../assets/images/ionic-ios-list.svg";
 import calenderSvg from "../../assets/images/feather-calendar.svg";
@@ -15,31 +14,33 @@ import Header from "../../components/header/Header";
 import createImg from "../../assets/images/new_project_create_image.png";
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
-import qs from "qs";
 
 const Dashboard = () => {
-  const imageRef = useRef();
+  const [customTabPinnedProject, setCustomTabPinnedProject] = useState(true);
+  const [customTabRecentProject, setCustomTabRecentProject] = useState(false);
+  const [columnState, setColumnState] = useState();
   const [show, setShow] = useState(false);
   const [showCancelProject, setShowCancelProject] = useState(false);
-
   const [projectName, setProjectName] = useState("");
   const [type, setType] = useState("");
   const [client, setClient] = useState("");
   const [product, setProduct] = useState("");
   const [version, setVersion] = useState();
   const [companyLogo, setCompanyLogo] = useState("");
-
-  // console.log(projectName, type, client, product, version, companyLogo);
-
-  // ------------------------------------------------------------------
-
   const [projects, setProjects] = useState([]);
-
   const authData = JSON.parse(localStorage.getItem("auth"));
   const userID = authData?.id;
-
-  // console.log(userID);
-
+  const customTabHandlerPinnedProjects = () => {
+    setCustomTabPinnedProject(true);
+    setCustomTabRecentProject(false);
+  };
+  const customTabHandlerRecentProjects = () => {
+    setCustomTabPinnedProject(false);
+    setCustomTabRecentProject(true);
+  };
+  const columnHandler = (e) => {
+    setColumnState(e.target.value);
+  };
   useEffect(() => {
     async function fetchProduct() {
       const { data } = await axios.get(
@@ -51,18 +52,9 @@ const Dashboard = () => {
     fetchProduct();
   }, [projects]);
 
-  // console.log(projects);
-
-  // ------------------------------------------------------------------
-
   const createProject = async () => {
     try {
       const formData = new FormData();
-
-      // console.log(companyLogo);
-
-      // console.log("imageRef.files[0]", imageRef.files[0]);
-
       formData.append("user_id", userID);
       formData.append("project_name", projectName);
       formData.append("slug", "project");
@@ -72,15 +64,9 @@ const Dashboard = () => {
       formData.append("project_version", version);
       formData.append("company_logo", companyLogo);
       formData.append("pin_project", 1);
-
-      // for (var pair of formData.entries()) {
-      //   console.log(pair[0] + ", " + pair[1]);
-      // }
-
       const config = {
         headers: { "content-type": "multipart/form-data" },
       };
-
       const { data } = await axios
         .post(
           "https://nla-backend.herokuapp.com/api/add/project",
@@ -97,15 +83,11 @@ const Dashboard = () => {
 
       if (data.status === 200) {
         setShow(false);
-        // alert("Project created Successfully");
       }
     } catch (error) {
       console.log("Error from catch", error.response);
-      // alert(error?.response?.data?.msg);
     }
   };
-
-  // ------------------------------------------------------------------
 
   const handleClose = () => {
     setShow(false);
@@ -140,7 +122,11 @@ const Dashboard = () => {
             <nav>
               <div className="nav nav-tabs" id="nav-tab" role="tablist">
                 <button
-                  className="nav-link active"
+                  className={
+                    customTabPinnedProject === true
+                      ? `nav-link active`
+                      : `nav-link`
+                  }
                   id="nav-home-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-home"
@@ -148,11 +134,16 @@ const Dashboard = () => {
                   role="tab"
                   aria-controls="nav-home"
                   aria-selected="true"
+                  onClick={customTabHandlerPinnedProjects}
                 >
                   <i className="fa-solid fa-layer-group"></i>
                 </button>
                 <button
-                  className="nav-link"
+                  className={
+                    customTabRecentProject === true
+                      ? `nav-link active`
+                      : `nav-link`
+                  }
                   id="nav-profile-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-profile"
@@ -160,6 +151,7 @@ const Dashboard = () => {
                   role="tab"
                   aria-controls="nav-profile"
                   aria-selected="false"
+                  onClick={customTabHandlerRecentProjects}
                 >
                   <i className="fa-solid fa-list-ul"></i>
                 </button>
@@ -212,13 +204,17 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-
         {/* <!-- Grid and list view block --> */}
         <div className="nla_grid_and_list_view_data_wrapper">
           <div className="tab-content" id="nav-tabContent">
             {/* <!-- Grid view content start --> */}
+
             <div
-              className="tab-pane fade show active"
+              className={
+                customTabPinnedProject === true
+                  ? `tab-pane fade show active`
+                  : "tab-pane fade "
+              }
               id="nav-home"
               role="tabpanel"
               aria-labelledby="nav-home-tab"
@@ -251,11 +247,12 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="nla_grid_view_wrapper">
-                {projects?.map((x) => (
+              <div className={`nla_grid_view_wrapper ${columnState}`}>
+                {projects?.map((x, id) => (
                   <div
                     className="nla_item_box_col first-nla-itembox"
                     data-position="right"
+                    key={id}
                   >
                     <div className="nla_item_box">
                       <div className="nla_pin-icon">
@@ -365,7 +362,11 @@ const Dashboard = () => {
 
                 <!-- List view content start --> */}
             <div
-              className="tab-pane fade"
+              className={
+                customTabRecentProject === true
+                  ? `tab-pane fade show active`
+                  : `tab-pane fade`
+              }
               id="nav-profile"
               role="tabpanel"
               aria-labelledby="nav-profile-tab"
@@ -588,6 +589,7 @@ const Dashboard = () => {
                 className="form-select"
                 aria-label="Default select example"
                 id="selectColumns"
+                onChange={columnHandler}
               >
                 <option value="nla-col-2">2 Column</option>
                 <option value="nla-col-3">3 Column</option>
