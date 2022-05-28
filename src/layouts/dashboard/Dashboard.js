@@ -45,7 +45,8 @@ const Dashboard = () => {
   const authData = JSON.parse(localStorage.getItem("auth"));
   const userID = authData?.user_id;
   const user_id = authData?.user_id;
-  //Searching
+
+  //Searching--
   const customTabHandlerPinnedProjects = () => {
     setCustomTabPinnedProject(true);
     setCustomTabRecentProject(false);
