@@ -82,7 +82,11 @@ const Login = () => {
         </Modal.Header>
         <Modal.Body>
           <h6 style={{ marginTop: 15 }}>
-            Please email techsupport@northanalytics.com to reset the password.
+            Please email{" "}
+            <a href="#">
+              <strong>techsupport@northanalytics.com</strong>
+            </a>{" "}
+            to reset the password.
           </h6>
         </Modal.Body>
         <Modal.Footer>
