@@ -1,0 +1,14 @@
+.clearbtn {
+  padding-right: 40px;
+}
+.clearbtn button {
+  padding: 10px 20px;
+  background-color: #14b3a7;
+  border: 1px solid #14b3a7 !important;
+  color: #ffffff;
+  border-radius: 3px;
+}
+.clearbtn button:hover {
+  color: #14b3a7;
+  background-color: transparent;
+}
