@@ -13,7 +13,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error,setErrorMsg]=useState("")
+  const [error, setErrorMsg] = useState("");
   const handleChange = (e) => {
     setLoginState({ ...loginState, [e.target.name]: e.target.value });
   };
@@ -136,12 +136,15 @@ const Login = () => {
                       </div>
                       <div className="col-lg-12 col-md-12">
                         {error !== "" ? (
-            <Stack sx={{ width: "100%", marginTop: "5px" }} spacing={2}>
-              <Alert variant="outlined" severity="info">
-                {error}
-              </Alert>
-            </Stack>
-          ) : null}
+                          <Stack
+                            sx={{ width: "100%", marginTop: "5px" }}
+                            spacing={2}
+                          >
+                            <Alert variant="outlined" severity="info">
+                              {error}
+                            </Alert>
+                          </Stack>
+                        ) : null}
                       </div>
                       <div className="col-6 nla_top-spacing">
                         <button
