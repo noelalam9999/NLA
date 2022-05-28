@@ -18,8 +18,6 @@ import axios from "axios";
 const Dashboard = () => {
   const [load, setLoad] = useState(false);
 
-  //kk
-
   const [customTabPinnedProject, setCustomTabPinnedProject] = useState(true);
   const [customTabRecentProject, setCustomTabRecentProject] = useState(false);
   const [columnState, setColumnState] = useState();
@@ -40,6 +38,10 @@ const Dashboard = () => {
   const [projects, setProjects] = useState([]);
   const authData = JSON.parse(localStorage.getItem("auth"));
   const userID = authData?.user_id;
+
+  //Searching
+  const [searchedProjects, setSearchedProjects] = useState([]);
+
   const customTabHandlerPinnedProjects = () => {
     setCustomTabPinnedProject(true);
     setCustomTabRecentProject(false);
@@ -75,7 +77,7 @@ const Dashboard = () => {
       formData.append("product_name", product);
       formData.append("project_version", version);
       formData.append("company_logo", companyLogo);
-      formData.append("pin_project", 1);
+      formData.append("pin_project", 0);
       const config = {
         headers: { "content-type": "multipart/form-data" },
       };
@@ -100,55 +102,127 @@ const Dashboard = () => {
     } catch (error) {}
   };
 
-  const search = async () => {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+  // const search = async () => {
+  //   const config = {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   };
 
-    if (project_name && project_date) {
-      console.log("Project Name & Date: ", project_name, project_date);
+  //   if (project_name && project_date) {
+  //     console.log("Project Name & Date: ", project_name, project_date);
 
+  //     const { data } = await axios.post(
+  //       "https://nla-backend-1.herokuapp.com/api/project/search",
+  //       // "http://localhost:5000/api/project/date",
+  //       {
+  //         project_name,
+  //         project_date,
+  //       },
+  //       config
+  //     );
+  //     setFilteredData(data);
+  //     console.log("Data: ", data);
+  //   } else if (project_name) {
+  //     console.log(project_name);
+
+  //     const { data } = await axios.post(
+  //       "https://nla-backend-1.herokuapp.com/api/project/name",
+  //       // "http://localhost:5000/api/project/name",
+  //       {
+  //         project_name,
+  //       },
+  //       config
+  //     );
+  //     setFilteredData(data);
+  //     console.log("Data: ", data);
+  //   } else if (project_date) {
+  //     console.log("Project date: ", project_date);
+
+  //     const { data } = await axios.post(
+  //       "https://nla-backend-1.herokuapp.com/api/project/date",
+  //       // "http://localhost:5000/api/project/date",
+  //       {
+  //         project_date,
+  //       },
+  //       config
+  //     );
+  //     setFilteredData(data);
+  //     console.log("Data: ", data);
+  //   } else {
+  //     console.log("Invalid");
+  //   }
+  // };
+
+  const searchData = (text) => {
+    // console.log("\n\nI typed: ", project_name);
+    const formattedQuery = text.toLowerCase();
+
+    const newData = projects.filter((item) => {
+      return item.project_name.toLowerCase().search(formattedQuery) > -1;
+    });
+    setSearchedProjects(newData);
+  };
+
+  const pinMeHandler = async (project_id) => {
+    setLoad(false);
+    // console.log("i am clickd", project_id);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
       const { data } = await axios.post(
-        "https://nla-backend-1.herokuapp.com/api/project/search",
-        // "http://localhost:5000/api/project/date",
+        "https://nla-backend-1.herokuapp.com/api/login",
+        // "http://localhost:5000/api/add/project/pinned",
         {
-          project_name,
-          project_date,
+          project_id,
         },
         config
       );
-      setFilteredData(data);
-      console.log("Data: ", data);
-    } else if (project_name) {
-      console.log(project_name);
 
+      console.log("After API");
+
+      if (data.status === 200) {
+        setLoad(true);
+        // console.log("Project pinned");
+      }
+    } catch (error) {
+      console.log("Error", error.response);
+      setLoad(false);
+    }
+  };
+
+  const unPinMeHandler = async (project_id) => {
+    setLoad(false);
+    console.log("i am clickd", project_id);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
       const { data } = await axios.post(
-        "https://nla-backend-1.herokuapp.com/api/project/name",
-        // "http://localhost:5000/api/project/name",
+        "https://nla-backend-1.herokuapp.com/api/login",
+        // "http://localhost:5000/api/add/project/unpinned",
         {
-          project_name,
+          project_id,
         },
         config
       );
-      setFilteredData(data);
-      console.log("Data: ", data);
-    } else if (project_date) {
-      console.log("Project date: ", project_date);
 
-      const { data } = await axios.post(
-        "https://nla-backend-1.herokuapp.com/api/project/date",
-        // "http://localhost:5000/api/project/date",
-        {
-          project_date,
-        },
-        config
-      );
-      setFilteredData(data);
-      console.log("Data: ", data);
-    } else {
-      console.log("Invalid");
+      console.log("After API");
+
+      if (data.status === 200) {
+        setLoad(true);
+        console.log("Project pinned");
+      }
+    } catch (error) {
+      console.log("Error", error.response);
+      setLoad(false);
     }
   };
   // ---------------------------------------------------
@@ -273,7 +347,7 @@ const Dashboard = () => {
                   type="submit"
                   value="Search"
                   className="btn btn-primary mb-0"
-                  onClick={search}
+                  onClick={() => searchData(project_name)}
                 />
               </div>
             </div>
@@ -300,7 +374,7 @@ const Dashboard = () => {
                     <p className="mb-0">
                       Pinned Projects
                       <a href="#">
-                        <img src={feather} alt="" />
+                        <img src={feather} style={{ marginLeft: 5 }} alt="" />
                       </a>
                     </p>
                   </div>
@@ -320,6 +394,74 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+
+              <div className={`nla_grid_view_wrapper ${columnState}`}>
+                {projects?.map((elem, id) => (
+                  <div
+                    className="nla_item_box_col first-nla-itembox"
+                    data-position="right"
+                    key={id}
+                  >
+                    {elem.pin_project === 1 && (
+                      <>
+                        <div className="nla_item_box">
+                          <div className="nla_pin-icon">
+                            <i
+                              className="fa-solid fa-thumbtack"
+                              onClick={() => unPinMeHandler(elem.project_id)}
+                            ></i>
+                          </div>
+                          <h3>{elem.project_name}</h3>
+                          <div className="nla_shared_link_block">
+                            <a
+                              href="#"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="top"
+                              title="Share"
+                              data-bs-target="#shareProject"
+                            >
+                              <i className="fa-solid fa-share-nodes"></i>
+                            </a>
+                            <a
+                              href="#"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="top"
+                              title="Duplicate"
+                            >
+                              <i className="fa-regular fa-copy"></i>
+                            </a>
+                            <a
+                              href="#"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="top"
+                              title="Download"
+                            >
+                              <i className="fa-solid fa-download"></i>
+                            </a>
+                            <a
+                              href="#"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="top"
+                              title="Edit"
+                            >
+                              <i className="fa-solid fa-pen"></i>
+                            </a>
+                          </div>
+                          <div className="nla_additional_links">
+                            <a href="#">
+                              Design Studio{" "}
+                              <i className="fa-solid fa-pencil"></i>
+                            </a>
+                            <a href="#">
+                              Insights <i className="fa-solid fa-eye"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))}
               </div>
 
               <div className={`nla_grid_view_wrapper ${columnState}`}>
@@ -387,7 +529,7 @@ const Dashboard = () => {
                     <p className="mb-0">
                       Recently Created
                       <a href="#">
-                        <img src={feather} alt="" />
+                        <img src={feather} style={{ marginLeft: 5 }} alt="" />
                       </a>
                     </p>
                   </div>
@@ -401,59 +543,67 @@ const Dashboard = () => {
                     data-position="right"
                     key={id}
                   >
-                    <div className="nla_item_box">
-                      <div className="nla_pin-icon">
-                        <i className="fa-solid fa-thumbtack"></i>
-                      </div>
-                      <h3>{elem.project_name}</h3>
-                      <div className="nla_shared_link_block">
-                        <a
-                          href="#"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          title="Share"
-                          data-bs-target="#shareProject"
-                        >
-                          <i className="fa-solid fa-share-nodes"></i>
-                        </a>
-                        <a
-                          href="#"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          title="Duplicate"
-                        >
-                          <i className="fa-regular fa-copy"></i>
-                        </a>
-                        <a
-                          href="#"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          title="Download"
-                        >
-                          <i className="fa-solid fa-download"></i>
-                        </a>
-                        <a
-                          href="#"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          title="Edit"
-                        >
-                          <i className="fa-solid fa-pen"></i>
-                        </a>
-                      </div>
-                      <div className="nla_additional_links">
-                        <a href="#">
-                          Design Studio <i className="fa-solid fa-pencil"></i>
-                        </a>
-                        <a href="#">
-                          Insights <i className="fa-solid fa-eye"></i>
-                        </a>
-                      </div>
-                    </div>
+                    {elem.pin_project === 0 && (
+                      <>
+                        <div className="nla_item_box">
+                          <div className="nla_pin-icon">
+                            <i
+                              className="fa-solid fa-thumbtack"
+                              onClick={() => pinMeHandler(elem.project_id)}
+                            ></i>
+                          </div>
+                          <h3>{elem.project_name}</h3>
+                          <div className="nla_shared_link_block">
+                            <a
+                              href="#"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="top"
+                              title="Share"
+                              data-bs-target="#shareProject"
+                            >
+                              <i className="fa-solid fa-share-nodes"></i>
+                            </a>
+                            <a
+                              href="#"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="top"
+                              title="Duplicate"
+                            >
+                              <i className="fa-regular fa-copy"></i>
+                            </a>
+                            <a
+                              href="#"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="top"
+                              title="Download"
+                            >
+                              <i className="fa-solid fa-download"></i>
+                            </a>
+                            <a
+                              href="#"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="top"
+                              title="Edit"
+                            >
+                              <i className="fa-solid fa-pen"></i>
+                            </a>
+                          </div>
+                          <div className="nla_additional_links">
+                            <a href="#">
+                              Design Studio{" "}
+                              <i className="fa-solid fa-pencil"></i>
+                            </a>
+                            <a href="#">
+                              Insights <i className="fa-solid fa-eye"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 ))}
               </div>
-              {filteredData !== "" ? (
+              {searchedProjects !== "" ? (
                 <>
                   <div
                     className="nla_view_top_title_and_add_new_block"
@@ -471,7 +621,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div className={`nla_grid_view_wrapper ${columnState}`}>
-                    {filteredData?.map((elem, id) => (
+                    {searchedProjects?.map((elem, id) => (
                       <div
                         className="nla_item_box_col first-nla-itembox"
                         data-position="right"
