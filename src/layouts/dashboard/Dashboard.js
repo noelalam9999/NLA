@@ -56,8 +56,8 @@ const Dashboard = () => {
   useEffect(() => {
     async function fetchProduct() {
       const { data } = await axios.get(
-        `https://nla-backend-1.herokuapp.com/api/projects/${userID}`
-        // `http://localhost:5000/api/projects/${userID}`
+        // `https://nla-backend-1.herokuapp.com/api/projects/${userID}`
+        `http://localhost:5000/api/projects/${userID}`
       );
       setProjects(data);
     }
@@ -83,8 +83,8 @@ const Dashboard = () => {
       };
       const { data } = await axios
         .post(
-          "https://nla-backend-1.herokuapp.com/api/add/project",
-          // "http://localhost:5000/api/add/project",
+          // "https://nla-backend-1.herokuapp.com/api/add/project",
+          "http://localhost:5000/api/add/project",
           formData,
           config
         )
