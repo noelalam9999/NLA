@@ -29,7 +29,7 @@ const Dashboard = () => {
   const [show, setShow] = useState(false);
   const [showCancelProject, setShowCancelProject] = useState(false);
 
-  //Search
+  //
   const [project_name, setSearchByProjectName] = useState("");
   const [project_date, setProjectDate] = useState("");
   const [filteredPinData, setFilteredPinData] = useState("");
