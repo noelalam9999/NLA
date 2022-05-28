@@ -8,12 +8,17 @@ import "../../css/style.css";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
+import { Modal, Button } from "react-bootstrap";
 const Login = () => {
+  const [modalShow, setModalShow] = React.useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setErrorMsg] = useState("");
+
+  const [showAlert, setShowAlert] = useState(false);
+
   const handleChange = (e) => {
     setLoginState({ ...loginState, [e.target.name]: e.target.value });
   };
@@ -52,8 +57,43 @@ const Login = () => {
   };
   const loginHandler = (e) => {
     e.preventDefault();
+    if (username === "" || password === "") {
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
+      return;
+    }
     loginHandlerSub();
   };
+
+  function MyVerticallyCenteredModal(props) {
+    return (
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Forgot Password?
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h6 style={{ marginTop: 15 }}>
+            Please email techsupport@northanalytics.com to reset the password.
+          </h6>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={props.onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
+  // ---------------------------------------------
+
   return (
     <>
       {/* <!-- Header Start --> */}
@@ -109,8 +149,15 @@ const Login = () => {
                   A path breaking analytics platform that harmonizes advanced
                   analytics and business decision making.
                 </p>
+                {showAlert && (
+                  <>
+                    <Alert variant="outlined" severity="info">
+                      Please fill all fields
+                    </Alert>
+                  </>
+                )}
                 <div className="login-form-block">
-                  <form onSubmit={loginHandler}>
+                  <form noValidate>
                     <div className="row align-items-center">
                       <div className="col-lg-12 col-md-12">
                         <input
@@ -151,6 +198,8 @@ const Login = () => {
                           type="submit"
                           className="btn btn-primary"
                           style={{ width: "166.81px" }}
+                          // onClick={(e) => loginHandler()}
+                          onClick={loginHandler}
                         >
                           {loading === true ? (
                             <>
@@ -169,7 +218,11 @@ const Login = () => {
                       </div>
 
                       <div className="col-6 text-end nla_top-spacing">
-                        <a href="" className="nla_forgot_psw">
+                        <a
+                          style={{ cursor: "pointer" }}
+                          className="nla_forgot_psw"
+                          onClick={() => setModalShow(true)}
+                        >
                           Forgot Password?
                         </a>
                       </div>
@@ -202,6 +255,10 @@ const Login = () => {
             </div>
           </div>
         </div>
+        <MyVerticallyCenteredModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+        />
       </div>
     </>
   );
