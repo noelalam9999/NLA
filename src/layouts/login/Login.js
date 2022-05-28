@@ -6,12 +6,14 @@ import logo from "../../assets/images/Northlight_Analytics_Final_Logo.png";
 import video from "../../assets/images/video_login_page.mp4";
 import "../../css/style.css";
 import Spinner from "react-bootstrap/Spinner";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
 const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  // const [response, setResponse] = useState([]);
+  const [error,setErrorMsg]=useState("")
   const handleChange = (e) => {
     setLoginState({ ...loginState, [e.target.name]: e.target.value });
   };
@@ -22,22 +24,11 @@ const Login = () => {
   const loginHandlerSub = async () => {
     try {
       setLoading(true);
-      // console.log("SAASK");
-      // let token = JSON.parse(localStorage.getItem("CVLyZeAuth"));
-      // const { user } = token;
       const config = {
         headers: {
           "Content-Type": "application/json",
         },
       };
-      // console.log("Before api", loginState);
-
-      // const jsonData = JSON.stringify(loginState);
-      // console.log("JSON DATA: ", username, password);
-
-      // const api = `http://localhost:5000/api/login`;
-      // var res = await axios.post(api, { loginState }, config);
-
       const { data } = await axios.post(
         "https://nla-backend-1.herokuapp.com/api/login",
         // "http://localhost:5000/api/login",
@@ -48,9 +39,6 @@ const Login = () => {
         config
       );
 
-      // console.log(data);
-      // console.log("After api");
-
       if (data.code === 200) {
         navigate("/dashboard");
         localStorage.setItem("auth", JSON.stringify(data.data));
@@ -59,7 +47,7 @@ const Login = () => {
     } catch (error) {
       setLoading(false);
       console.log("Error", error.response);
-      alert(error?.response?.data?.msg);
+      setErrorMsg(error?.response?.data?.msg);
     }
   };
   const loginHandler = (e) => {
@@ -146,7 +134,15 @@ const Login = () => {
                           required
                         />
                       </div>
-
+                      <div className="col-lg-12 col-md-12">
+                        {error !== "" ? (
+            <Stack sx={{ width: "100%", marginTop: "5px" }} spacing={2}>
+              <Alert variant="outlined" severity="info">
+                {error}
+              </Alert>
+            </Stack>
+          ) : null}
+                      </div>
                       <div className="col-6 nla_top-spacing">
                         <button
                           type="submit"

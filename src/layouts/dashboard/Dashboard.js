@@ -25,6 +25,7 @@ const Dashboard = () => {
   //Search
   const [project_name, setSearchByProjectName] = useState("");
   const [project_date, setProjectDate] = useState("");
+  const [filteredData, setFilteredData] = useState("");
 
   const [projectName, setProjectName] = useState("");
   const [type, setType] = useState("");
@@ -56,7 +57,7 @@ const Dashboard = () => {
     }
 
     fetchProduct();
-  }, []);
+  }, [projects]);
 
   const createProject = async () => {
     try {
@@ -90,9 +91,7 @@ const Dashboard = () => {
       if (data.status === 200) {
         setShow(false);
       }
-    } catch (error) {
-      console.log("Error from catch", error.response);
-    }
+    } catch (error) {}
   };
 
   const search = async () => {
@@ -114,7 +113,7 @@ const Dashboard = () => {
         },
         config
       );
-
+      setFilteredData(data);
       console.log("Data: ", data);
     } else if (project_name) {
       console.log(project_name);
@@ -127,7 +126,7 @@ const Dashboard = () => {
         },
         config
       );
-
+      setFilteredData(data);
       console.log("Data: ", data);
     } else if (project_date) {
       console.log("Project date: ", project_date);
@@ -140,13 +139,12 @@ const Dashboard = () => {
         },
         config
       );
-
+      setFilteredData(data);
       console.log("Data: ", data);
     } else {
       console.log("Invalid");
     }
   };
-
   // ---------------------------------------------------
 
   const handleClose = () => {
@@ -164,7 +162,15 @@ const Dashboard = () => {
   const handleShow = () => {
     setShow(true);
   };
-
+  const scroll = () => {
+    const getFilteredDiv = document.getElementById("searchedResults");
+    if (filteredData) {
+      getFilteredDiv.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+  useEffect(() => {
+    scroll();
+  }, [filteredData]);
   return (
     <div>
       <Header />
@@ -311,7 +317,7 @@ const Dashboard = () => {
               </div>
 
               <div className={`nla_grid_view_wrapper ${columnState}`}>
-                {projects?.map((x, id) => (
+                {/* {projects?.map((elem, id) => (
                   <div
                     className="nla_item_box_col first-nla-itembox"
                     data-position="right"
@@ -321,7 +327,79 @@ const Dashboard = () => {
                       <div className="nla_pin-icon">
                         <i className="fa-solid fa-thumbtack"></i>
                       </div>
-                      <h3>{x.project_name}</h3>
+                      <h3>{elem.project_name}</h3>
+                      <div className="nla_shared_link_block">
+                        <a
+                          href="#"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="Share"
+                          data-bs-target="#shareProject"
+                        >
+                          <i className="fa-solid fa-share-nodes"></i>
+                        </a>
+                        <a
+                          href="#"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="Duplicate"
+                        >
+                          <i className="fa-regular fa-copy"></i>
+                        </a>
+                        <a
+                          href="#"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="Download"
+                        >
+                          <i className="fa-solid fa-download"></i>
+                        </a>
+                        <a
+                          href="#"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="Edit"
+                        >
+                          <i className="fa-solid fa-pen"></i>
+                        </a>
+                      </div>
+                      <div className="nla_additional_links">
+                        <a href="#">
+                          Design Studio <i className="fa-solid fa-pencil"></i>
+                        </a>
+                        <a href="#">
+                          Insights <i className="fa-solid fa-eye"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))} */}
+              </div>
+              <div className="nla_view_top_title_and_add_new_block">
+                <div className="row align-items-center">
+                  <div className="col-lg-5">
+                    <p className="mb-0">
+                      Recently Created
+                      <a href="#">
+                        <img src={feather} alt="" />
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className={`nla_grid_view_wrapper ${columnState}`}>
+                {projects?.map((elem, id) => (
+                  <div
+                    className="nla_item_box_col first-nla-itembox"
+                    data-position="right"
+                    key={id}
+                  >
+                    <div className="nla_item_box">
+                      <div className="nla_pin-icon">
+                        <i className="fa-solid fa-thumbtack"></i>
+                      </div>
+                      <h3>{elem.project_name}</h3>
                       <div className="nla_shared_link_block">
                         <a
                           href="#"
@@ -368,58 +446,86 @@ const Dashboard = () => {
                     </div>
                   </div>
                 ))}
-
-                {/* <div className="nla_item_box_col">
-                  <div className="nla_item_box">
-                    <div className="nla_pin-icon">
-                      <i className="fa-solid fa-thumbtack"></i>
-                    </div>
-                    <h3>Covid Demand Forecasting</h3>
-                    <div className="nla_shared_link_block">
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Share"
-                      >
-                        <i className="fa-solid fa-share-nodes"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Duplicate"
-                      >
-                        <i className="fa-regular fa-copy"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Download"
-                      >
-                        <i className="fa-solid fa-download"></i>
-                      </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Edit"
-                      >
-                        <i className="fa-solid fa-pen"></i>
-                      </a>
-                    </div>
-                    <div className="nla_additional_links">
-                      <a href="#">
-                        Design Studio <i className="fa-solid fa-pencil"></i>
-                      </a>
-                      <a href="#">
-                        Insights <i className="fa-solid fa-eye"></i>
-                      </a>
+              </div>
+              {filteredData !== "" ? (
+                <>
+                  <div
+                    className="nla_view_top_title_and_add_new_block"
+                    id="searchedResults"
+                  >
+                    <div className="row align-items-center">
+                      <div className="col-lg-5">
+                        <p className="mb-0">
+                          Searched Results
+                          <a href="#">
+                            <img src={feather} alt="" />
+                          </a>
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div> */}
-              </div>
+                  <div className={`nla_grid_view_wrapper ${columnState}`}>
+                    {filteredData?.map((elem, id) => (
+                      <div
+                        className="nla_item_box_col first-nla-itembox"
+                        data-position="right"
+                        key={id}
+                      >
+                        <div className="nla_item_box">
+                          <div className="nla_pin-icon">
+                            <i className="fa-solid fa-thumbtack"></i>
+                          </div>
+                          <h3>{elem.project_name}</h3>
+                          <div className="nla_shared_link_block">
+                            <a
+                              href="#"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="top"
+                              title="Share"
+                              data-bs-target="#shareProject"
+                            >
+                              <i className="fa-solid fa-share-nodes"></i>
+                            </a>
+                            <a
+                              href="#"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="top"
+                              title="Duplicate"
+                            >
+                              <i className="fa-regular fa-copy"></i>
+                            </a>
+                            <a
+                              href="#"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="top"
+                              title="Download"
+                            >
+                              <i className="fa-solid fa-download"></i>
+                            </a>
+                            <a
+                              href="#"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="top"
+                              title="Edit"
+                            >
+                              <i className="fa-solid fa-pen"></i>
+                            </a>
+                          </div>
+                          <div className="nla_additional_links">
+                            <a href="#">
+                              Design Studio{" "}
+                              <i className="fa-solid fa-pencil"></i>
+                            </a>
+                            <a href="#">
+                              Insights <i className="fa-solid fa-eye"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : null}
             </div>
             {/* <!-- Grid view content end -->
 
@@ -468,7 +574,53 @@ const Dashboard = () => {
                 </div>
                 <div className="nla_list_view_body_content">
                   <ul>
-                    <li className="active">
+                    {projects.map((elem, id) => (
+                      <li
+                        // className="active"
+                        key={id}
+                      >
+                        <div className="nla_modal">
+                          <i className="fa-solid fa-thumbtack"></i>{" "}
+                          {elem.project_name}
+                        </div>
+                        <div className="nla_action">
+                          <div>
+                            Insights{" "}
+                            <a href="#">
+                              <img src={featherEye} alt="eye" />
+                            </a>
+                          </div>
+                          <div>
+                            Design Studio{" "}
+                            <a href="#">
+                              {" "}
+                              <img src={openPencil} alt="Pencil" />{" "}
+                            </a>
+                          </div>
+                          <div>
+                            Share{" "}
+                            <a href="#">
+                              {" "}
+                              <img src={share} alt="Share" />{" "}
+                            </a>
+                          </div>
+                          <div>
+                            Copy{" "}
+                            <a href="#">
+                              <i className="fa-solid fa-copy"></i>
+                            </a>
+                          </div>
+                          <div>
+                            Download{" "}
+                            <a href="#">
+                              <i className="fa-solid fa-download"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+
+                    {/* <li>
                       <div className="nla_modal">
                         <i className="fa-solid fa-thumbtack"></i> Covid Demand
                         Forecasting
@@ -507,87 +659,7 @@ const Dashboard = () => {
                           </a>
                         </div>
                       </div>
-                    </li>
-                    <li className="active">
-                      <div className="nla_modal">
-                        <i className="fa-solid fa-thumbtack"></i> Covid Demand
-                        Forecasting
-                      </div>
-                      <div className="nla_action">
-                        <div>
-                          Insights{" "}
-                          <a href="#">
-                            <img src={featherEye} alt="eye" />
-                          </a>
-                        </div>
-                        <div>
-                          Design Studio{" "}
-                          <a href="#">
-                            {" "}
-                            <img src={openPencil} alt="Pencil" />{" "}
-                          </a>
-                        </div>
-                        <div>
-                          Share{" "}
-                          <a href="#">
-                            {" "}
-                            <img src={share} alt="Share" />{" "}
-                          </a>
-                        </div>
-                        <div>
-                          Copy{" "}
-                          <a href="#">
-                            <i className="fa-solid fa-copy"></i>
-                          </a>
-                        </div>
-                        <div>
-                          Download{" "}
-                          <a href="#">
-                            <i className="fa-solid fa-download"></i>
-                          </a>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="nla_modal">
-                        <i className="fa-solid fa-thumbtack"></i> Covid Demand
-                        Forecasting
-                      </div>
-                      <div className="nla_action">
-                        <div>
-                          Insights{" "}
-                          <a href="#">
-                            <img src={featherEye} alt="eye" />
-                          </a>
-                        </div>
-                        <div>
-                          Design Studio{" "}
-                          <a href="#">
-                            {" "}
-                            <img src={openPencil} alt="Pencil" />{" "}
-                          </a>
-                        </div>
-                        <div>
-                          Share{" "}
-                          <a href="#">
-                            {" "}
-                            <img src={share} alt="Share" />{" "}
-                          </a>
-                        </div>
-                        <div>
-                          Copy{" "}
-                          <a href="#">
-                            <i className="fa-solid fa-copy"></i>
-                          </a>
-                        </div>
-                        <div>
-                          Download{" "}
-                          <a href="#">
-                            <i className="fa-solid fa-download"></i>
-                          </a>
-                        </div>
-                      </div>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
               </div>
