@@ -16,6 +16,8 @@ import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 
 const Dashboard = () => {
+  const [load, setLoad] = useState(false);
+
   const [customTabPinnedProject, setCustomTabPinnedProject] = useState(true);
   const [customTabRecentProject, setCustomTabRecentProject] = useState(false);
   const [columnState, setColumnState] = useState();
@@ -57,9 +59,10 @@ const Dashboard = () => {
     }
 
     fetchProduct();
-  }, [projects]);
+  }, [load]);
 
   const createProject = async () => {
+    setLoad(false);
     try {
       const formData = new FormData();
       formData.append("user_id", userID);
@@ -83,6 +86,7 @@ const Dashboard = () => {
         )
         .then(function (response) {
           setShow(false);
+          setLoad(true);
         })
         .catch(function (response) {
           console.log(response);
