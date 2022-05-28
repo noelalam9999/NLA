@@ -14,7 +14,12 @@ import Header from "../../components/header/Header";
 import createImg from "../../assets/images/new_project_create_image.png";
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
-
+import projectDiagram from "../../assets/newIcons/awesome-project-diagram.svg";
+import mergeType from "../../assets/newIcons/material-merge-type.svg";
+import featherUser from "../../assets/newIcons/feather-user.svg";
+import featherCodeSandBox from "../../assets/newIcons/feather-codesandbox.svg";
+import metroVersion from "../../assets/newIcons/metro-versions.svg";
+import uploadIcon from "../../assets/newIcons/ionic-ios-images.svg";
 const Dashboard = () => {
   const [load, setLoad] = useState(false);
 
@@ -758,7 +763,8 @@ const Dashboard = () => {
               <form method="post" enctype="multipart/form-data">
                 <div className="">
                   <div className="nla_form_project_name position-relative nla_form_field_block">
-                    <i className="fa fa-share-alt" aria-hidden="true"></i>
+                    {/* <i className="fa fa-share-alt" aria-hidden="true"></i> */}
+                    <img src={projectDiagram} alt="" />
                     <input
                       type="text"
                       className="form-control"
@@ -768,7 +774,7 @@ const Dashboard = () => {
                     />
                   </div>
                   <div className="nla_form_select_type position-relative nla_form_field_block">
-                    <i className="fa-solid fa-code-merge"></i>
+                    <img src={mergeType} alt="" />
                     <input
                       className="form-control"
                       list="selectType"
@@ -784,7 +790,7 @@ const Dashboard = () => {
                     </datalist>
                   </div>
                   <div className="nla_form_select_client position-relative nla_form_field_block">
-                    <i className="fa-solid fa-user"></i>
+                    <img src={featherUser} alt="" />
                     <select
                       className="form-select"
                       aria-label="Select Client"
@@ -797,7 +803,7 @@ const Dashboard = () => {
                     </select>
                   </div>
                   <div className="nla_form_select_product position-relative nla_form_field_block">
-                    <i className="fa-brands fa-unity"></i>
+                    <img src={featherCodeSandBox} alt="" />
                     <select
                       className="form-select"
                       aria-label="Select Product"
@@ -810,7 +816,7 @@ const Dashboard = () => {
                     </select>
                   </div>
                   <div className="nla_form_version position-relative nla_form_field_block">
-                    <i className="fa-solid fa-box"></i>
+                    <img src={metroVersion} alt="" />
                     <input
                       type="number"
                       className="form-control"
@@ -820,7 +826,7 @@ const Dashboard = () => {
                     />
                   </div>
                   <div className="nla_form_file_upload position-relative nla_form_field_block">
-                    <i className="fa-solid fa-images"></i>
+                    <img src={uploadIcon} alt="" />
                     <label htmlFor="formFile">Upload Company Logo</label>
                     <input
                       className="form-control"
