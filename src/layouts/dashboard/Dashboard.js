@@ -29,7 +29,7 @@ const Dashboard = () => {
   const [show, setShow] = useState(false);
   const [showCancelProject, setShowCancelProject] = useState(false);
 
-  //
+  //Search
   const [project_name, setSearchByProjectName] = useState("");
   const [project_date, setProjectDate] = useState("");
   const [filteredPinData, setFilteredPinData] = useState("");
@@ -46,7 +46,10 @@ const Dashboard = () => {
   const userID = authData?.user_id;
   const user_id = authData?.user_id;
 
-  //Searching--
+  //Date
+  const [dateType, setDateType] = useState("text");
+
+  //Searching
   const customTabHandlerPinnedProjects = () => {
     setCustomTabPinnedProject(true);
     setCustomTabRecentProject(false);
@@ -58,17 +61,6 @@ const Dashboard = () => {
   const columnHandler = (e) => {
     setColumnState(e.target.value);
   };
-  useEffect(() => {
-    async function fetchProduct() {
-      const { data } = await axios.get(
-        `https://nla-backend-1.herokuapp.com/api/projects/${userID}`
-        // `http://localhost:5000/api/projects/${userID}`
-      );
-      setProjects(data);
-    }
-
-    fetchProduct();
-  }, [load]);
 
   const createProject = async () => {
     setLoad(false);
@@ -324,10 +316,12 @@ const Dashboard = () => {
               <div className="nla_search">
                 <img src={calenderSvg} alt="list" className="img-fluid" />
                 <input
-                  type="date"
+                  placeholder="mm/dd/yyyy"
+                  type={dateType}
+                  onFocus={() => setDateType("date")}
+                  onBlur={() => setDateType("text")}
                   className="form-control mb-0 ms-3"
                   onChange={(e) => setProjectDate(e.target.value)}
-                  // placeholder="Search by Project Name"
                 />
               </div>
             </div>
@@ -660,7 +654,6 @@ const Dashboard = () => {
               )}
             </div>
             {/* <!-- Grid view content end -->
-
                 <!-- List view content start --> */}
             <div
               className={
@@ -679,18 +672,14 @@ const Dashboard = () => {
                   </div>
                   <div className="col-lg-7 text-end">
                     <div className="nla_add_new_project_btn">
-                      <a
-                        href="#"
-                        data-bs-toggle="modal"
-                        data-bs-target="#createNewProject"
-                      >
+                      <div onClick={handleShow} style={{ cursor: "pointer" }}>
                         <p>
                           <span>
                             <img src={plusCircle} alt="Create New Project" />
                           </span>
                           Create New Project
                         </p>
-                      </a>
+                      </div>
                       <a href="#">
                         <img src={feather} alt="" />
                       </a>
