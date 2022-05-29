@@ -319,7 +319,7 @@ const Dashboard = () => {
                   placeholder="mm/dd/yyyy"
                   type={dateType}
                   onFocus={() => setDateType("date")}
-                  onBlur={() => setDateType("text")}
+                  // onBlur={() => setDateType("text")}
                   className="form-control mb-0 ms-3"
                   onChange={(e) => setProjectDate(e.target.value)}
                 />
