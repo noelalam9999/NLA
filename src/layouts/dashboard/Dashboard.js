@@ -667,18 +667,14 @@ const Dashboard = () => {
                   </div>
                   <div className="col-lg-7 text-end">
                     <div className="nla_add_new_project_btn">
-                      <a
-                        href="#"
-                        data-bs-toggle="modal"
-                        data-bs-target="#createNewProject"
-                      >
+                      <div onClick={handleShow} style={{ cursor: "pointer" }}>
                         <p>
                           <span>
                             <img src={plusCircle} alt="Create New Project" />
                           </span>
                           Create New Project
                         </p>
-                      </a>
+                      </div>
                       <a href="#">
                         <img src={feather} alt="" />
                       </a>
