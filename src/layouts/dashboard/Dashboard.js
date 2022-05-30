@@ -460,7 +460,7 @@ const Dashboard = () => {
                       <div
                         className="col-lg-5"
                         style={
-                          filteredPinData.length === 0
+                          filteredPinData?.length === 0
                             ? { visibility: "hidden" }
                             : null
                         }
@@ -1099,7 +1099,7 @@ const Dashboard = () => {
                   </div>
                   <div className="nla_form_file_upload position-relative nla_form_field_block">
                     <img src={uploadIcon} alt="" />
-                    <label htmlFor="formFile">{companyLogo}</label>
+                    <label htmlFor="formFile">Upload Company Logo</label>
                     <input
                       className="form-control"
                       type="file"
