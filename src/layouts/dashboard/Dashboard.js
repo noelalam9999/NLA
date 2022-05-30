@@ -67,6 +67,7 @@ const Dashboard = () => {
   const [product, setProduct] = useState("");
   const [version, setVersion] = useState();
   const [companyLogo, setCompanyLogo] = useState([]);
+  const [companyLogoType, setCompanyLogoType] = useState("");
 
   //User
   const authData = JSON.parse(localStorage.getItem("auth"));
@@ -88,6 +89,40 @@ const Dashboard = () => {
   const columnHandler = (e) => {
     setColumnState(e.target.value);
   };
+  const companyLogoHandler = (e) => {
+    setCompanyLogo(e.target.files);
+    setCompanyLogoType(e.target.files[0].type);
+    imageChecker(e.target.files[0].type);
+  };
+  console.log(companyLogo);
+  const imageChecker = (props) => {
+    console.log(props);
+    if (companyLogo.length > 0) {
+      const formData = new FormData();
+      for (const file of companyLogo) formData.append("company_logo", file);
+      const xhr = new XMLHttpRequest();
+      xhr.upload.onprogress = (event) => {
+        const percentage = parseInt((event.loaded / event.total) * 100);
+        console.log(percentage);
+      };
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState !== 4) return;
+        if (xhr.status !== 200) {
+          console.log("error"); // Handle error here
+        }
+        console.log("success"); // Handle success here
+      };
+      xhr.open("POST", "https://httpbin.org/post", true);
+      xhr.send(formData);
+      console.log("AAAAAAAAAA", companyLogo[0]);
+
+      // Type
+      if (companyLogoType !== "image/jpeg" || companyLogoType !== "image/png") {
+        alert("Invalid Image type");
+        setCompanyLogo([]);
+      }
+    }
+  };
 
   const createProject = async () => {
     setLoad(false);
@@ -108,13 +143,13 @@ const Dashboard = () => {
         formData.append("type_of_project", type);
         formData.append("client_name", client);
         formData.append("product_name", product);
-        formData.append("project_version", version);
+        formData.append("project_version", 1);
         formData.append("company_logo", companyLogo[0]);
         formData.append("pin_project", 0);
         const config = {
           headers: { "content-type": "multipart/form-data" },
         };
-
+        console.log(companyLogo[0]);
         const upload = {
           onUploadProgress: (data) => {
             setProgress(Math.round((100 * data.loaded) / data.total));
@@ -924,8 +959,9 @@ const Dashboard = () => {
                   </a>
                 )}
                 <ul>
-                  {searchedPages.map((page) => (
+                  {searchedPages.map((page, index) => (
                     <li
+                      key={index}
                       className={
                         page === searchResultpagination?.page ? "current" : ""
                       }
@@ -956,8 +992,9 @@ const Dashboard = () => {
                   </a>
                 )}
                 <ul>
-                  {pages.map((page) => (
+                  {pages.map((page, index) => (
                     <li
+                      key={index}
                       className={page === pagination.page ? "current" : ""}
                       style={{ cursor: "pointer" }}
                     >
@@ -1095,17 +1132,48 @@ const Dashboard = () => {
                       id="version"
                       placeholder="Version 1"
                       onChange={(e) => setVersion(e.target.value)}
+                      disabled
+                      // value="1"
                     />
                   </div>
                   <div className="nla_form_file_upload position-relative nla_form_field_block">
                     <img src={uploadIcon} alt="" />
-                    <label htmlFor="formFile">Upload Company Logo</label>
+                    {/* <label htmlFor="formFile">Upload Company Logo</label> */}
+                    {companyLogo.length > 0 ? (
+                      <label htmlFor="formFile">{companyLogo[0].name}</label>
+                    ) : (
+                      <label htmlFor="formFile">Upload Company Logo</label>
+                    )}
+
+                    {/* {companyLogo.length > 0 ? (
+                      <input
+                        className="form-control"
+                        type="file"
+                        id="formFile"
+                        accept="image/png, image/jpeg"
+                        // onChange={(e) => setCompanyLogo(e.target.files)}
+                        onChange={companyLogoHandler}
+                        value={companyLogoType}
+                      />
+                    ) : (
+                      <input
+                        className="form-control"
+                        type="file"
+                        id="formFile"
+                        accept="image/png, image/jpeg"
+                        // onChange={(e) => setCompanyLogo(e.target.files)}
+                        onChange={companyLogoHandler}
+                      />
+                    )} */}
                     <input
                       className="form-control"
                       type="file"
                       id="formFile"
-                      // ref={imageRef}
-                      onChange={(e) => setCompanyLogo(e.target.files)}
+                      accept="image/png, image/jpeg"
+                      // onChange={(e) => setCompanyLogo(e.target.files)}
+                      onChange={companyLogoHandler}
+                      // value={companyLogoType}
+                      // value={companyLogo.length > 0 ? companyLogo[0].name : ""}
                     />
                     {/* <ProgressBar now={progress} label={`${progress}%`} /> */}
                   </div>

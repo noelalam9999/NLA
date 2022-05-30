@@ -79,14 +79,12 @@ const Login = () => {
       setTimeout(() => {
         setShowAlert(false);
       }, 3000);
-      return;
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
       setErrorMsg("Invalid Email");
       setShowAlert(true);
       setTimeout(() => {
         setShowAlert(false);
       }, 3000);
-      return;
     } else {
       loginHandlerSub();
     }
@@ -213,13 +211,13 @@ const Login = () => {
                     <div className="row align-items-center">
                       <div className="col-lg-12 col-md-12">
                         <input
-                          type="text"
+                          type="email"
                           className="form-control"
                           placeholder="Email"
                           name="email"
+                          required
                           // onChange={handleChange}
                           onChange={(e) => setEmail(e.currentTarget.value)}
-                          required
                         />
                       </div>
                       <div className="col-lg-12 col-md-12">
