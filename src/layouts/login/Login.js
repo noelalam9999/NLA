@@ -70,15 +70,17 @@ const Login = () => {
   const loginHandler = (e) => {
     e.preventDefault();
     if (email === "" || password === "") {
+      setErrorMsg("Please fill all fields");
       setShowAlert(true);
       setTimeout(() => {
         setShowAlert(false);
       }, 3000);
       return;
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-      setShowEmailAlert(true);
+      setErrorMsg("Invalid Email");
+      setShowAlert(true);
       setTimeout(() => {
-        setShowEmailAlert(false);
+        setShowAlert(false);
       }, 3000);
       return;
     } else {
@@ -228,7 +230,7 @@ const Login = () => {
                         />
                       </div>
                       <div className="col-lg-12 col-md-12">
-                        {error !== "" ? (
+                        {error !== "" || showAlert ? (
                           <Stack
                             sx={{ width: "100%", marginTop: "5px" }}
                             spacing={2}
@@ -238,21 +240,20 @@ const Login = () => {
                             </Alert>
                           </Stack>
                         ) : null}
-                        {showAlert ? (
+                        {/* {showAlert && (
                           <>
                             <Alert variant="outlined" severity="info">
                               Please fill all fields
                             </Alert>
                           </>
-                        ) : showEmailAlert ? (
+                        )}
+                        {showEmailAlert && (
                           <>
                             <Alert variant="outlined" severity="info">
                               Invalid email..!!
                             </Alert>
                           </>
-                        ) : (
-                          ""
-                        )}
+                        )} */}
                       </div>
                       <div className="col-6 nla_top-spacing">
                         <button
