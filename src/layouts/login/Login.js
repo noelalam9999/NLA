@@ -65,6 +65,10 @@ const Login = () => {
       setLoading(false);
       console.log("Error", error.response);
       setErrorMsg(error?.response?.data?.msg);
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
     }
   };
   const loginHandler = (e) => {
@@ -230,7 +234,7 @@ const Login = () => {
                         />
                       </div>
                       <div className="col-lg-12 col-md-12">
-                        {error !== "" || showAlert ? (
+                        {error !== "" && showAlert ? (
                           <Stack
                             sx={{ width: "100%", marginTop: "5px" }}
                             spacing={2}
