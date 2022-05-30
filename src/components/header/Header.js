@@ -62,7 +62,7 @@ const Header = () => {
                     aria-expanded="false"
                     onClick={notifHandler}
                   >
-                    {authData?.username ? authData?.username : "John Doe"}
+                    {authData?.email ? authData?.email : "John Doe"}
                   </button>
                   {notifState === true ? (
                     <>

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Alert from "@mui/material/Alert";
+import { ProgressBar } from "react-bootstrap";
 import Sidebar from "../../components/sidebar/Sidebar";
 import "../../css/style.css";
 import awUser from "../../assets/images/awesome-user-alt.svg";
@@ -20,14 +22,38 @@ import featherUser from "../../assets/newIcons/feather-user.svg";
 import featherCodeSandBox from "../../assets/newIcons/feather-codesandbox.svg";
 import metroVersion from "../../assets/newIcons/metro-versions.svg";
 import uploadIcon from "../../assets/newIcons/ionic-ios-images.svg";
+import Api from "../../services/Api";
+import EditProject from "./EditProject";
+import Snackbar from "@mui/material/Snackbar";
+
 const Dashboard = () => {
+  const [modalShow, setModalShow] = useState(false);
+  const [projectID, setProjectID] = useState("");
+  const [projectCreatedAlert, setProjectCreatedAlert] = useState(false);
+
+  // Project and Pagination
+  const [projects, setProjects] = useState([]);
+  const [pagination, setPagination] = useState([]);
+
+  const [searchResultpagination, setSearchResultpagination] = useState([]);
+
+  const [progress, setProgress] = useState();
+
+  // console.log("searchResultpagination", searchResultpagination);
+
+  const [page, setPage] = useState(1);
+
+  // console.log("Modal show", modalShow);
   const [load, setLoad] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [filterVisible, setFilterVisible] = useState(false);
   const [customTabPinnedProject, setCustomTabPinnedProject] = useState(true);
   const [customTabRecentProject, setCustomTabRecentProject] = useState(false);
   const [columnState, setColumnState] = useState();
   const [show, setShow] = useState(false);
   const [showCancelProject, setShowCancelProject] = useState(false);
+
+  // const [PUBLIC_URL, SETPUBLIC_URL] = useState("http://localhost:5000/");
 
   //Search
   const [project_name, setSearchByProjectName] = useState("");
@@ -40,8 +66,9 @@ const Dashboard = () => {
   const [client, setClient] = useState("");
   const [product, setProduct] = useState("");
   const [version, setVersion] = useState();
-  const [companyLogo, setCompanyLogo] = useState("");
-  const [projects, setProjects] = useState([]);
+  const [companyLogo, setCompanyLogo] = useState([]);
+
+  //User
   const authData = JSON.parse(localStorage.getItem("auth"));
   const userID = authData?.user_id;
   const user_id = authData?.user_id;
@@ -64,41 +91,74 @@ const Dashboard = () => {
 
   const createProject = async () => {
     setLoad(false);
-    try {
-      const formData = new FormData();
-      formData.append("user_id", userID);
-      formData.append("project_name", projectName);
-      formData.append("slug", "project");
-      formData.append("type_of_project", type);
-      formData.append("client_name", client);
-      formData.append("product_name", product);
-      formData.append("project_version", version);
-      formData.append("company_logo", companyLogo);
-      formData.append("pin_project", 0);
-      const config = {
-        headers: { "content-type": "multipart/form-data" },
-      };
-      const { data } = await axios
-        .post(
-          "https://nla-backend-1.herokuapp.com/api/add/project",
-          // "http://localhost:5000/api/add/project",
-          formData,
-          config
-        )
-        .then(function (response) {
-          setShow(false);
-          setLoad(true);
-        })
-        .catch(function (response) {
-          console.log(response);
-        });
+    if (
+      userID !== "" &&
+      projectName !== "" &&
+      type !== "" &&
+      client !== "" &&
+      product !== "" &&
+      version !== "" &&
+      companyLogo !== ""
+    ) {
+      try {
+        const formData = new FormData();
+        formData.append("user_id", userID);
+        formData.append("project_name", projectName);
+        formData.append("slug", "project");
+        formData.append("type_of_project", type);
+        formData.append("client_name", client);
+        formData.append("product_name", product);
+        formData.append("project_version", version);
+        formData.append("company_logo", companyLogo[0]);
+        formData.append("pin_project", 0);
+        const config = {
+          headers: { "content-type": "multipart/form-data" },
+        };
 
-      if (data.status === 200) {
-        setShow(false);
-      }
-    } catch (error) {}
+        const upload = {
+          onUploadProgress: (data) => {
+            setProgress(Math.round((100 * data.loaded) / data.total));
+          },
+        };
+
+        let { data } = await Api(
+          "POST",
+          "api/add/project",
+          formData,
+          config,
+          upload
+        )
+          .then(function (response) {
+            setProjectName("");
+            setType("");
+            setClient("");
+            setProduct("");
+            setVersion("");
+            setCompanyLogo([]);
+            setShow(false);
+            setLoad(true);
+            setProjectCreatedAlert(true);
+            setTimeout(() => {
+              setProjectCreatedAlert(false);
+            }, 3000);
+          })
+          .catch(function (response) {
+            console.log(response);
+          });
+
+        if (data.status === 200) {
+          setShow(false);
+        }
+      } catch (error) {}
+    } else {
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
+    }
   };
 
+  //Search
   const searchDataHandler = async () => {
     const config = {
       headers: {
@@ -106,45 +166,40 @@ const Dashboard = () => {
       },
     };
 
+    const apiData = {
+      project_name,
+      project_date,
+      user_id,
+    };
+
     if (project_name && project_date) {
-      const res = await axios.post(
-        "https://nla-backend-1.herokuapp.com/api/project/search",
-        // "http://localhost:5000/api/project/date",
-        {
-          project_name,
-          project_date,
-          user_id,
-        },
-        config
-      );
+      const res = await Api("POST", "api/project/search", apiData, config);
+
       setFilteredData(res.data);
       if (res.status === 200) {
         setFilterVisible(true);
       }
     } else if (project_name) {
-      const res = await axios.post(
-        "https://nla-backend-1.herokuapp.com/api/project/name",
-        // "http://localhost:5000/api/project/name",
-        {
-          project_name,
-          user_id,
-        },
+      const res = await Api(
+        "POST",
+        `api/project/name/?page=${page}`,
+        { project_name, user_id },
         config
       );
-      setFilteredData(res.data);
+
+      setFilteredData(res.data.rows);
+      setSearchResultpagination(res.data.pagination);
       if (res.status === 200) {
         setFilterVisible(true);
       }
     } else if (project_date) {
-      const res = await axios.post(
-        "https://nla-backend-1.herokuapp.com/api/project/date",
-        // "http://localhost:5000/api/project/date",
-        {
-          project_date,
-          user_id,
-        },
+      const res = await Api(
+        "POST",
+        "api/project/date",
+        { project_date, user_id },
         config
       );
+
       setFilteredData(res.data);
       if (res.status === 200) {
         setFilterVisible(true);
@@ -153,15 +208,8 @@ const Dashboard = () => {
       console.log("Invalid");
     }
   };
-  // const searchData = (text) => {
-  //   // console.log("\n\nI typed: ", project_name);
-  //   const formattedQuery = text.toLowerCase();
 
-  //   const newData = projects.filter((item) => {
-  //     return item.project_name.toLowerCase().search(formattedQuery) > -1;
-  //   });
-  //   setSearchedProjects(newData);
-  // };
+  //Pin or Unpin Project
   const PinUnPinHandler = async (project_id) => {
     setLoad(false);
     try {
@@ -170,14 +218,7 @@ const Dashboard = () => {
           "Content-Type": "application/json",
         },
       };
-      const res = await axios.post(
-        "https://nla-backend-1.herokuapp.com/api/pin/project",
-        // "http://localhost:5000/api/add/project/unpinned",
-        {
-          project_id,
-        },
-        config
-      );
+      const res = await Api("POST", "api/pin/project", { project_id }, config);
       if (res.status === 200) {
         setLoad(true);
       }
@@ -212,27 +253,87 @@ const Dashboard = () => {
   const unsetSearchData = () => {
     setFilterVisible(false);
   };
+
+  //Pagination for All Products --------------------------------
+  var pages = [];
+  for (let i = pagination?.page; i <= pagination?.endingLink; i++) {
+    pages.push(i);
+  }
+
+  var searchedPages = [];
+  for (
+    let i = searchResultpagination?.page;
+    i <= searchResultpagination?.endingLink;
+    i++
+  ) {
+    searchedPages.push(i);
+  }
+
+  console.log("searchedPages", searchedPages);
+
+  const setPageHandler = (page_no) => {
+    if (page_no) {
+      setPage(page_no);
+      setLoad(true);
+    }
+  };
+
+  const setSearchedPageHandler = (page_no) => {
+    if (page_no) {
+      setPage(page_no);
+      searchDataHandler();
+    }
+  };
+
+  //Pagination for Search Products
+  // ----------------------------------------------
+
   useEffect(() => {
     async function fetchProduct() {
-      const { data } = await axios.get(
-        `https://nla-backend-1.herokuapp.com/api/projects/${userID}`
-        // `http://localhost:5000/api/projects/${userID}`
-      );
-      setProjects(data);
-      const filteredPin = data?.filter((val) => {
+      const { data } = await Api("GET", `api/projects/${userID}/?page=${page}`);
+      setProjects(data.rows);
+      setPagination(data.pagination);
+      const filteredPin = data.rows?.filter((val) => {
         return val.pin_project === 1;
       });
-      const filteredUnPin = data?.filter((val) => {
+      const filteredUnPin = data.rows?.filter((val) => {
         return val.pin_project === 0;
       });
       setFilteredPinData(filteredPin);
       setFilteredUnPinData(filteredUnPin);
     }
     fetchProduct();
+    setLoad(false);
   }, [load]);
+
   useEffect(() => {
     scroll();
-  }, [filteredData]);
+  }, [load]);
+
+  // console.log("pagination", pagination);
+
+  // Edit Project Modal
+
+  const handleEditProjectModal = (project_id) => {
+    setModalShow(true);
+    setProjectID(project_id);
+  };
+
+  function MyVerticallyCenteredModal(props) {
+    return (
+      <Modal
+        {...props}
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        id="createNewProject"
+        animation={true}
+      >
+        <EditProject project_id={projectID} {...props} />
+      </Modal>
+    );
+  }
+
+  // ----------------------------------------------------------------------------------------------------------------------------
   return (
     <div>
       <Header />
@@ -400,7 +501,7 @@ const Dashboard = () => {
                   </div>
 
                   <div className={`nla_grid_view_wrapper ${columnState}`}>
-                    {filteredPinData.length > 0
+                    {filteredPinData?.length > 0
                       ? filteredPinData?.map((elem, id) => (
                           <div
                             className="nla_item_box_col first-nla-itembox"
@@ -444,10 +545,12 @@ const Dashboard = () => {
                                   <i className="fa-solid fa-download"></i>
                                 </a>
                                 <a
-                                  href="#"
                                   data-bs-toggle="tooltip"
                                   data-bs-placement="top"
                                   title="Edit"
+                                  onClick={() =>
+                                    handleEditProjectModal(elem?.project_id)
+                                  }
                                 >
                                   <i className="fa-solid fa-pen"></i>
                                 </a>
@@ -502,6 +605,11 @@ const Dashboard = () => {
                                 ></i>
                               </div>
                               <h3>{elem.project_name}</h3>
+                              {/* <img
+                                src={PUBLIC_URL + elem.company_logo}
+                                alt="no image"
+                              ></img> */}
+                              {/* <img src={elem.company_logo} alt="no image"></img> */}
                               <div className="nla_shared_link_block">
                                 <a
                                   href="#"
@@ -533,6 +641,9 @@ const Dashboard = () => {
                                   data-bs-toggle="tooltip"
                                   data-bs-placement="top"
                                   title="Edit"
+                                  onClick={() =>
+                                    handleEditProjectModal(elem?.project_id)
+                                  }
                                 >
                                   <i className="fa-solid fa-pen"></i>
                                 </a>
@@ -579,7 +690,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                       <div className={`nla_grid_view_wrapper ${columnState}`}>
-                        {filteredData.length > 0
+                        {filteredData?.length > 0
                           ? filteredData?.map((elem, id) => (
                               <div
                                 className="nla_item_box_col first-nla-itembox"
@@ -629,6 +740,9 @@ const Dashboard = () => {
                                       data-bs-toggle="tooltip"
                                       data-bs-placement="top"
                                       title="Edit"
+                                      onClick={() =>
+                                        handleEditProjectModal(elem?.project_id)
+                                      }
                                     >
                                       <i className="fa-solid fa-pen"></i>
                                     </a>
@@ -799,38 +913,69 @@ const Dashboard = () => {
         {/* <!-- Pagination Start --> */}
         <div className="nla-pagination-and-all-results-wrapper">
           <nav data-pagination>
-            <a href="#" disabled>
-              <i className="ion-chevron-left"></i>
-            </a>
-            <ul>
-              <li className="current">
-                <a href="">1</a>
-              </li>
-              <li>
-                <a href="">2</a>
-              </li>
-              <li>
-                <a href="">3</a>
-              </li>
-              <li>
-                <a href="">4</a>
-              </li>
-              <li>
-                <a href="">5</a>
-              </li>
-              <li>
-                <a href="">6</a>
-              </li>
-              <li>
-                <a href="">…</a>
-              </li>
-              <li>
-                <a href="">15</a>
-              </li>
-            </ul>
-            <a href="#2" className="arrow">
-              <i className="ion-chevron-right"></i>
-            </a>
+            {filteredData !== "" ? (
+              <>
+                {searchResultpagination?.page > 1 && (
+                  <a
+                    onClick={() => setSearchedPageHandler(page - 1)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <i className="ion-chevron-left"></i>
+                  </a>
+                )}
+                <ul>
+                  {searchedPages.map((page) => (
+                    <li
+                      className={
+                        page === searchResultpagination?.page ? "current" : ""
+                      }
+                      style={{ cursor: "pointer" }}
+                    >
+                      <a onClick={() => setSearchedPageHandler(page)}>{page}</a>
+                    </li>
+                  ))}
+                </ul>
+                {pagination.page < searchResultpagination?.numberOfPages && (
+                  <a
+                    onClick={() => setSearchedPageHandler(page + 1)}
+                    style={{ cursor: "pointer" }}
+                    className="arrow"
+                  >
+                    <i className="ion-chevron-right"></i>
+                  </a>
+                )}
+              </>
+            ) : (
+              <>
+                {pagination.page > 1 && (
+                  <a
+                    onClick={() => setPageHandler(page - 1)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <i className="ion-chevron-left"></i>
+                  </a>
+                )}
+                <ul>
+                  {pages.map((page) => (
+                    <li
+                      className={page === pagination.page ? "current" : ""}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <a onClick={() => setPageHandler(page)}>{page}</a>
+                    </li>
+                  ))}
+                </ul>
+                {pagination.page < pagination.numberOfPages && (
+                  <a
+                    onClick={() => setPageHandler(page + 1)}
+                    style={{ cursor: "pointer" }}
+                    className="arrow"
+                  >
+                    <i className="ion-chevron-right"></i>
+                  </a>
+                )}
+              </>
+            )}
           </nav>
 
           <div className="nla_result_show_block">
@@ -880,6 +1025,13 @@ const Dashboard = () => {
               <div className="nla_modal_banenr">
                 <img src={createImg} alt="placeholder" className="img-fluid" />
               </div>
+              {showAlert && (
+                <>
+                  <Alert className="mb-2" variant="outlined" severity="info">
+                    Please fill all fields
+                  </Alert>
+                </>
+              )}
               <form method="post" enctype="multipart/form-data">
                 <div className="">
                   <div className="nla_form_project_name position-relative nla_form_field_block">
@@ -953,8 +1105,9 @@ const Dashboard = () => {
                       type="file"
                       id="formFile"
                       // ref={imageRef}
-                      onChange={(e) => setCompanyLogo(e.target.files[0])}
+                      onChange={(e) => setCompanyLogo(e.target.files)}
                     />
+                    <ProgressBar now={progress} label={`${progress}%`} />
                   </div>
                 </div>
               </form>
@@ -1022,9 +1175,21 @@ const Dashboard = () => {
             </Modal.Footer>
           </Modal>
           {/* <!-- Cancel Project Modal End --> */}
+          <MyVerticallyCenteredModal
+            show={modalShow}
+            onHide={() => setModalShow(false)}
+            onEdit={() => setLoad(true)}
+          />
         </div>
         {/* <!-- Pagination End --> */}
       </div>
+
+      <Snackbar open={projectCreatedAlert} autoHideDuration={3000}>
+        <Alert severity="success" sx={{ width: "100%" }}>
+          Project created successfully!
+        </Alert>
+      </Snackbar>
+
       <Footer />
     </div>
   );

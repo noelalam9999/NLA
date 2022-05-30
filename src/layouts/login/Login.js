@@ -9,21 +9,25 @@ import Spinner from "react-bootstrap/Spinner";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import { Modal, Button } from "react-bootstrap";
+import Api from "../../services/Api";
+
 const Login = () => {
-  const [modalShow, setModalShow] = React.useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const [showHelpModal, setHelpModal] = useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setErrorMsg] = useState("");
 
   const [showAlert, setShowAlert] = useState(false);
+  const [showEmailAlert, setShowEmailAlert] = useState(false);
 
   const handleChange = (e) => {
     setLoginState({ ...loginState, [e.target.name]: e.target.value });
   };
   const [loginState, setLoginState] = useState({
-    username: "",
+    email: "",
     password: "",
   });
   const loginHandlerSub = async () => {
@@ -34,15 +38,23 @@ const Login = () => {
           "Content-Type": "application/json",
         },
       };
-      const { data } = await axios.post(
-        "https://nla-backend-1.herokuapp.com/api/login",
-        // "http://localhost:5000/api/login",
-        {
-          username,
-          password,
-        },
-        config
-      );
+
+      const apiData = {
+        email,
+        password,
+      };
+
+      let { data } = await Api("POST", "api/login", apiData, config);
+
+      // const { data } = await axios.post(
+      //   // "https://nla-backend-1.herokuapp.com/api/login",
+      //   "http://localhost:5000/api/login",
+      //   {
+      //     email,
+      //     password,
+      //   },
+      //   config
+      // );
 
       if (data.code === 200) {
         navigate("/dashboard");
@@ -57,14 +69,21 @@ const Login = () => {
   };
   const loginHandler = (e) => {
     e.preventDefault();
-    if (username === "" || password === "") {
+    if (email === "" || password === "") {
       setShowAlert(true);
       setTimeout(() => {
         setShowAlert(false);
       }, 3000);
       return;
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+      setShowEmailAlert(true);
+      setTimeout(() => {
+        setShowEmailAlert(false);
+      }, 3000);
+      return;
+    } else {
+      loginHandlerSub();
     }
-    loginHandlerSub();
   };
 
   function MyVerticallyCenteredModal(props) {
@@ -87,6 +106,35 @@ const Login = () => {
               <strong>techsupport@northanalytics.com</strong>
             </a>{" "}
             to reset the password.
+          </h6>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={props.onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
+  function HelpAndSupportModal(props) {
+    return (
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Help and Support
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h6 style={{ marginTop: 15 }}>
+            Please contact{" "}
+            <a href="#">
+              <strong>techsupport@northanalytics.com</strong>
+            </a>{" "}
+            for Help and Support, Thanks.
           </h6>
         </Modal.Body>
         <Modal.Footer>
@@ -153,12 +201,20 @@ const Login = () => {
                   A path breaking analytics platform that harmonizes advanced
                   analytics and business decision making.
                 </p>
-                {showAlert && (
+                {showAlert ? (
                   <>
                     <Alert variant="outlined" severity="info">
                       Please fill all fields
                     </Alert>
                   </>
+                ) : showEmailAlert ? (
+                  <>
+                    <Alert variant="outlined" severity="info">
+                      Invalid email..!!
+                    </Alert>
+                  </>
+                ) : (
+                  ""
                 )}
                 <div className="login-form-block">
                   <form noValidate>
@@ -167,10 +223,10 @@ const Login = () => {
                         <input
                           type="text"
                           className="form-control"
-                          placeholder="Username"
-                          name="username"
+                          placeholder="Email"
+                          name="email"
                           // onChange={handleChange}
-                          onChange={(e) => setUsername(e.currentTarget.value)}
+                          onChange={(e) => setEmail(e.currentTarget.value)}
                           required
                         />
                       </div>
@@ -239,7 +295,10 @@ const Login = () => {
                   <div className="row align-items-center">
                     <div className="col-lg-4 col-md-4">
                       <div className="nla_help_and_support">
-                        <a href="#">
+                        <a
+                          style={{ cursor: "pointer" }}
+                          onClick={() => setHelpModal(true)}
+                        >
                           <i className="fa-solid fa-circle-question"></i> Help &
                           Support
                         </a>
@@ -262,6 +321,10 @@ const Login = () => {
         <MyVerticallyCenteredModal
           show={modalShow}
           onHide={() => setModalShow(false)}
+        />
+        <HelpAndSupportModal
+          show={showHelpModal}
+          onHide={() => setHelpModal(false)}
         />
       </div>
     </>
