@@ -41,6 +41,7 @@ export default function EditProject(props) {
     }
     fetchProduct();
   }, [load]);
+  console.log(project);
 
   useEffect(() => {
     if (project) {
