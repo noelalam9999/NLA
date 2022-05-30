@@ -201,21 +201,7 @@ const Login = () => {
                   A path breaking analytics platform that harmonizes advanced
                   analytics and business decision making.
                 </p>
-                {showAlert ? (
-                  <>
-                    <Alert variant="outlined" severity="info">
-                      Please fill all fields
-                    </Alert>
-                  </>
-                ) : showEmailAlert ? (
-                  <>
-                    <Alert variant="outlined" severity="info">
-                      Invalid email..!!
-                    </Alert>
-                  </>
-                ) : (
-                  ""
-                )}
+
                 <div className="login-form-block">
                   <form noValidate>
                     <div className="row align-items-center">
@@ -252,6 +238,21 @@ const Login = () => {
                             </Alert>
                           </Stack>
                         ) : null}
+                        {showAlert ? (
+                          <>
+                            <Alert variant="outlined" severity="info">
+                              Please fill all fields
+                            </Alert>
+                          </>
+                        ) : showEmailAlert ? (
+                          <>
+                            <Alert variant="outlined" severity="info">
+                              Invalid email..!!
+                            </Alert>
+                          </>
+                        ) : (
+                          ""
+                        )}
                       </div>
                       <div className="col-6 nla_top-spacing">
                         <button

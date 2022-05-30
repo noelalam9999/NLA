@@ -1099,7 +1099,7 @@ const Dashboard = () => {
                   </div>
                   <div className="nla_form_file_upload position-relative nla_form_field_block">
                     <img src={uploadIcon} alt="" />
-                    <label htmlFor="formFile">Upload Company Logo</label>
+                    <label htmlFor="formFile">{companyLogo}</label>
                     <input
                       className="form-control"
                       type="file"
@@ -1107,7 +1107,7 @@ const Dashboard = () => {
                       // ref={imageRef}
                       onChange={(e) => setCompanyLogo(e.target.files)}
                     />
-                    <ProgressBar now={progress} label={`${progress}%`} />
+                    {/* <ProgressBar now={progress} label={`${progress}%`} /> */}
                   </div>
                 </div>
               </form>
