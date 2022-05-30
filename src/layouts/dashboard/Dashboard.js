@@ -77,6 +77,9 @@ const Dashboard = () => {
   //Date
   const [dateType, setDateType] = useState("text");
 
+  //Alert
+  const [alertMsg, setAlertMsg] = useState("");
+
   //Searching
   const customTabHandlerPinnedProjects = () => {
     setCustomTabPinnedProject(true);
@@ -91,12 +94,12 @@ const Dashboard = () => {
   };
   const companyLogoHandler = (e) => {
     setCompanyLogo(e.target.files);
-    setCompanyLogoType(e.target.files[0].type);
-    imageChecker(e.target.files[0].type);
+    setCompanyLogoType(e.target.files[0]?.type);
+    imageChecker(e.target.files[0]?.type);
   };
-  console.log(companyLogo);
+
   const imageChecker = (props) => {
-    console.log(props);
+    // console.log(props);
     if (companyLogo.length > 0) {
       const formData = new FormData();
       for (const file of companyLogo) formData.append("company_logo", file);
@@ -114,13 +117,21 @@ const Dashboard = () => {
       };
       xhr.open("POST", "https://httpbin.org/post", true);
       xhr.send(formData);
-      console.log("AAAAAAAAAA", companyLogo[0]);
+      console.log("AAAAAAAAAA", companyLogo);
 
-      // Type
-      if (companyLogoType !== "image/jpeg" || companyLogoType !== "image/png") {
-        alert("Invalid Image type");
-        setCompanyLogo([]);
-      }
+      // String filename = textfile.split(".")[0];
+
+      console.log("companyLogo", companyLogo.type);
+    }
+    // Type
+    if (companyLogoType !== "image/jpeg" || companyLogoType !== "image/png") {
+      // alert("Invalid Image type");
+      // setCompanyLogo([]);
+      // setShowAlert(true);
+      // setAlertMsg("Invalid Image type");
+      // setTimeout(() => {
+      //   setShowAlert(false);
+      // }, 3000);
     }
   };
 
@@ -132,7 +143,6 @@ const Dashboard = () => {
       type !== "" &&
       client !== "" &&
       product !== "" &&
-      version !== "" &&
       companyLogo !== ""
     ) {
       try {
@@ -173,6 +183,7 @@ const Dashboard = () => {
             setShow(false);
             setLoad(true);
             setProjectCreatedAlert(true);
+            console.log("Seting Alert");
             setTimeout(() => {
               setProjectCreatedAlert(false);
             }, 3000);
@@ -187,6 +198,7 @@ const Dashboard = () => {
       } catch (error) {}
     } else {
       setShowAlert(true);
+      setAlertMsg("Please fill all fields");
       setTimeout(() => {
         setShowAlert(false);
       }, 3000);
@@ -304,7 +316,7 @@ const Dashboard = () => {
     searchedPages.push(i);
   }
 
-  console.log("searchedPages", searchedPages);
+  // console.log("searchedPages", searchedPages);
 
   const setPageHandler = (page_no) => {
     if (page_no) {
@@ -344,6 +356,10 @@ const Dashboard = () => {
   useEffect(() => {
     scroll();
   }, [load]);
+
+  useEffect(() => {
+    imageChecker();
+  }, [companyLogoType]);
 
   // console.log("pagination", pagination);
 
@@ -1065,11 +1081,11 @@ const Dashboard = () => {
               {showAlert && (
                 <>
                   <Alert className="mb-2" variant="outlined" severity="info">
-                    Please fill all fields
+                    {alertMsg}
                   </Alert>
                 </>
               )}
-              <form method="post" enctype="multipart/form-data">
+              <form method="post" encType="multipart/form-data">
                 <div className="">
                   <div className="nla_form_project_name position-relative nla_form_field_block">
                     {/* <i className="fa fa-share-alt" aria-hidden="true"></i> */}

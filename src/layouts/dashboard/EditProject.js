@@ -126,7 +126,7 @@ export default function EditProject(props) {
         {showAlert && (
           <>
             <Alert className="mb-2" variant="outlined" severity="info">
-              Please fill all fields
+              Please fill all field including image
             </Alert>
           </>
         )}
