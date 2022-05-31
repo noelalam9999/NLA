@@ -25,7 +25,8 @@ import uploadIcon from "../../assets/newIcons/ionic-ios-images.svg";
 import Api from "../../services/Api";
 import EditProject from "./EditProject";
 import Snackbar from "@mui/material/Snackbar";
-
+import copyIcon from "../../assets/newIcons/ionic-md-copy.svg";
+import downloadIcon from "../../assets/newIcons/feather-download.svg";
 const Dashboard = () => {
   const [modalShow, setModalShow] = useState(false);
   const [projectID, setProjectID] = useState("");
@@ -143,7 +144,8 @@ const Dashboard = () => {
       type !== "" &&
       client !== "" &&
       product !== "" &&
-      companyLogo !== ""
+      companyLogo !== "" &&
+      companyLogoType !== ""
     ) {
       try {
         const formData = new FormData();
@@ -757,6 +759,9 @@ const Dashboard = () => {
                                           ? { color: "rgba(0, 0, 0, 0.23)" }
                                           : { color: "#0c0d25" }
                                       }
+                                      onClick={() =>
+                                        PinUnPinHandler(elem.project_id)
+                                      }
                                     ></i>
                                   </div>
                                   <h3>{elem.project_name}</h3>
@@ -873,6 +878,7 @@ const Dashboard = () => {
                                 ? { color: "rgba(0, 0, 0, 0.23)" }
                                 : { color: "#0c0d25" }
                             }
+                            onClick={() => PinUnPinHandler(elem.project_id)}
                           ></i>
                           {elem.project_name}
                         </div>
@@ -900,13 +906,15 @@ const Dashboard = () => {
                           <div>
                             Copy{" "}
                             <a href="#">
-                              <i className="fa-solid fa-copy"></i>
+                              {/* <i className="fa-solid fa-copy"></i> */}
+                              <img src={copyIcon} alt="copy Icon" />
                             </a>
                           </div>
                           <div>
                             Download{" "}
                             <a href="#">
-                              <i className="fa-solid fa-download"></i>
+                              {/* <i className="fa-solid fa-download"></i> */}
+                              <img src={downloadIcon} alt="" />
                             </a>
                           </div>
                         </div>
@@ -1104,7 +1112,7 @@ const Dashboard = () => {
                       className="form-control"
                       list="selectType"
                       id="exampleDataList"
-                      placeholder="Select Type"
+                      placeholder="Select Type*"
                       onChange={(e) => setType(e.target.value)}
                     />
                     <datalist id="selectType">
@@ -1121,7 +1129,7 @@ const Dashboard = () => {
                       aria-label="Select Client"
                       onChange={(e) => setClient(e.target.value)}
                     >
-                      <option selected>Select Client</option>
+                      <option selected>Select Client*</option>
                       <option value="one">One</option>
                       <option value="two">Two</option>
                       <option value="three">Three</option>
@@ -1134,7 +1142,7 @@ const Dashboard = () => {
                       aria-label="Select Product"
                       onChange={(e) => setProduct(e.target.value)}
                     >
-                      <option selected>Select Product</option>
+                      <option selected>Select Product*</option>
                       <option value="one">One</option>
                       <option value="two">Two</option>
                       <option value="three">Three</option>
@@ -1158,7 +1166,7 @@ const Dashboard = () => {
                     {companyLogo.length > 0 ? (
                       <label htmlFor="formFile">{companyLogo[0].name}</label>
                     ) : (
-                      <label htmlFor="formFile">Upload Company Logo</label>
+                      <label htmlFor="formFile">Upload Company Logo*</label>
                     )}
 
                     {/* {companyLogo.length > 0 ? (
