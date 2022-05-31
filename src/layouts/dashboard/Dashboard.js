@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Alert from "@mui/material/Alert";
-import { ProgressBar } from "react-bootstrap";
+import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import Sidebar from "../../components/sidebar/Sidebar";
 import "../../css/style.css";
 import awUser from "../../assets/images/awesome-user-alt.svg";
@@ -31,6 +31,8 @@ const Dashboard = () => {
   const [modalShow, setModalShow] = useState(false);
   const [projectID, setProjectID] = useState("");
   const [projectCreatedAlert, setProjectCreatedAlert] = useState(false);
+  const [projectPinAlert, setProjectPinAlert] = useState(false);
+  const [pinAlertText, setPinAlertText] = useState("");
 
   // Project and Pagination
   const [projects, setProjects] = useState([]);
@@ -270,6 +272,11 @@ const Dashboard = () => {
       const res = await Api("POST", "api/pin/project", { project_id }, config);
       if (res.status === 200) {
         setLoad(true);
+        setPinAlertText(res.data);
+        setProjectPinAlert(true);
+        setTimeout(() => {
+          setProjectPinAlert(false);
+        }, 3000);
       }
     } catch (error) {
       console.log("Error", error.response);
@@ -385,6 +392,13 @@ const Dashboard = () => {
       </Modal>
     );
   }
+
+  //ToolTip
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Simple Tool tip
+    </Tooltip>
+  );
 
   // ----------------------------------------------------------------------------------------------------------------------------
   return (
@@ -572,41 +586,61 @@ const Dashboard = () => {
                               </div>
                               <h3>{elem.project_name}</h3>
                               <div className="nla_shared_link_block">
-                                <a
-                                  href="#"
-                                  data-bs-toggle="tooltip"
-                                  data-bs-placement="top"
-                                  title="Share"
-                                  data-bs-target="#shareProject"
-                                >
-                                  <i className="fa-solid fa-share-nodes"></i>
-                                </a>
-                                <a
-                                  href="#"
-                                  data-bs-toggle="tooltip"
-                                  data-bs-placement="top"
-                                  title="Duplicate"
-                                >
-                                  <i className="fa-regular fa-copy"></i>
-                                </a>
-                                <a
-                                  href="#"
-                                  data-bs-toggle="tooltip"
-                                  data-bs-placement="top"
-                                  title="Download"
-                                >
-                                  <i className="fa-solid fa-download"></i>
-                                </a>
-                                <a
-                                  data-bs-toggle="tooltip"
-                                  data-bs-placement="top"
-                                  title="Edit"
-                                  onClick={() =>
-                                    handleEditProjectModal(elem?.project_id)
+                                <OverlayTrigger
+                                  placement="top"
+                                  delay={{ show: 250, hide: 250 }}
+                                  overlay={
+                                    <Tooltip id={`tooltip-top`}>Share</Tooltip>
                                   }
                                 >
-                                  <i className="fa-solid fa-pen"></i>
-                                </a>
+                                  <a>
+                                    <i className="fa-solid fa-share-nodes"></i>
+                                  </a>
+                                </OverlayTrigger>
+
+                                <OverlayTrigger
+                                  placement="top"
+                                  delay={{ show: 250, hide: 250 }}
+                                  overlay={
+                                    <Tooltip id={`tooltip-top`}>
+                                      Duplicate
+                                    </Tooltip>
+                                  }
+                                >
+                                  <a>
+                                    <i className="fa-regular fa-copy"></i>
+                                  </a>
+                                </OverlayTrigger>
+
+                                <OverlayTrigger
+                                  placement="top"
+                                  delay={{ show: 250, hide: 250 }}
+                                  overlay={
+                                    <Tooltip id={`tooltip-top`}>
+                                      Download
+                                    </Tooltip>
+                                  }
+                                >
+                                  <a>
+                                    <i className="fa-solid fa-download"></i>
+                                  </a>
+                                </OverlayTrigger>
+
+                                <OverlayTrigger
+                                  placement="top"
+                                  delay={{ show: 250, hide: 250 }}
+                                  overlay={
+                                    <Tooltip id={`tooltip-top`}>Edit</Tooltip>
+                                  }
+                                >
+                                  <a
+                                    onClick={() =>
+                                      handleEditProjectModal(elem?.project_id)
+                                    }
+                                  >
+                                    <i className="fa-solid fa-pen"></i>
+                                  </a>
+                                </OverlayTrigger>
                               </div>
                               <div className="nla_additional_links">
                                 <a href="#">
@@ -664,42 +698,61 @@ const Dashboard = () => {
                               ></img> */}
                               {/* <img src={elem.company_logo} alt="no image"></img> */}
                               <div className="nla_shared_link_block">
-                                <a
-                                  href="#"
-                                  data-bs-toggle="tooltip"
-                                  data-bs-placement="top"
-                                  title="Share"
-                                  data-bs-target="#shareProject"
-                                >
-                                  <i className="fa-solid fa-share-nodes"></i>
-                                </a>
-                                <a
-                                  href="#"
-                                  data-bs-toggle="tooltip"
-                                  data-bs-placement="top"
-                                  title="Duplicate"
-                                >
-                                  <i className="fa-regular fa-copy"></i>
-                                </a>
-                                <a
-                                  href="#"
-                                  data-bs-toggle="tooltip"
-                                  data-bs-placement="top"
-                                  title="Download"
-                                >
-                                  <i className="fa-solid fa-download"></i>
-                                </a>
-                                <a
-                                  href="#"
-                                  data-bs-toggle="tooltip"
-                                  data-bs-placement="top"
-                                  title="Edit"
-                                  onClick={() =>
-                                    handleEditProjectModal(elem?.project_id)
+                                <OverlayTrigger
+                                  placement="top"
+                                  delay={{ show: 250, hide: 250 }}
+                                  overlay={
+                                    <Tooltip id={`tooltip-top`}>Share</Tooltip>
                                   }
                                 >
-                                  <i className="fa-solid fa-pen"></i>
-                                </a>
+                                  <a>
+                                    <i className="fa-solid fa-share-nodes"></i>
+                                  </a>
+                                </OverlayTrigger>
+
+                                <OverlayTrigger
+                                  placement="top"
+                                  delay={{ show: 250, hide: 250 }}
+                                  overlay={
+                                    <Tooltip id={`tooltip-top`}>
+                                      Duplicate
+                                    </Tooltip>
+                                  }
+                                >
+                                  <a>
+                                    <i className="fa-regular fa-copy"></i>
+                                  </a>
+                                </OverlayTrigger>
+
+                                <OverlayTrigger
+                                  placement="top"
+                                  delay={{ show: 250, hide: 250 }}
+                                  overlay={
+                                    <Tooltip id={`tooltip-top`}>
+                                      Download
+                                    </Tooltip>
+                                  }
+                                >
+                                  <a>
+                                    <i className="fa-solid fa-download"></i>
+                                  </a>
+                                </OverlayTrigger>
+
+                                <OverlayTrigger
+                                  placement="top"
+                                  delay={{ show: 250, hide: 250 }}
+                                  overlay={
+                                    <Tooltip id={`tooltip-top`}>Edit</Tooltip>
+                                  }
+                                >
+                                  <a
+                                    onClick={() =>
+                                      handleEditProjectModal(elem?.project_id)
+                                    }
+                                  >
+                                    <i className="fa-solid fa-pen"></i>
+                                  </a>
+                                </OverlayTrigger>
                               </div>
                               <div className="nla_additional_links">
                                 <a href="#">
@@ -766,42 +819,67 @@ const Dashboard = () => {
                                   </div>
                                   <h3>{elem.project_name}</h3>
                                   <div className="nla_shared_link_block">
-                                    <a
-                                      href="#"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                      title="Share"
-                                      data-bs-target="#shareProject"
-                                    >
-                                      <i className="fa-solid fa-share-nodes"></i>
-                                    </a>
-                                    <a
-                                      href="#"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                      title="Duplicate"
-                                    >
-                                      <i className="fa-regular fa-copy"></i>
-                                    </a>
-                                    <a
-                                      href="#"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                      title="Download"
-                                    >
-                                      <i className="fa-solid fa-download"></i>
-                                    </a>
-                                    <a
-                                      href="#"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                      title="Edit"
-                                      onClick={() =>
-                                        handleEditProjectModal(elem?.project_id)
+                                    <OverlayTrigger
+                                      placement="top"
+                                      delay={{ show: 250, hide: 250 }}
+                                      overlay={
+                                        <Tooltip id={`tooltip-top`}>
+                                          Share
+                                        </Tooltip>
                                       }
                                     >
-                                      <i className="fa-solid fa-pen"></i>
-                                    </a>
+                                      <a>
+                                        <i className="fa-solid fa-share-nodes"></i>
+                                      </a>
+                                    </OverlayTrigger>
+
+                                    <OverlayTrigger
+                                      placement="top"
+                                      delay={{ show: 250, hide: 250 }}
+                                      overlay={
+                                        <Tooltip id={`tooltip-top`}>
+                                          Duplicate
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <a>
+                                        <i className="fa-regular fa-copy"></i>
+                                      </a>
+                                    </OverlayTrigger>
+
+                                    <OverlayTrigger
+                                      placement="top"
+                                      delay={{ show: 250, hide: 250 }}
+                                      overlay={
+                                        <Tooltip id={`tooltip-top`}>
+                                          Download
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <a>
+                                        <i className="fa-solid fa-download"></i>
+                                      </a>
+                                    </OverlayTrigger>
+
+                                    <OverlayTrigger
+                                      placement="top"
+                                      delay={{ show: 250, hide: 250 }}
+                                      overlay={
+                                        <Tooltip id={`tooltip-top`}>
+                                          Edit
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <a
+                                        onClick={() =>
+                                          handleEditProjectModal(
+                                            elem?.project_id
+                                          )
+                                        }
+                                      >
+                                        <i className="fa-solid fa-pen"></i>
+                                      </a>
+                                    </OverlayTrigger>
                                   </div>
                                   <div className="nla_additional_links">
                                     <a href="#">
@@ -1279,6 +1357,12 @@ const Dashboard = () => {
       <Snackbar open={projectCreatedAlert} autoHideDuration={3000}>
         <Alert severity="success" sx={{ width: "100%" }}>
           Project created successfully!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar open={projectPinAlert} autoHideDuration={3000}>
+        <Alert severity="success" sx={{ width: "100%" }}>
+          {pinAlertText}
         </Alert>
       </Snackbar>
 
