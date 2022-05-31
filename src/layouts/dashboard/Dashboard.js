@@ -1338,10 +1338,7 @@ const Dashboard = () => {
               </div>
               <div class="nla_modal_body_title text-center">
                 <h5>Are you Sure?</h5>
-                <p>
-                  Hitting yes will delete all the relevant data and output for
-                  the project.
-                </p>
+                <p>Hitting yes will cancel the project</p>
               </div>
             </Modal.Body>
             <Modal.Footer>
