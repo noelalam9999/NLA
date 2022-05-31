@@ -232,7 +232,7 @@ export default function EditProject(props) {
           className="btn btn-primary"
           onClick={createProject}
         >
-          Create
+          Update
         </button>
         <Snackbar open={projectEditedAlert} autoHideDuration={3000}>
           <Alert severity="success" sx={{ width: "100%" }}>

@@ -1159,6 +1159,15 @@ header .theme-title h1 span {
   border-top-color: #174f73;
 }
 
+.bs-tooltip-right .tooltip-inner {
+  background-color: #174f73;
+  color: #ffffff;
+}
+
+.bs-tooltip-right .tooltip-arrow::before {
+  border-right-color: #174f73;
+}
+
 .bs-tooltip-end .tooltip-inner {
   background-color: #ffffff;
   color: #000000;

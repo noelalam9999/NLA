@@ -534,13 +534,23 @@ const Dashboard = () => {
                       >
                         <p className="mb-0">
                           Pinned Projects
-                          <a href="#">
-                            <img
-                              src={feather}
-                              style={{ marginLeft: 5 }}
-                              alt=""
-                            />
-                          </a>
+                          <OverlayTrigger
+                            placement="top"
+                            delay={{ show: 250, hide: 250 }}
+                            overlay={
+                              <Tooltip id="overlay-example">
+                                Pinned projects
+                              </Tooltip>
+                            }
+                          >
+                            <a>
+                              <img
+                                src={feather}
+                                style={{ marginLeft: 5 }}
+                                alt=""
+                              />
+                            </a>
+                          </OverlayTrigger>
                         </p>
                       </div>
                       <div className="col-lg-7 text-end">
@@ -661,13 +671,23 @@ const Dashboard = () => {
                       <div className="col-lg-5">
                         <p className="mb-0">
                           Recently Created
-                          <a href="#">
-                            <img
-                              src={feather}
-                              style={{ marginLeft: 5 }}
-                              alt=""
-                            />
-                          </a>
+                          <OverlayTrigger
+                            placement="top"
+                            delay={{ show: 250, hide: 250 }}
+                            overlay={
+                              <Tooltip id="overlay-example">
+                                Pinned projects
+                              </Tooltip>
+                            }
+                          >
+                            <a>
+                              <img
+                                src={feather}
+                                style={{ marginLeft: 5 }}
+                                alt=""
+                              />
+                            </a>
+                          </OverlayTrigger>
                         </p>
                       </div>
                     </div>
