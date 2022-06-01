@@ -27,6 +27,7 @@ import EditProject from "./EditProject";
 import Snackbar from "@mui/material/Snackbar";
 import copyIcon from "../../assets/newIcons/ionic-md-copy.svg";
 import downloadIcon from "../../assets/newIcons/feather-download.svg";
+
 const Dashboard = () => {
   const [modalShow, setModalShow] = useState(false);
   const [projectID, setProjectID] = useState("");
@@ -44,7 +45,9 @@ const Dashboard = () => {
 
   // console.log("searchResultpagination", searchResultpagination);
 
+  //Pagination
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(5);
 
   // console.log("Modal show", modalShow);
   const [load, setLoad] = useState(false);
@@ -233,13 +236,14 @@ const Dashboard = () => {
     } else if (project_name) {
       const res = await Api(
         "POST",
-        `api/project/name/?page=${page}`,
+        `api/project/name/?page=${page}&limit=${limit}`,
         { project_name, user_id },
         config
       );
 
       setFilteredData(res.data.rows);
       setSearchResultpagination(res.data.pagination);
+      console.log("setSearchResultpagination: ", searchResultpagination);
       if (res.status === 200) {
         setFilterVisible(true);
       }
@@ -345,22 +349,48 @@ const Dashboard = () => {
   // ----------------------------------------------
 
   useEffect(() => {
-    async function fetchProduct() {
-      const { data } = await Api("GET", `api/projects/${userID}/?page=${page}`);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    console.log("Limit: ", limit);
+    async function fetchProjects() {
+      const { data } = await Api(
+        "GET",
+        `api/projects/${userID}/?page=${page}&limit=${limit}`
+        // config
+      );
       setProjects(data.rows);
       setPagination(data.pagination);
+      console.log("setPagination: ", pagination);
+
       const filteredPin = data.rows?.filter((val) => {
         return val.pin_project === 1;
       });
+
+      //Getting Pinned Projects
+      // const response = await Api(
+      //   "POST",
+      //   `api/pinned/projects/?page=${page}&limit=${limit}`,
+      //   { user_id },
+      //   config
+      // );
+
+      // console.log("response: ", response.data.rows);
+      // console.log("user: ", user_id);
+
       const filteredUnPin = data.rows?.filter((val) => {
         return val.pin_project === 0;
       });
+      // setFilteredPinData(response.data.rows);
       setFilteredPinData(filteredPin);
       setFilteredUnPinData(filteredUnPin);
     }
-    fetchProduct();
+    fetchProjects();
     setLoad(false);
-  }, [load]);
+  }, [load, limit]);
 
   useEffect(() => {
     scroll();
@@ -369,6 +399,10 @@ const Dashboard = () => {
   useEffect(() => {
     imageChecker();
   }, [companyLogoType]);
+
+  useEffect(() => {
+    searchDataHandler();
+  }, [limit, page]);
 
   // console.log("pagination", pagination);
 
@@ -1070,7 +1104,9 @@ const Dashboard = () => {
         {/* <!-- Pagination Start --> */}
         <div className="nla-pagination-and-all-results-wrapper">
           <nav data-pagination>
-            {filteredData !== "" ? (
+            {filteredData !== "" &&
+            filteredData !== null &&
+            filteredData.length !== 0 ? (
               <>
                 {searchResultpagination?.page > 1 && (
                   <a
@@ -1080,6 +1116,25 @@ const Dashboard = () => {
                     <i className="ion-chevron-left"></i>
                   </a>
                 )}
+                <ul>
+                  {searchResultpagination?.results?.previous?.page && (
+                    <li
+                      // className={page === pagination.page ? "current" : ""}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <a
+                        onClick={() =>
+                          setSearchedPageHandler(
+                            searchResultpagination?.results?.previous?.page
+                          )
+                        }
+                      >
+                        {searchResultpagination?.results?.previous?.page}
+                      </a>
+                    </li>
+                  )}
+                </ul>
+
                 <ul>
                   {searchedPages.map((page, index) => (
                     <li
@@ -1093,7 +1148,8 @@ const Dashboard = () => {
                     </li>
                   ))}
                 </ul>
-                {pagination.page < searchResultpagination?.numberOfPages && (
+                {searchResultpagination?.page <
+                  searchResultpagination?.numberOfPages && (
                   <a
                     onClick={() => setSearchedPageHandler(page + 1)}
                     style={{ cursor: "pointer" }}
@@ -1105,7 +1161,7 @@ const Dashboard = () => {
               </>
             ) : (
               <>
-                {pagination.page > 1 && (
+                {pagination?.page > 1 && (
                   <a
                     onClick={() => setPageHandler(page - 1)}
                     style={{ cursor: "pointer" }}
@@ -1114,7 +1170,23 @@ const Dashboard = () => {
                   </a>
                 )}
                 <ul>
-                  {pages.map((page, index) => (
+                  {pagination?.results?.previous?.page && (
+                    <li
+                      // className={page === pagination.page ? "current" : ""}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <a
+                        onClick={() =>
+                          setPageHandler(pagination?.results?.previous?.page)
+                        }
+                      >
+                        {pagination?.results?.previous?.page}
+                      </a>
+                    </li>
+                  )}
+                </ul>
+                <ul>
+                  {pages?.map((page, index) => (
                     <li
                       key={index}
                       className={page === pagination.page ? "current" : ""}
@@ -1124,7 +1196,7 @@ const Dashboard = () => {
                     </li>
                   ))}
                 </ul>
-                {pagination.page < pagination.numberOfPages && (
+                {pagination?.page < pagination?.numberOfPages && (
                   <a
                     onClick={() => setPageHandler(page + 1)}
                     style={{ cursor: "pointer" }}
@@ -1137,18 +1209,22 @@ const Dashboard = () => {
             )}
           </nav>
 
+          {/* <!-- Pagination End --> */}
+
           <div className="nla_result_show_block">
             <div>
               <label htmlFor="">Show</label>
               <select
                 className="form-select"
                 aria-label="Default select example"
-                defaultValue={"value"}
+                // defaultValue={"value"}
+                onChange={(e) => setLimit(e.target.value)}
               >
-                <option value="0">10 Project</option>
-                <option value="1">15 Project</option>
-                <option value="2">20 Project</option>
-                <option value="3">25 Project</option>
+                <option value="5">5 Project</option>
+                <option value="10">10 Project</option>
+                <option value="15">15 Project</option>
+                <option value="20">20 Project</option>
+                <option value="35">25 Project</option>
               </select>
             </div>
             <div>
@@ -1368,7 +1444,6 @@ const Dashboard = () => {
             onEdit={() => setLoad(true)}
           />
         </div>
-        {/* <!-- Pagination End --> */}
       </div>
 
       <Snackbar open={projectCreatedAlert} autoHideDuration={3000}>
