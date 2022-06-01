@@ -11,6 +11,7 @@ import metroVersion from "../../assets/newIcons/metro-versions.svg";
 import uploadIcon from "../../assets/newIcons/ionic-ios-images.svg";
 import createImg from "../../assets/images/new_project_create_image.png";
 import Snackbar from "@mui/material/Snackbar";
+import { getNativeSelectUtilityClasses } from "@mui/material";
 
 export default function EditProject(props) {
   const project_id = props.project_id;
@@ -25,11 +26,11 @@ export default function EditProject(props) {
   const [client, setClient] = useState("");
   const [product, setProduct] = useState("");
   const [version, setVersion] = useState("");
-  const [companyLogo, setCompanyLogo] = useState("");
+  const [companyLogo, setCompanyLogo] = useState(null);
   const [checkLogo, setCheckLogo] = useState("");
 
-  //   const reload = props.load;
-  //   const setReload = props.setLoad;
+  const [file1, setFile1] = useState("");
+  const [image, setImage] = useState(null);
 
   //   console.log("reload", reload);
   //   console.log("setReload", setReload);
@@ -55,6 +56,8 @@ export default function EditProject(props) {
     }
   }, [project]);
 
+  console.log("companyLogo", companyLogo);
+
   //   ----------------------
 
   const createProject = async () => {
@@ -64,6 +67,7 @@ export default function EditProject(props) {
       type !== "" &&
       client !== "" &&
       product !== "" &&
+      companyLogo !== "" &&
       checkLogo !== ""
     ) {
       try {
@@ -110,6 +114,17 @@ export default function EditProject(props) {
         setShowAlert(false);
       }, 3000);
     }
+  };
+
+  const imageHandler = (e) => {
+    setFile1(e.target.files[0]);
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
   };
 
   // ------------------------
@@ -203,13 +218,22 @@ export default function EditProject(props) {
             </div>
             <div className="nla_form_file_upload position-relative nla_form_field_block">
               <img src={uploadIcon} alt="" />
-              <label htmlFor="formFile">Upload Company Logo</label>
+              {/* <label htmlFor="formFile">Upload Company Logo</label> */}
+              {companyLogo?.length > 0 ? (
+                <label htmlFor="formFile">{companyLogo}</label>
+              ) : (
+                <label htmlFor="formFile">Upload Company Logo*</label>
+              )}
               <input
                 className="form-control"
                 type="file"
                 id="formFile"
-                value={checkLogo[0]}
+                value={""}
+                accept="image/*"
                 // placeholder="Upload Company Logo"
+                // onChange={(e) => {
+                //   imageHandler(e);
+                // }}
                 onChange={(e) => setCheckLogo(e.target.files[0])}
               />
             </div>

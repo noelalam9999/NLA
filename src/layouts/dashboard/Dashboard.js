@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Alert from "@mui/material/Alert";
-import { Tooltip, OverlayTrigger } from "react-bootstrap";
+import { Tooltip, OverlayTrigger, Badge } from "react-bootstrap";
+import moment from "moment";
 import Sidebar from "../../components/sidebar/Sidebar";
 import "../../css/style.css";
 import awUser from "../../assets/images/awesome-user-alt.svg";
@@ -64,9 +65,13 @@ const Dashboard = () => {
   //Search
   const [project_name, setSearchByProjectName] = useState("");
   const [project_date, setProjectDate] = useState("");
+  const [searchByAuthor, setSearchByAuthor] = useState("");
+
   const [filteredPinData, setFilteredPinData] = useState("");
   const [filteredUnPinData, setFilteredUnPinData] = useState("");
   const [filteredData, setFilteredData] = useState("");
+  const [filteredDataError, setFilteredDataError] = useState("");
+
   const [projectName, setProjectName] = useState("");
   const [type, setType] = useState("");
   const [client, setClient] = useState("");
@@ -85,6 +90,9 @@ const Dashboard = () => {
 
   //Alert
   const [alertMsg, setAlertMsg] = useState("");
+
+  //Badge
+  const [newProject, setNewProject] = useState(false);
 
   //Searching
   const customTabHandlerPinnedProjects = () => {
@@ -259,6 +267,11 @@ const Dashboard = () => {
       if (res.status === 200) {
         setFilterVisible(true);
       }
+    } else if (searchByAuthor) {
+      console.log("searchByAuthor", searchByAuthor);
+      // setFilteredDataError("No record found");
+      setFilteredData(1);
+      setFilterVisible(true);
     } else {
       console.log("Invalid");
     }
@@ -311,6 +324,9 @@ const Dashboard = () => {
     }
   };
   const unsetSearchData = () => {
+    // setSearchByAuthor("");
+    // setSearchByProjectName("");
+    // setProjectDate("");
     setFilterVisible(false);
   };
 
@@ -392,6 +408,10 @@ const Dashboard = () => {
     setLoad(false);
   }, [load, limit]);
 
+  for (let i = 0; i < filteredUnPinData; i++) {
+    isNewProject(i.date_created);
+  }
+
   useEffect(() => {
     scroll();
   }, [load]);
@@ -434,7 +454,21 @@ const Dashboard = () => {
     </Tooltip>
   );
 
-  // ----------------------------------------------------------------------------------------------------------------------------
+  const todayDate = new Date();
+
+  const isNewProject = (orderCreatedDate) => {
+    console.log("orderCreatedDate: ", orderCreatedDate);
+    const todayDate = new Date();
+
+    if (moment(todayDate).diff(moment(orderCreatedDate)) / 3600000 <= 1) {
+      console.log("True");
+      setNewProject(true);
+    } else {
+      setNewProject(false);
+    }
+  };
+
+  // ==========================================================================================================================
   return (
     <div>
       <Header />
@@ -499,6 +533,7 @@ const Dashboard = () => {
                   type="search"
                   className="form-control mb-0 ms-3"
                   placeholder="Search Model by Author"
+                  onChange={(e) => setSearchByAuthor(e.target.value)}
                 />
               </div>
             </div>
@@ -710,7 +745,7 @@ const Dashboard = () => {
                             delay={{ show: 250, hide: 250 }}
                             overlay={
                               <Tooltip id="overlay-example">
-                                Pinned projects
+                                Recently created projects
                               </Tooltip>
                             }
                           >
@@ -736,6 +771,18 @@ const Dashboard = () => {
                             key={id}
                           >
                             <div className="nla_item_box">
+                              {moment(todayDate).diff(
+                                moment(elem.date_created)
+                              ) /
+                                3600000 <=
+                              1 ? (
+                                <div className="mb-3">
+                                  <Badge bg="success">NEW</Badge>
+                                </div>
+                              ) : (
+                                ""
+                              )}
+
                               <div className="nla_pin-icon">
                                 <i
                                   className="fa-solid fa-thumbtack"
@@ -850,108 +897,107 @@ const Dashboard = () => {
                         </div>
                       </div>
                       <div className={`nla_grid_view_wrapper ${columnState}`}>
-                        {filteredData?.length > 0
-                          ? filteredData?.map((elem, id) => (
-                              <div
-                                className="nla_item_box_col first-nla-itembox"
-                                data-position="right"
-                                key={id}
-                              >
-                                <div className="nla_item_box">
-                                  <div className="nla_pin-icon">
-                                    <i
-                                      className="fa-solid fa-thumbtack"
-                                      style={
-                                        elem.pin_project === 0
-                                          ? { color: "rgba(0, 0, 0, 0.23)" }
-                                          : { color: "#0c0d25" }
-                                      }
+                        {filteredData?.length > 0 ? (
+                          filteredData?.map((elem, id) => (
+                            <div
+                              className="nla_item_box_col first-nla-itembox"
+                              data-position="right"
+                              key={id}
+                            >
+                              <div className="nla_item_box">
+                                <div className="nla_pin-icon">
+                                  <i
+                                    className="fa-solid fa-thumbtack"
+                                    style={
+                                      elem.pin_project === 0
+                                        ? { color: "rgba(0, 0, 0, 0.23)" }
+                                        : { color: "#0c0d25" }
+                                    }
+                                    onClick={() =>
+                                      PinUnPinHandler(elem.project_id)
+                                    }
+                                  ></i>
+                                </div>
+                                <h3>{elem.project_name}</h3>
+                                <div className="nla_shared_link_block">
+                                  <OverlayTrigger
+                                    placement="top"
+                                    delay={{ show: 250, hide: 250 }}
+                                    overlay={
+                                      <Tooltip id={`tooltip-top`}>
+                                        Share
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <a>
+                                      <i className="fa-solid fa-share-nodes"></i>
+                                    </a>
+                                  </OverlayTrigger>
+
+                                  <OverlayTrigger
+                                    placement="top"
+                                    delay={{ show: 250, hide: 250 }}
+                                    overlay={
+                                      <Tooltip id={`tooltip-top`}>
+                                        Duplicate
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <a>
+                                      <i className="fa-regular fa-copy"></i>
+                                    </a>
+                                  </OverlayTrigger>
+
+                                  <OverlayTrigger
+                                    placement="top"
+                                    delay={{ show: 250, hide: 250 }}
+                                    overlay={
+                                      <Tooltip id={`tooltip-top`}>
+                                        Download
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <a>
+                                      <i className="fa-solid fa-download"></i>
+                                    </a>
+                                  </OverlayTrigger>
+
+                                  <OverlayTrigger
+                                    placement="top"
+                                    delay={{ show: 250, hide: 250 }}
+                                    overlay={
+                                      <Tooltip id={`tooltip-top`}>Edit</Tooltip>
+                                    }
+                                  >
+                                    <a
                                       onClick={() =>
-                                        PinUnPinHandler(elem.project_id)
-                                      }
-                                    ></i>
-                                  </div>
-                                  <h3>{elem.project_name}</h3>
-                                  <div className="nla_shared_link_block">
-                                    <OverlayTrigger
-                                      placement="top"
-                                      delay={{ show: 250, hide: 250 }}
-                                      overlay={
-                                        <Tooltip id={`tooltip-top`}>
-                                          Share
-                                        </Tooltip>
+                                        handleEditProjectModal(elem?.project_id)
                                       }
                                     >
-                                      <a>
-                                        <i className="fa-solid fa-share-nodes"></i>
-                                      </a>
-                                    </OverlayTrigger>
-
-                                    <OverlayTrigger
-                                      placement="top"
-                                      delay={{ show: 250, hide: 250 }}
-                                      overlay={
-                                        <Tooltip id={`tooltip-top`}>
-                                          Duplicate
-                                        </Tooltip>
-                                      }
-                                    >
-                                      <a>
-                                        <i className="fa-regular fa-copy"></i>
-                                      </a>
-                                    </OverlayTrigger>
-
-                                    <OverlayTrigger
-                                      placement="top"
-                                      delay={{ show: 250, hide: 250 }}
-                                      overlay={
-                                        <Tooltip id={`tooltip-top`}>
-                                          Download
-                                        </Tooltip>
-                                      }
-                                    >
-                                      <a>
-                                        <i className="fa-solid fa-download"></i>
-                                      </a>
-                                    </OverlayTrigger>
-
-                                    <OverlayTrigger
-                                      placement="top"
-                                      delay={{ show: 250, hide: 250 }}
-                                      overlay={
-                                        <Tooltip id={`tooltip-top`}>
-                                          Edit
-                                        </Tooltip>
-                                      }
-                                    >
-                                      <a
-                                        onClick={() =>
-                                          handleEditProjectModal(
-                                            elem?.project_id
-                                          )
-                                        }
-                                      >
-                                        <i className="fa-solid fa-pen"></i>
-                                      </a>
-                                    </OverlayTrigger>
-                                  </div>
-                                  <div className="nla_additional_links">
-                                    <a href="#">
-                                      Design Studio{" "}
-                                      <i className="fa-solid fa-pencil"></i>
+                                      <i className="fa-solid fa-pen"></i>
                                     </a>
-                                    <a href="#">
-                                      Insights{" "}
-                                      <i className="fa-solid fa-eye"></i>
-                                    </a>
-                                  </div>
+                                  </OverlayTrigger>
+                                </div>
+                                <div className="nla_additional_links">
+                                  <a href="#">
+                                    Design Studio{" "}
+                                    <i className="fa-solid fa-pencil"></i>
+                                  </a>
+                                  <a href="#">
+                                    Insights <i className="fa-solid fa-eye"></i>
+                                  </a>
                                 </div>
                               </div>
-                            ))
-                          : null}
+                            </div>
+                          ))
+                        ) : (
+                          <p>No search results found</p>
+                        )}
                       </div>
                     </>
-                  ) : null}
+                  ) : (
+                    <p>No search results found</p>
+                  )}
                 </>
               )}
             </div>
@@ -997,7 +1043,7 @@ const Dashboard = () => {
                 </div>
                 <div className="nla_list_view_body_content">
                   <ul>
-                    {projects.map((elem, id) => (
+                    {projects?.map((elem, id) => (
                       <li
                         // className="active"
                         key={id}
@@ -1106,7 +1152,7 @@ const Dashboard = () => {
           <nav data-pagination>
             {filteredData !== "" &&
             filteredData !== null &&
-            filteredData.length !== 0 ? (
+            filteredData?.length !== 0 ? (
               <>
                 {searchResultpagination?.page > 1 && (
                   <a
@@ -1136,7 +1182,7 @@ const Dashboard = () => {
                 </ul>
 
                 <ul>
-                  {searchedPages.map((page, index) => (
+                  {searchedPages?.map((page, index) => (
                     <li
                       key={index}
                       className={
@@ -1337,7 +1383,7 @@ const Dashboard = () => {
                   <div className="nla_form_file_upload position-relative nla_form_field_block">
                     <img src={uploadIcon} alt="" />
                     {/* <label htmlFor="formFile">Upload Company Logo</label> */}
-                    {companyLogo.length > 0 ? (
+                    {companyLogo?.length > 0 ? (
                       <label htmlFor="formFile">{companyLogo[0].name}</label>
                     ) : (
                       <label htmlFor="formFile">Upload Company Logo*</label>
