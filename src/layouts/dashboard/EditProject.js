@@ -26,7 +26,7 @@ export default function EditProject(props) {
   const [client, setClient] = useState("");
   const [product, setProduct] = useState("");
   const [version, setVersion] = useState("");
-  const [companyLogo, setCompanyLogo] = useState(null);
+  const [companyLogo, setCompanyLogo] = useState([]);
   const [checkLogo, setCheckLogo] = useState("");
 
   const [file1, setFile1] = useState("");
@@ -55,6 +55,24 @@ export default function EditProject(props) {
       // setCheckLogo(project[0]?.company_logo);
     }
   }, [project]);
+
+  useEffect(() => {
+    if (projectName !== "") {
+      document.querySelector("#projectName").style.borderColor = "#86b7fe";
+    }
+    if (type !== "") {
+      document.querySelector("#exampleDataList").style.borderColor = "#86b7fe";
+    }
+    if (client !== "") {
+      document.querySelector("#selectClientt").style.borderColor = "#86b7fe";
+    }
+    if (product !== "") {
+      document.querySelector("#product").style.borderColor = "#86b7fe";
+    }
+    // if (companyLogo?.length > 1) {
+    //   document.querySelector("#companyLogo").style.borderColor = "#86b7fe";
+    // }
+  }, [projectName, type, client, product]);
 
   console.log("companyLogo", companyLogo);
 
@@ -114,6 +132,43 @@ export default function EditProject(props) {
         setShowAlert(false);
       }, 3000);
     }
+
+    if (projectName === "") {
+      document.querySelector("#projectName").focus();
+      document.querySelector("#projectName").style.borderColor = "#eb3434";
+    }
+    if (type === "") {
+      document.querySelector("#exampleDataList").focus();
+      document.querySelector("#exampleDataList").style.borderColor = "#eb3434";
+    }
+    if (client === "") {
+      document.querySelector("#selectClientt").focus();
+      document.querySelector("#selectClientt").style.borderColor = "#eb3434";
+    }
+    if (product === "") {
+      document.querySelector("#product").focus();
+      document.querySelector("#product").style.borderColor = "#eb3434";
+    }
+    if (companyLogo?.length === 0) {
+      document.querySelector("#companyLogo").focus();
+      document.querySelector("#companyLogo").style.border = "1px solid #eb3434";
+      document.querySelector("#product").style.borderColor = "#eb3434";
+    }
+    if (projectName !== "") {
+      document.querySelector("#projectName").style.borderColor = "#86b7fe";
+    }
+    if (type !== "") {
+      document.querySelector("#exampleDataList").style.borderColor = "#86b7fe";
+    }
+    if (client !== "") {
+      document.querySelector("#selectClientt").style.borderColor = "#86b7fe";
+    }
+    if (product !== "") {
+      document.querySelector("#product").style.borderColor = "#86b7fe";
+    }
+    // if (companyLogo.length > 1) {
+    //   document.querySelector("#companyLogo").style.borderColor = "#86b7fe";
+    // }
   };
 
   const imageHandler = (e) => {
@@ -182,6 +237,7 @@ export default function EditProject(props) {
                 className="form-select"
                 aria-label="Select Client"
                 value={client}
+                id="selectClientt"
                 onChange={(e) => setClient(e.target.value)}
               >
                 <option selected>Select Client</option>
@@ -195,6 +251,7 @@ export default function EditProject(props) {
               <select
                 className="form-select"
                 aria-label="Select Product"
+                id="product"
                 value={product}
                 onChange={(e) => setProduct(e.target.value)}
               >
