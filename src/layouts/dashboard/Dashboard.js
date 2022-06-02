@@ -42,12 +42,16 @@ const Dashboard = () => {
   const [pagination, setPagination] = useState([]);
 
   const [searchResultpagination, setSearchResultpagination] = useState([]);
+  const [orderByPinProjectPagination, setOrderByPinProjectPagination] =
+    useState([]);
 
   const [progress, setProgress] = useState();
 
+  const [pinnedProjectsTotalPages, setPinnedProjectsTotalPages] = useState(1);
+
   //Pagination
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(10);
 
   const [load, setLoad] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -101,6 +105,23 @@ const Dashboard = () => {
   const customTabHandlerRecentProjects = async () => {
     setCustomTabPinnedProject(false);
     setCustomTabRecentProject(true);
+
+    try {
+      let { data } = await Api(
+        "GET",
+        `api/projects/order-by-pin/${user_id}/?page=${page}&limit=${limit}`
+      );
+
+      if (data) {
+        setProjectsOrderByPin(data);
+        setOrderByPinProjectPagination(data.pagination);
+        console.log("\n\ndata", data);
+      }
+    } catch (error) {
+      console.log("Error", error.response);
+    }
+
+    // setProjectsOrderByPin()
   };
   const columnHandler = (e) => {
     setColumnState(e.target.value);
@@ -371,6 +392,7 @@ const Dashboard = () => {
     pages.push(i);
   }
 
+  // Searched Result Pages
   var searchedPages = [];
   for (
     let i = searchResultpagination?.page;
@@ -378,6 +400,16 @@ const Dashboard = () => {
     i++
   ) {
     searchedPages.push(i);
+  }
+
+  // Order By Pin Pagination
+  var orderByPinProjectPages = [];
+  for (
+    let i = orderByPinProjectPagination?.page;
+    i <= orderByPinProjectPagination?.endingLink;
+    i++
+  ) {
+    orderByPinProjectPages.push(i);
   }
 
   // console.log("searchedPages", searchedPages);
@@ -396,6 +428,13 @@ const Dashboard = () => {
     }
   };
 
+  const setOrderByPinProjectsHandler = (page_no) => {
+    if (page_no) {
+      setPage(page_no);
+      setLoad(true);
+    }
+  };
+
   //Pagination for Search Products
   // ----------------------------------------------
 
@@ -405,6 +444,7 @@ const Dashboard = () => {
         "Content-Type": "application/json",
       },
     };
+    console.log("Page and Limit: ", page, limit);
 
     async function fetchProjects() {
       const { data } = await Api(
@@ -414,34 +454,38 @@ const Dashboard = () => {
       );
       setProjects(data.rows);
       setPagination(data.pagination);
-      console.log("setPagination: ", pagination);
+      console.log("data.rows: ", data.rows);
 
       const filteredPin = data.rows?.filter((val) => {
         return val.pin_project === 1;
       });
 
       //Getting Pinned Projects
-      // const response = await Api(
-      //   "POST",
-      //   `api/pinned/projects/?page=${page}&limit=${limit}`,
-      //   { user_id },
-      //   config
-      // );
-      // console.log("response: ", response.data.rows);
-      // setFilteredPinDataByDate(response.data.rows);
+      if (page <= pinnedProjectsTotalPages) {
+        const response = await Api(
+          "POST",
+          `api/pinned/projects/?page=${page}&limit=${limit}`,
+          { user_id },
+          config
+        );
+        console.log("response: ", response.data.pagination.numberOfPages);
+        setPinnedProjectsTotalPages(response.data.pagination.numberOfPages);
+        setFilteredPinDataByDate(response.data.rows);
+      }
+
       // console.log("user: ", user_id);
 
       const filteredUnPin = data.rows?.filter((val) => {
         return val.pin_project === 0;
       });
 
-      setFilteredPinDataByDate(filteredPin);
+      // setFilteredPinDataByDate(filteredPin);
       setFilteredPinData(filteredPin);
       setFilteredUnPinData(filteredUnPin);
     }
     fetchProjects();
     setLoad(false);
-  }, [load, limit]);
+  }, [load, limit, projectID]);
 
   // useEffect(() => {
   //   const config = {
@@ -484,6 +528,10 @@ const Dashboard = () => {
   useEffect(() => {
     searchDataHandler();
   }, [limit, page]);
+
+  // useEffect(() => {
+  //   customTabHandlerRecentProjects();
+  // }, [limit, page, load]);
 
   // Add project field color changer useEffect
   useEffect(() => {
@@ -1127,66 +1175,8 @@ const Dashboard = () => {
                 </div>
                 <div className="nla_list_view_body_content">
                   <ul>
-                    {filteredUnPinData !== ""
-                      ? filteredPinData?.map((elem, id) => (
-                          <li
-                            // className="active"
-                            key={id}
-                          >
-                            <div className="nla_modal">
-                              <i
-                                className="fa-solid fa-thumbtack"
-                                style={
-                                  elem.pin_project === 0
-                                    ? { color: "rgba(0, 0, 0, 0.23)" }
-                                    : { color: "#0c0d25" }
-                                }
-                                onClick={() => PinUnPinHandler(elem.project_id)}
-                              ></i>
-                              {elem.project_name}
-                            </div>
-                            <div className="nla_action">
-                              <div>
-                                Insights{" "}
-                                <a href="#">
-                                  <img src={featherEye} alt="eye" />
-                                </a>
-                              </div>
-                              <div>
-                                Design Studio{" "}
-                                <a href="#">
-                                  {" "}
-                                  <img src={openPencil} alt="Pencil" />{" "}
-                                </a>
-                              </div>
-                              <div>
-                                Share{" "}
-                                <a href="#">
-                                  {" "}
-                                  <img src={share} alt="Share" />{" "}
-                                </a>
-                              </div>
-                              <div>
-                                Copy{" "}
-                                <a href="#">
-                                  {/* <i className="fa-solid fa-copy"></i> */}
-                                  <img src={copyIcon} alt="copy Icon" />
-                                </a>
-                              </div>
-                              <div>
-                                Download{" "}
-                                <a href="#">
-                                  {/* <i className="fa-solid fa-download"></i> */}
-                                  <img src={downloadIcon} alt="" />
-                                </a>
-                              </div>
-                            </div>
-                          </li>
-                        ))
-                      : ""}
-
-                    {filteredUnPinData !== ""
-                      ? filteredUnPinData?.map((elem, id) => (
+                    {projectsOrderByPin !== ""
+                      ? projectsOrderByPin?.map((elem, id) => (
                           <li
                             // className="active"
                             key={id}
@@ -1349,11 +1339,64 @@ const Dashboard = () => {
                   </a>
                 )}
               </>
-            ) : projectsOrderByPin === "" ? (
-              <>
-                <p>No Pagination</p>
-              </>
+            ) : customTabPinnedProject !== true ? (
+              ""
             ) : (
+              // <>
+              //   {orderByPinProjectPagination?.page > 1 && (
+              //     <a
+              //       onClick={() => setOrderByPinProjectsHandler(page - 1)}
+              //       style={{ cursor: "pointer" }}
+              //     >
+              //       <i className="ion-chevron-left"></i>
+              //     </a>
+              //   )}
+              //   <ul>
+              //     {orderByPinProjectPagination?.results?.previous?.page && (
+              //       <li
+              //         // className={page === orderByPinProjectPagination.page ? "current" : ""}
+              //         style={{ cursor: "pointer" }}
+              //       >
+              //         <a
+              //           onClick={() =>
+              //             setOrderByPinProjectsHandler(
+              //               orderByPinProjectPagination?.results?.previous?.page
+              //             )
+              //           }
+              //         >
+              //           {orderByPinProjectPagination?.results?.previous?.page}
+              //         </a>
+              //       </li>
+              //     )}
+              //   </ul>
+              //   <ul>
+              //     {orderByPinProjectPages?.map((page, index) => (
+              //       <li
+              //         key={index}
+              //         className={
+              //           page === orderByPinProjectPagination.page
+              //             ? "current"
+              //             : ""
+              //         }
+              //         style={{ cursor: "pointer" }}
+              //       >
+              //         <a onClick={() => setOrderByPinProjectsHandler(page)}>
+              //           {page}
+              //         </a>
+              //       </li>
+              //     ))}
+              //   </ul>
+              //   {orderByPinProjectPagination?.page <
+              //     orderByPinProjectPagination?.numberOfPages && (
+              //     <a
+              //       onClick={() => setOrderByPinProjectsHandler(page + 1)}
+              //       style={{ cursor: "pointer" }}
+              //       className="arrow"
+              //     >
+              //       <i className="ion-chevron-right"></i>
+              //     </a>
+              //   )}
+              // </>
               <>
                 {pagination?.page > 1 && (
                   <a
@@ -1414,7 +1457,7 @@ const Dashboard = () => {
                 // defaultValue={"value"}
                 onChange={(e) => setLimit(e.target.value)}
               >
-                <option value="5">5 Project</option>
+                {/* <option value="5">5 Project</option> */}
                 <option value="10">10 Project</option>
                 <option value="15">15 Project</option>
                 <option value="20">20 Project</option>
