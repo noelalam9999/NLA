@@ -38,6 +38,7 @@ const Dashboard = () => {
 
   // Project and Pagination
   const [projects, setProjects] = useState([]);
+  const [projectsOrderByPin, setProjectsOrderByPin] = useState([]);
   const [pagination, setPagination] = useState([]);
 
   const [searchResultpagination, setSearchResultpagination] = useState([]);
@@ -65,6 +66,7 @@ const Dashboard = () => {
   const [searchByAuthor, setSearchByAuthor] = useState("");
 
   const [filteredPinData, setFilteredPinData] = useState("");
+  const [filteredPinDataByDate, setFilteredPinDataByDate] = useState("");
   const [filteredUnPinData, setFilteredUnPinData] = useState("");
   const [filteredData, setFilteredData] = useState("");
   const [filteredDataError, setFilteredDataError] = useState("");
@@ -96,7 +98,7 @@ const Dashboard = () => {
     setCustomTabPinnedProject(true);
     setCustomTabRecentProject(false);
   };
-  const customTabHandlerRecentProjects = () => {
+  const customTabHandlerRecentProjects = async () => {
     setCustomTabPinnedProject(false);
     setCustomTabRecentProject(true);
   };
@@ -359,6 +361,7 @@ const Dashboard = () => {
     // setSearchByAuthor("");
     // setSearchByProjectName("");
     // setProjectDate("");
+    setFilteredData("");
     setFilterVisible(false);
   };
 
@@ -424,20 +427,47 @@ const Dashboard = () => {
       //   { user_id },
       //   config
       // );
-
       // console.log("response: ", response.data.rows);
+      // setFilteredPinDataByDate(response.data.rows);
       // console.log("user: ", user_id);
 
       const filteredUnPin = data.rows?.filter((val) => {
         return val.pin_project === 0;
       });
-      // setFilteredPinData(response.data.rows);
+
+      setFilteredPinDataByDate(filteredPin);
       setFilteredPinData(filteredPin);
       setFilteredUnPinData(filteredUnPin);
     }
     fetchProjects();
     setLoad(false);
   }, [load, limit]);
+
+  // useEffect(() => {
+  //   const config = {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   };
+
+  //   async function fetchProjects() {
+  //     //Getting Pinned Projects
+  //     const response = await Api(
+  //       "POST",
+  //       `api/pinned/projects/?page=${page}&limit=${limit}`,
+  //       { user_id },
+  //       config
+  //     );
+
+  //     console.log("response: ", response.data.rows);
+  //     // console.log("user: ", user_id);
+
+  //     // setFilteredPinData(response.data.rows);
+  //     setFilteredPinDataByDate(response?.data?.rows);
+  //   }
+
+  //   fetchProjects();
+  // }, []);
 
   for (let i = 0; i < filteredUnPinData; i++) {
     isNewProject(i.date_created);
@@ -697,8 +727,8 @@ const Dashboard = () => {
                   </div>
 
                   <div className={`nla_grid_view_wrapper ${columnState}`}>
-                    {filteredPinData?.length > 0
-                      ? filteredPinData?.map((elem, id) => (
+                    {filteredPinDataByDate?.length > 0
+                      ? filteredPinDataByDate?.map((elem, id) => (
                           <div
                             className="nla_item_box_col first-nla-itembox"
                             data-position="right"
@@ -1041,12 +1071,16 @@ const Dashboard = () => {
                             </div>
                           ))
                         ) : (
-                          <p>No search results found</p>
+                          <p style={{ paddingLeft: "15px" }}>
+                            No search results found
+                          </p>
                         )}
                       </div>
                     </>
                   ) : (
-                    <p>No search results found</p>
+                    <p style={{ paddingLeft: "15px" }}>
+                      No search results found
+                    </p>
                   )}
                 </>
               )}
@@ -1093,61 +1127,121 @@ const Dashboard = () => {
                 </div>
                 <div className="nla_list_view_body_content">
                   <ul>
-                    {projects?.map((elem, id) => (
-                      <li
-                        // className="active"
-                        key={id}
-                      >
-                        <div className="nla_modal">
-                          <i
-                            className="fa-solid fa-thumbtack"
-                            style={
-                              elem.pin_project === 0
-                                ? { color: "rgba(0, 0, 0, 0.23)" }
-                                : { color: "#0c0d25" }
-                            }
-                            onClick={() => PinUnPinHandler(elem.project_id)}
-                          ></i>
-                          {elem.project_name}
-                        </div>
-                        <div className="nla_action">
-                          <div>
-                            Insights{" "}
-                            <a href="#">
-                              <img src={featherEye} alt="eye" />
-                            </a>
-                          </div>
-                          <div>
-                            Design Studio{" "}
-                            <a href="#">
-                              {" "}
-                              <img src={openPencil} alt="Pencil" />{" "}
-                            </a>
-                          </div>
-                          <div>
-                            Share{" "}
-                            <a href="#">
-                              {" "}
-                              <img src={share} alt="Share" />{" "}
-                            </a>
-                          </div>
-                          <div>
-                            Copy{" "}
-                            <a href="#">
-                              {/* <i className="fa-solid fa-copy"></i> */}
-                              <img src={copyIcon} alt="copy Icon" />
-                            </a>
-                          </div>
-                          <div>
-                            Download{" "}
-                            <a href="#">
-                              {/* <i className="fa-solid fa-download"></i> */}
-                              <img src={downloadIcon} alt="" />
-                            </a>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
+                    {filteredUnPinData !== ""
+                      ? filteredPinData?.map((elem, id) => (
+                          <li
+                            // className="active"
+                            key={id}
+                          >
+                            <div className="nla_modal">
+                              <i
+                                className="fa-solid fa-thumbtack"
+                                style={
+                                  elem.pin_project === 0
+                                    ? { color: "rgba(0, 0, 0, 0.23)" }
+                                    : { color: "#0c0d25" }
+                                }
+                                onClick={() => PinUnPinHandler(elem.project_id)}
+                              ></i>
+                              {elem.project_name}
+                            </div>
+                            <div className="nla_action">
+                              <div>
+                                Insights{" "}
+                                <a href="#">
+                                  <img src={featherEye} alt="eye" />
+                                </a>
+                              </div>
+                              <div>
+                                Design Studio{" "}
+                                <a href="#">
+                                  {" "}
+                                  <img src={openPencil} alt="Pencil" />{" "}
+                                </a>
+                              </div>
+                              <div>
+                                Share{" "}
+                                <a href="#">
+                                  {" "}
+                                  <img src={share} alt="Share" />{" "}
+                                </a>
+                              </div>
+                              <div>
+                                Copy{" "}
+                                <a href="#">
+                                  {/* <i className="fa-solid fa-copy"></i> */}
+                                  <img src={copyIcon} alt="copy Icon" />
+                                </a>
+                              </div>
+                              <div>
+                                Download{" "}
+                                <a href="#">
+                                  {/* <i className="fa-solid fa-download"></i> */}
+                                  <img src={downloadIcon} alt="" />
+                                </a>
+                              </div>
+                            </div>
+                          </li>
+                        ))
+                      : ""}
+
+                    {filteredUnPinData !== ""
+                      ? filteredUnPinData?.map((elem, id) => (
+                          <li
+                            // className="active"
+                            key={id}
+                          >
+                            <div className="nla_modal">
+                              <i
+                                className="fa-solid fa-thumbtack"
+                                style={
+                                  elem.pin_project === 0
+                                    ? { color: "rgba(0, 0, 0, 0.23)" }
+                                    : { color: "#0c0d25" }
+                                }
+                                onClick={() => PinUnPinHandler(elem.project_id)}
+                              ></i>
+                              {elem.project_name}
+                            </div>
+                            <div className="nla_action">
+                              <div>
+                                Insights{" "}
+                                <a href="#">
+                                  <img src={featherEye} alt="eye" />
+                                </a>
+                              </div>
+                              <div>
+                                Design Studio{" "}
+                                <a href="#">
+                                  {" "}
+                                  <img src={openPencil} alt="Pencil" />{" "}
+                                </a>
+                              </div>
+                              <div>
+                                Share{" "}
+                                <a href="#">
+                                  {" "}
+                                  <img src={share} alt="Share" />{" "}
+                                </a>
+                              </div>
+                              <div>
+                                Copy{" "}
+                                <a href="#">
+                                  {/* <i className="fa-solid fa-copy"></i> */}
+                                  <img src={copyIcon} alt="copy Icon" />
+                                </a>
+                              </div>
+                              <div>
+                                Download{" "}
+                                <a href="#">
+                                  {/* <i className="fa-solid fa-download"></i> */}
+                                  <img src={downloadIcon} alt="" />
+                                </a>
+                              </div>
+                            </div>
+                          </li>
+                        ))
+                      : ""}
 
                     {/* <li>
                       <div className="nla_modal">
@@ -1254,6 +1348,10 @@ const Dashboard = () => {
                     <i className="ion-chevron-right"></i>
                   </a>
                 )}
+              </>
+            ) : projectsOrderByPin === "" ? (
+              <>
+                <p>No Pagination</p>
               </>
             ) : (
               <>
