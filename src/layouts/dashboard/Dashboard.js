@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Alert from "@mui/material/Alert";
+import { Link } from "react-router-dom";
 import { Tooltip, OverlayTrigger, Badge } from "react-bootstrap";
 import moment from "moment";
 import Sidebar from "../../components/sidebar/Sidebar";
@@ -850,10 +851,10 @@ const Dashboard = () => {
                                 </OverlayTrigger>
                               </div>
                               <div className="nla_additional_links">
-                                <a href="#">
+                                <Link to="/design-studio">
                                   Design Studio{" "}
                                   <i className="fa-solid fa-pencil"></i>
-                                </a>
+                                </Link>
                                 <a href="#">
                                   Insights <i className="fa-solid fa-eye"></i>
                                 </a>
