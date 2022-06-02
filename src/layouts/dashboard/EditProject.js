@@ -26,7 +26,7 @@ export default function EditProject(props) {
   const [client, setClient] = useState("");
   const [product, setProduct] = useState("");
   const [version, setVersion] = useState("");
-  const [companyLogo, setCompanyLogo] = useState([]);
+  const [companyLogo, setCompanyLogo] = useState("");
   const [checkLogo, setCheckLogo] = useState("");
 
   const [file1, setFile1] = useState("");
@@ -85,7 +85,6 @@ export default function EditProject(props) {
       type !== "" &&
       client !== "" &&
       product !== "" &&
-      companyLogo !== "" &&
       checkLogo !== ""
     ) {
       try {
@@ -108,6 +107,56 @@ export default function EditProject(props) {
             setProduct("");
             setVersion("");
             setCompanyLogo("");
+            setCheckLogo("");
+            setShow(false);
+            setProjectEditedAlert(true);
+            setTimeout(() => {
+              props.onEdit();
+              props.onHide();
+              setProjectEditedAlert(false);
+            }, 2000);
+
+            setLoad(true);
+          })
+          .catch(function (response) {
+            console.log(response);
+          });
+
+        if (data.status === 200) {
+          setShow(false);
+        }
+      } catch (error) {}
+    } else if (checkLogo == "") {
+      try {
+        // const formData = new FormData();
+        // formData.append("project_name", projectName);
+        // formData.append("type_of_project", type);
+        // formData.append("client_name", client);
+        // formData.append("product_name", product);
+        // formData.append("project_id", project_id);
+        const apiData = {
+          project_name: projectName,
+          type_of_project: type,
+          client_name: client,
+          product_name: product,
+          project_id: project_id,
+        };
+        const config = {
+          headers: { "content-type": "multipart/form-data" },
+        };
+
+        let { data } = await Api(
+          "POST",
+          "api/edit/image/project",
+          apiData,
+          config
+        )
+          .then(function (response) {
+            setProjectName("");
+            setType("");
+            setClient("");
+            setProduct("");
+            setVersion("");
             setShow(false);
             setProjectEditedAlert(true);
             setTimeout(() => {
