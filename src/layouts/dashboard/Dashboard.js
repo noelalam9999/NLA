@@ -44,13 +44,10 @@ const Dashboard = () => {
 
   const [progress, setProgress] = useState();
 
-  // console.log("searchResultpagination", searchResultpagination);
-
   //Pagination
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
 
-  // console.log("Modal show", modalShow);
   const [load, setLoad] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [filterVisible, setFilterVisible] = useState(false);
@@ -149,7 +146,7 @@ const Dashboard = () => {
     }
   };
 
-  const createProject = async () => {
+  const createProject = async (e) => {
     setLoad(false);
     if (
       userID !== "" &&
@@ -157,7 +154,7 @@ const Dashboard = () => {
       type !== "" &&
       client !== "" &&
       product !== "" &&
-      companyLogo !== "" &&
+      companyLogo !== [] &&
       companyLogoType !== ""
     ) {
       try {
@@ -218,6 +215,42 @@ const Dashboard = () => {
         setShowAlert(false);
       }, 3000);
     }
+    if (projectName === "") {
+      document.querySelector("#projectName").focus();
+      document.querySelector("#projectName").style.borderColor = "#eb3434";
+    }
+    if (type === "") {
+      document.querySelector("#exampleDataList").focus();
+      document.querySelector("#exampleDataList").style.borderColor = "#eb3434";
+    }
+    if (client === "") {
+      document.querySelector("#selectClientt").focus();
+      document.querySelector("#selectClientt").style.borderColor = "#eb3434";
+    }
+    if (product === "") {
+      document.querySelector("#product").focus();
+      document.querySelector("#product").style.borderColor = "#eb3434";
+    }
+    if (companyLogo.length === 0) {
+      document.querySelector("#companyLogo").focus();
+      document.querySelector("#companyLogo").style.border = "1px solid #eb3434";
+      document.querySelector("#product").style.borderColor = "#eb3434";
+    }
+    if (projectName !== "") {
+      document.querySelector("#projectName").style.borderColor = "#86b7fe";
+    }
+    if (type !== "") {
+      document.querySelector("#exampleDataList").style.borderColor = "#86b7fe";
+    }
+    if (client !== "") {
+      document.querySelector("#selectClientt").style.borderColor = "#86b7fe";
+    }
+    if (product !== "") {
+      document.querySelector("#product").style.borderColor = "#86b7fe";
+    }
+    if (companyLogo.length > 1) {
+      document.querySelector("#companyLogo").style.borderColor = "#86b7fe";
+    }
   };
 
   //Search
@@ -269,7 +302,6 @@ const Dashboard = () => {
       }
     } else if (searchByAuthor) {
       console.log("searchByAuthor", searchByAuthor);
-      // setFilteredDataError("No record found");
       setFilteredData(1);
       setFilterVisible(true);
     } else {
@@ -371,7 +403,6 @@ const Dashboard = () => {
       },
     };
 
-    console.log("Limit: ", limit);
     async function fetchProjects() {
       const { data } = await Api(
         "GET",
@@ -423,6 +454,25 @@ const Dashboard = () => {
   useEffect(() => {
     searchDataHandler();
   }, [limit, page]);
+
+  // Add project field color changer useEffect
+  useEffect(() => {
+    if (projectName !== "") {
+      document.querySelector("#projectName").style.borderColor = "#86b7fe";
+    }
+    if (type !== "") {
+      document.querySelector("#exampleDataList").style.borderColor = "#86b7fe";
+    }
+    if (client !== "") {
+      document.querySelector("#selectClientt").style.borderColor = "#86b7fe";
+    }
+    if (product !== "") {
+      document.querySelector("#product").style.borderColor = "#86b7fe";
+    }
+    if (companyLogo.length > 1) {
+      document.querySelector("#companyLogo").style.borderColor = "#86b7fe";
+    }
+  }, [projectName, type, client, product, companyLogo]);
 
   // console.log("pagination", pagination);
 
@@ -1347,6 +1397,7 @@ const Dashboard = () => {
                     <select
                       className="form-select"
                       aria-label="Select Client"
+                      id="selectClientt"
                       onChange={(e) => setClient(e.target.value)}
                     >
                       <option selected>Select Client*</option>
@@ -1360,6 +1411,7 @@ const Dashboard = () => {
                     <select
                       className="form-select"
                       aria-label="Select Product"
+                      id="product"
                       onChange={(e) => setProduct(e.target.value)}
                     >
                       <option selected>Select Product*</option>
@@ -1386,29 +1438,10 @@ const Dashboard = () => {
                     {companyLogo?.length > 0 ? (
                       <label htmlFor="formFile">{companyLogo[0].name}</label>
                     ) : (
-                      <label htmlFor="formFile">Upload Company Logo*</label>
+                      <label htmlFor="formFile" id="companyLogo">
+                        Upload Company Logo*
+                      </label>
                     )}
-
-                    {/* {companyLogo.length > 0 ? (
-                      <input
-                        className="form-control"
-                        type="file"
-                        id="formFile"
-                        accept="image/png, image/jpeg"
-                        // onChange={(e) => setCompanyLogo(e.target.files)}
-                        onChange={companyLogoHandler}
-                        value={companyLogoType}
-                      />
-                    ) : (
-                      <input
-                        className="form-control"
-                        type="file"
-                        id="formFile"
-                        accept="image/png, image/jpeg"
-                        // onChange={(e) => setCompanyLogo(e.target.files)}
-                        onChange={companyLogoHandler}
-                      />
-                    )} */}
                     <input
                       className="form-control"
                       type="file"
@@ -1416,8 +1449,6 @@ const Dashboard = () => {
                       accept="image/png, image/jpeg"
                       // onChange={(e) => setCompanyLogo(e.target.files)}
                       onChange={companyLogoHandler}
-                      // value={companyLogoType}
-                      // value={companyLogo.length > 0 ? companyLogo[0].name : ""}
                     />
                     {/* <ProgressBar now={progress} label={`${progress}%`} /> */}
                   </div>
