@@ -329,7 +329,7 @@ const Dashboard = () => {
       setFilteredData(1);
       setFilterVisible(true);
     } else {
-      console.log("Invalid");
+      // console.log("Invalid");
     }
   };
 
@@ -445,7 +445,6 @@ const Dashboard = () => {
         "Content-Type": "application/json",
       },
     };
-    console.log("Page and Limit: ", page, limit);
 
     async function fetchProjects() {
       const { data } = await Api(
@@ -455,7 +454,6 @@ const Dashboard = () => {
       );
       setProjects(data.rows);
       setPagination(data.pagination);
-      console.log("data.rows: ", data.rows);
 
       const filteredPin = data.rows?.filter((val) => {
         return val.pin_project === 1;
@@ -469,12 +467,9 @@ const Dashboard = () => {
           { user_id },
           config
         );
-        console.log("response: ", response.data.pagination.numberOfPages);
         setPinnedProjectsTotalPages(response.data.pagination.numberOfPages);
         setFilteredPinDataByDate(response.data.rows);
       }
-
-      // console.log("user: ", user_id);
 
       const filteredUnPin = data.rows?.filter((val) => {
         return val.pin_project === 0;
@@ -725,7 +720,7 @@ const Dashboard = () => {
                       <div
                         className="col-lg-5"
                         style={
-                          filteredPinData?.length === 0
+                          filteredPinDataByDate?.length === 0
                             ? { visibility: "hidden" }
                             : null
                         }
@@ -1500,7 +1495,7 @@ const Dashboard = () => {
               </div>
               {showAlert && (
                 <>
-                  <Alert className="mb-2" variant="outlined" severity="info">
+                  <Alert className="mb-2" variant="outlined" severity="error">
                     {alertMsg}
                   </Alert>
                 </>

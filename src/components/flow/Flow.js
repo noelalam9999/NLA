@@ -1,19 +1,16 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import "./flow.css";
-import {
-  BsFillArrowLeftCircleFill,
-  BsFillPenFill,
-  BsFillPlayFill,
-  BsPatchExclamation,
-} from "react-icons/bs";
+// import {
+//   BsFillArrowLeftCircleFill,
+//   BsFillPenFill,
+//   BsFillPlayFill,
+//   BsPatchExclamation,
+// } from "react-icons/bs";
 import { Modal, Button } from "react-bootstrap";
 import ReactFlow, {
   ReactFlowProvider,
   useNodesState,
   useEdgesState,
-  arrowHeadType,
-  ConnectionLineType,
-  MarkerType,
   getSmoothStepPath,
   addEdge,
   useReactFlow,
@@ -27,18 +24,18 @@ const Flow = () => {
   const getNodeId = () => `randomnode_${+new Date()}`;
 
   const initialNodes = [
-    {
-      id: "1",
-      type: "input",
-      data: { label: "Read File" },
-      position: { x: 580, y: 200 },
-    },
-    {
-      id: "2",
-      type: "default",
-      data: { label: "$ Pricing" },
-      position: { x: 450, y: 50 },
-    },
+    // {
+    //   id: "1",
+    //   type: "input",
+    //   data: { label: "Read File" },
+    //   position: { x: 580, y: 200 },
+    // },
+    // {
+    //   id: "2",
+    //   type: "default",
+    //   data: { label: "$ Pricing" },
+    //   position: { x: 450, y: 50 },
+    // },
   ];
   const saveclass = useRef("save-button");
   const initialEdges = [
@@ -125,7 +122,7 @@ const Flow = () => {
       });
       const newNode = {
         id: getNodeId(),
-        type,
+        type: "default",
         position,
         data: { label: `${node_data} ` },
       };
@@ -211,12 +208,12 @@ const Flow = () => {
   // useEffect(()=>{
   //   onRestore();
   //    },[pagereloaded]);
-  const [ab, set] = useState(localStorage.getItem("save"));
-  useEffect(() => {
-    if (localStorage.getItem("save")) {
-      onSave();
-    }
-  }, [ab]);
+  // const [ab, set] = useState(localStorage.getItem("save"));
+  // useEffect(() => {
+  //   if (localStorage.getItem("save")) {
+  //     // onSave();
+  //   }
+  // }, [ab]);
   const onShowOutput = () => {
     if (rfInstance) {
       const flow = rfInstance.toObject();
@@ -240,7 +237,9 @@ const Flow = () => {
             style={graphStyles}
             edgeTypes={edgeTypes}
           >
-            {" "}
+            <div className="save__controls">
+              <button onClick={onSave}>save</button>
+            </div>
             <Background variant="dots" gap={12} size={0.5} />
             <Controls className="flow-controls"></Controls>
           </ReactFlow>

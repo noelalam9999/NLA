@@ -227,3 +227,6 @@
 .react-flow__attribution.right {
   display: none;
 }
+.react-flow__edge-path {
+  cursor: pointer;
+}
