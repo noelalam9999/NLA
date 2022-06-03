@@ -152,7 +152,7 @@ const DesignStudio = () => {
           </div>
         </div>
         <RightSideBarDesignStudio />
-        <Flow />
+        <Flow onSave={save} />
         <div className="design-studio-additional-block position-relative">
           {/* <div className="heading">
             <h6>Design Studio</h6>
