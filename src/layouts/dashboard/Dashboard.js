@@ -525,9 +525,9 @@ const Dashboard = () => {
     imageChecker();
   }, [companyLogoType]);
 
-  useEffect(() => {
-    // searchDataHandler();
-  }, [limit, page]);
+  // useEffect(() => {
+  //   searchDataHandler();
+  // }, [limit, page]);
 
   // useEffect(() => {
   //   customTabHandlerRecentProjects();
@@ -557,8 +557,9 @@ const Dashboard = () => {
   // Edit Project Modal
 
   const handleEditProjectModal = (project_id) => {
-    setModalShow(true);
+    // console.log("I am in Edit Modal");
     setProjectID(project_id);
+    setModalShow(true);
   };
 
   function MyVerticallyCenteredModal(props) {

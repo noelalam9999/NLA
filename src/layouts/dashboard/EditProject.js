@@ -42,7 +42,7 @@ export default function EditProject(props) {
     }
     fetchProduct();
   }, [load]);
-  console.log(project);
+  // console.log(project);
 
   useEffect(() => {
     if (project) {
@@ -74,7 +74,7 @@ export default function EditProject(props) {
     // }
   }, [projectName, type, client, product]);
 
-  console.log("companyLogo", companyLogo);
+  // console.log("companyLogo", companyLogo);
 
   //   ----------------------
 
@@ -249,7 +249,7 @@ export default function EditProject(props) {
             </Alert>
           </>
         )}
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" encType="multipart/form-data">
           <div className="">
             <div className="nla_form_project_name position-relative nla_form_field_block">
               {/* <i className="fa fa-share-alt" aria-hidden="true"></i> */}
