@@ -36,7 +36,7 @@ const Dashboard = () => {
   const [projectCreatedAlert, setProjectCreatedAlert] = useState(false);
   const [projectPinAlert, setProjectPinAlert] = useState(false);
   const [pinAlertText, setPinAlertText] = useState("");
-
+  const [searchEmptyChecker, setSearchEmptyChecker] = useState(false);
   // Project and Pagination
   const [projects, setProjects] = useState([]);
   const [projectsOrderByPin, setProjectsOrderByPin] = useState([]);
@@ -219,7 +219,6 @@ const Dashboard = () => {
             setShow(false);
             setLoad(true);
             setProjectCreatedAlert(true);
-            console.log("Seting Alert");
             setTimeout(() => {
               setProjectCreatedAlert(false);
             }, 3000);
@@ -284,7 +283,7 @@ const Dashboard = () => {
         "Content-Type": "application/json",
       },
     };
-
+    setSearchEmptyChecker(false);
     const apiData = {
       project_name,
       project_date,
@@ -328,8 +327,13 @@ const Dashboard = () => {
       console.log("searchByAuthor", searchByAuthor);
       setFilteredData(1);
       setFilterVisible(true);
+    } else if (project_name === "" && project_date === "") {
+      setSearchEmptyChecker(true);
+      setTimeout(() => {
+        setSearchEmptyChecker(false);
+      }, 3000);
     } else {
-      // console.log("Invalid");
+      console.log("Invalid");
     }
   };
 
@@ -522,7 +526,7 @@ const Dashboard = () => {
   }, [companyLogoType]);
 
   useEffect(() => {
-    searchDataHandler();
+    // searchDataHandler();
   }, [limit, page]);
 
   // useEffect(() => {
@@ -762,9 +766,23 @@ const Dashboard = () => {
                               Create New Project
                             </p>
                           </div>
-                          <a href="#">
-                            <img src={feather} alt="" />
-                          </a>
+                          <OverlayTrigger
+                            placement="top"
+                            delay={{ show: 250, hide: 250 }}
+                            overlay={
+                              <Tooltip id="overlay-example">
+                                Create new project
+                              </Tooltip>
+                            }
+                          >
+                            <a href="#">
+                              <img
+                                src={feather}
+                                alt=""
+                                style={{ marginLeft: "5px" }}
+                              />
+                            </a>
+                          </OverlayTrigger>
                         </div>
                       </div>
                     </div>
@@ -862,7 +880,7 @@ const Dashboard = () => {
                   <div className="nla_view_top_title_and_add_new_block">
                     <div className="row align-items-center">
                       <div className="col-lg-5">
-                        <p className="mb-0">
+                        <p className="mb-3">
                           Recently Created
                           <OverlayTrigger
                             placement="top"
@@ -900,7 +918,7 @@ const Dashboard = () => {
                               ) /
                                 3600000 <=
                               1 ? (
-                                <div className="mb-3">
+                                <div className="mb-3 badgeNew">
                                   <Badge bg="success">NEW</Badge>
                                 </div>
                               ) : (
@@ -1211,7 +1229,7 @@ const Dashboard = () => {
                                 </a>
                               </div>
                               <div>
-                                Copy{" "}
+                                Duplicate{" "}
                                 <a href="#">
                                   {/* <i className="fa-solid fa-copy"></i> */}
                                   <img src={copyIcon} alt="copy Icon" />
@@ -1535,9 +1553,12 @@ const Dashboard = () => {
                       className="form-select"
                       aria-label="Select Client"
                       id="selectClientt"
+                      required
                       onChange={(e) => setClient(e.target.value)}
                     >
-                      <option selected>Select Client*</option>
+                      <option selected value="">
+                        Select Client*
+                      </option>
                       <option value="one">One</option>
                       <option value="two">Two</option>
                       <option value="three">Three</option>
@@ -1549,9 +1570,12 @@ const Dashboard = () => {
                       className="form-select"
                       aria-label="Select Product"
                       id="product"
+                      required
                       onChange={(e) => setProduct(e.target.value)}
                     >
-                      <option selected>Select Product*</option>
+                      <option selected value="">
+                        Select Product*
+                      </option>
                       <option value="one">One</option>
                       <option value="two">Two</option>
                       <option value="three">Three</option>
@@ -1575,7 +1599,11 @@ const Dashboard = () => {
                     {companyLogo?.length > 0 ? (
                       <label htmlFor="formFile">{companyLogo[0].name}</label>
                     ) : (
-                      <label htmlFor="formFile" id="companyLogo">
+                      <label
+                        htmlFor="formFile"
+                        id="companyLogo"
+                        style={{ color: "#acb0b1" }}
+                      >
                         Upload Company Logo*
                       </label>
                     )}
@@ -1628,7 +1656,7 @@ const Dashboard = () => {
               </div>
               <div class="nla_modal_body_title text-center">
                 <h5>Are you Sure?</h5>
-                <p>Hitting yes will cancel the project</p>
+                <p>Pressing yes will cancel the project</p>
               </div>
             </Modal.Body>
             <Modal.Footer>
@@ -1659,7 +1687,11 @@ const Dashboard = () => {
           />
         </div>
       </div>
-
+      <Snackbar open={searchEmptyChecker} autoHideDuration={3000}>
+        <Alert severity="error" sx={{ width: "100%" }}>
+          Please fill at least one field
+        </Alert>
+      </Snackbar>
       <Snackbar open={projectCreatedAlert} autoHideDuration={3000}>
         <Alert severity="success" sx={{ width: "100%" }}>
           Project created successfully!
