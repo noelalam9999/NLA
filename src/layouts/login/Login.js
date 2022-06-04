@@ -213,7 +213,7 @@ const Login = () => {
                         <input
                           type="email"
                           className="form-control"
-                          placeholder="Email"
+                          placeholder="Email*"
                           name="email"
                           required
                           // onChange={handleChange}
@@ -224,7 +224,7 @@ const Login = () => {
                         <input
                           type="password"
                           className="form-control"
-                          placeholder="Password"
+                          placeholder="Password*"
                           name="password"
                           // onChange={handleChange}
                           onChange={(e) => setPassword(e.currentTarget.value)}
@@ -237,7 +237,7 @@ const Login = () => {
                             sx={{ width: "100%", marginTop: "5px" }}
                             spacing={2}
                           >
-                            <Alert variant="outlined" severity="info">
+                            <Alert variant="outlined" severity="error">
                               {error}
                             </Alert>
                           </Stack>

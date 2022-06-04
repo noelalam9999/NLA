@@ -12,3 +12,20 @@
   color: #14b3a7;
   background-color: transparent;
 }
+.badgeNew {
+  position: absolute;
+  top: -10px;
+}
+.nla_form_field_block input::placeholder {
+  color: #acb0b1 !important;
+}
+
+/* .nla_form_field_block select {
+  color: #acb0b1 !important;
+} */
+/* .nla_form_field_block select[required] option:first-child {
+  color: #acb0b1;
+} */
+.nla_form_field_block select:invalid {
+  color: #acb0b1;
+}
