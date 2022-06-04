@@ -287,9 +287,12 @@ export default function EditProject(props) {
                 aria-label="Select Client"
                 value={client}
                 id="selectClientt"
+                required
                 onChange={(e) => setClient(e.target.value)}
               >
-                <option selected>Select Client</option>
+                <option selected value="">
+                  Select Client
+                </option>
                 <option value="one">One</option>
                 <option value="two">Two</option>
                 <option value="three">Three</option>
@@ -301,10 +304,13 @@ export default function EditProject(props) {
                 className="form-select"
                 aria-label="Select Product"
                 id="product"
+                required
                 value={product}
                 onChange={(e) => setProduct(e.target.value)}
               >
-                <option selected>Select Product</option>
+                <option selected value="">
+                  Select Product
+                </option>
                 <option value="one">One</option>
                 <option value="two">Two</option>
                 <option value="three">Three</option>
