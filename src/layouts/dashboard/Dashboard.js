@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Alert from "@mui/material/Alert";
 import { Link } from "react-router-dom";
-import { Tooltip, OverlayTrigger, Badge } from "react-bootstrap";
+import { Tooltip, OverlayTrigger, Badge, Modal } from "react-bootstrap";
 import moment from "moment";
 import Sidebar from "../../components/sidebar/Sidebar";
 import "../../css/style.css";
@@ -16,7 +16,7 @@ import share from "../../assets/images/feather-share.svg";
 import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
 import createImg from "../../assets/images/new_project_create_image.png";
-import Modal from "react-bootstrap/Modal";
+// import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import projectDiagram from "../../assets/newIcons/awesome-project-diagram.svg";
 import mergeType from "../../assets/newIcons/material-merge-type.svg";
@@ -52,6 +52,8 @@ const Dashboard = () => {
 
   //Pagination
   const [page, setPage] = useState(1);
+  const [orderByPinPage, setOrderByPinPage] = useState(1);
+  const [searchResultPage, setSearchResultPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
   const [load, setLoad] = useState(false);
@@ -110,13 +112,14 @@ const Dashboard = () => {
     try {
       let { data } = await Api(
         "GET",
-        `api/projects/order-by-pin/${user_id}/?page=${page}&limit=${limit}`
+        `api/projects/order-by-pin/${user_id}/?page=${orderByPinPage}&limit=${limit}`
       );
 
       if (data) {
-        setProjectsOrderByPin(data);
+        setProjectsOrderByPin(data.rows);
         setOrderByPinProjectPagination(data.pagination);
-        console.log("\n\ndata", data);
+        console.log("\n\ndata of Order by Pin: ", data.rows);
+        console.log("\n\nOrder by Pin Pagination: ", data.pagination);
       }
     } catch (error) {
       console.log("Error", error.response);
@@ -283,7 +286,7 @@ const Dashboard = () => {
         "Content-Type": "application/json",
       },
     };
-    setSearchEmptyChecker(false);
+    // setSearchEmptyChecker(false);
     const apiData = {
       project_name,
       project_date,
@@ -300,7 +303,7 @@ const Dashboard = () => {
     } else if (project_name) {
       const res = await Api(
         "POST",
-        `api/project/name/?page=${page}&limit=${limit}`,
+        `api/project/name/?page=${searchResultPage}&limit=${limit}`,
         { project_name, user_id },
         config
       );
@@ -417,7 +420,7 @@ const Dashboard = () => {
     orderByPinProjectPages.push(i);
   }
 
-  // console.log("searchedPages", searchedPages);
+  // console.log("orderByPinProjectPages", orderByPinProjectPages);
 
   const setPageHandler = (page_no) => {
     if (page_no) {
@@ -428,14 +431,14 @@ const Dashboard = () => {
 
   const setSearchedPageHandler = (page_no) => {
     if (page_no) {
-      setPage(page_no);
+      setSearchResultPage(page_no);
       searchDataHandler();
     }
   };
 
   const setOrderByPinProjectsHandler = (page_no) => {
     if (page_no) {
-      setPage(page_no);
+      setOrderByPinPage(page_no);
       setLoad(true);
     }
   };
@@ -485,7 +488,7 @@ const Dashboard = () => {
     }
     fetchProjects();
     setLoad(false);
-  }, [load, limit, projectID]);
+  }, [load, limit]);
 
   // useEffect(() => {
   //   const config = {
@@ -525,13 +528,17 @@ const Dashboard = () => {
     imageChecker();
   }, [companyLogoType]);
 
-  // useEffect(() => {
-  //   searchDataHandler();
-  // }, [limit, page]);
+  useEffect(() => {
+    if (project_name !== "" || project_date !== "" || searchByAuthor !== "") {
+      searchDataHandler();
+    }
+  }, [limit, searchResultPage]);
 
-  // useEffect(() => {
-  //   customTabHandlerRecentProjects();
-  // }, [limit, page, load]);
+  useEffect(() => {
+    if (customTabPinnedProject === false) {
+      customTabHandlerRecentProjects();
+    }
+  }, [limit, orderByPinPage, load]);
 
   // Add project field color changer useEffect
   useEffect(() => {
@@ -557,9 +564,10 @@ const Dashboard = () => {
   // Edit Project Modal
 
   const handleEditProjectModal = (project_id) => {
-    // console.log("I am in Edit Modal");
+    console.log("I am in Edit Modal");
     setProjectID(project_id);
     setModalShow(true);
+    console.log("After Modal");
   };
 
   function MyVerticallyCenteredModal(props) {
@@ -569,7 +577,9 @@ const Dashboard = () => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         id="createNewProject"
-        animation={true}
+        // animation-fill-mode="forward"
+        // animation={true}
+        // hasBackdrop={false}
       >
         <EditProject project_id={projectID} {...props} />
       </Modal>
@@ -577,14 +587,14 @@ const Dashboard = () => {
   }
 
   //ToolTip
-  const renderTooltip = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      Simple Tool tip
-    </Tooltip>
-  );
+  // const renderTooltip = (props) => (
+  //   <Tooltip id="button-tooltip" {...props}>
+  //     Simple Tool tip
+  //   </Tooltip>
+  // );
 
+  // New Project Badge
   const todayDate = new Date();
-
   const isNewProject = (orderCreatedDate) => {
     console.log("orderCreatedDate: ", orderCreatedDate);
     const todayDate = new Date();
@@ -1305,7 +1315,7 @@ const Dashboard = () => {
               <>
                 {searchResultpagination?.page > 1 && (
                   <a
-                    onClick={() => setSearchedPageHandler(page - 1)}
+                    onClick={() => setSearchedPageHandler(searchResultPage - 1)}
                     style={{ cursor: "pointer" }}
                   >
                     <i className="ion-chevron-left"></i>
@@ -1346,7 +1356,7 @@ const Dashboard = () => {
                 {searchResultpagination?.page <
                   searchResultpagination?.numberOfPages && (
                   <a
-                    onClick={() => setSearchedPageHandler(page + 1)}
+                    onClick={() => setSearchedPageHandler(searchResultPage + 1)}
                     style={{ cursor: "pointer" }}
                     className="arrow"
                   >
@@ -1355,63 +1365,66 @@ const Dashboard = () => {
                 )}
               </>
             ) : customTabPinnedProject !== true ? (
-              ""
+              <>
+                {orderByPinProjectPagination?.page > 1 && (
+                  <a
+                    onClick={() =>
+                      setOrderByPinProjectsHandler(orderByPinPage - 1)
+                    }
+                    style={{ cursor: "pointer" }}
+                  >
+                    <i className="ion-chevron-left"></i>
+                  </a>
+                )}
+                <ul>
+                  {orderByPinProjectPagination?.results?.previous?.page && (
+                    <li
+                      // className={page === orderByPinProjectPagination.page ? "current" : ""}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <a
+                        onClick={() =>
+                          setOrderByPinProjectsHandler(
+                            orderByPinProjectPagination?.results?.previous?.page
+                          )
+                        }
+                      >
+                        {orderByPinProjectPagination?.results?.previous?.page}
+                      </a>
+                    </li>
+                  )}
+                </ul>
+                <ul>
+                  {orderByPinProjectPages?.map((page, index) => (
+                    <li
+                      key={index}
+                      className={
+                        page === orderByPinProjectPagination.page
+                          ? "current"
+                          : ""
+                      }
+                      style={{ cursor: "pointer" }}
+                    >
+                      <a onClick={() => setOrderByPinProjectsHandler(page)}>
+                        {page}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                {orderByPinProjectPagination?.page <
+                  orderByPinProjectPagination?.numberOfPages && (
+                  <a
+                    onClick={() =>
+                      setOrderByPinProjectsHandler(orderByPinPage + 1)
+                    }
+                    style={{ cursor: "pointer" }}
+                    className="arrow"
+                  >
+                    <i className="ion-chevron-right"></i>
+                  </a>
+                )}
+              </>
             ) : (
-              // <>
-              //   {orderByPinProjectPagination?.page > 1 && (
-              //     <a
-              //       onClick={() => setOrderByPinProjectsHandler(page - 1)}
-              //       style={{ cursor: "pointer" }}
-              //     >
-              //       <i className="ion-chevron-left"></i>
-              //     </a>
-              //   )}
-              //   <ul>
-              //     {orderByPinProjectPagination?.results?.previous?.page && (
-              //       <li
-              //         // className={page === orderByPinProjectPagination.page ? "current" : ""}
-              //         style={{ cursor: "pointer" }}
-              //       >
-              //         <a
-              //           onClick={() =>
-              //             setOrderByPinProjectsHandler(
-              //               orderByPinProjectPagination?.results?.previous?.page
-              //             )
-              //           }
-              //         >
-              //           {orderByPinProjectPagination?.results?.previous?.page}
-              //         </a>
-              //       </li>
-              //     )}
-              //   </ul>
-              //   <ul>
-              //     {orderByPinProjectPages?.map((page, index) => (
-              //       <li
-              //         key={index}
-              //         className={
-              //           page === orderByPinProjectPagination.page
-              //             ? "current"
-              //             : ""
-              //         }
-              //         style={{ cursor: "pointer" }}
-              //       >
-              //         <a onClick={() => setOrderByPinProjectsHandler(page)}>
-              //           {page}
-              //         </a>
-              //       </li>
-              //     ))}
-              //   </ul>
-              //   {orderByPinProjectPagination?.page <
-              //     orderByPinProjectPagination?.numberOfPages && (
-              //     <a
-              //       onClick={() => setOrderByPinProjectsHandler(page + 1)}
-              //       style={{ cursor: "pointer" }}
-              //       className="arrow"
-              //     >
-              //       <i className="ion-chevron-right"></i>
-              //     </a>
-              //   )}
-              // </>
               <>
                 {pagination?.page > 1 && (
                   <a
