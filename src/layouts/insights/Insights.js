@@ -13,9 +13,9 @@ import featherFilePlus from "../../assets/images/feather-file-plus.svg";
 import downloadIcon from "../../assets/newIcons/icon-download.svg";
 import chartIcon from "../../assets/newIcons/icon-chart.svg";
 import featherInfo from "../../assets/images/feather-info.svg";
-import Chartjs from "../../components/Chartjs";
+// import Chartjs from "../../components/Chartjs";
 import { useClickAway } from "react-use";
-import ChartjsBar from "../../components/ChartjsBar";
+// import ChartjsBar from "../../components/ChartjsBar";
 import { Link, useParams } from "react-router-dom";
 import Api from "../../services/Api";
 
@@ -883,7 +883,7 @@ const Insights = () => {
 
                             <div className="nla_graph-block">
                               <div className="myChartDiv">
-                                <Chartjs />
+                                {/* <Chartjs /> */}
                               </div>
                             </div>
 
@@ -1440,7 +1440,7 @@ const Insights = () => {
 
                           <div className="nla_graph-block">
                             <div className="myChartDiv">
-                              <ChartjsBar />
+                              {/* <ChartjsBar /> */}
                             </div>
                           </div>
                         </div>
