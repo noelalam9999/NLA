@@ -70,7 +70,7 @@ const Sidebar = () => {
                 </Tooltip>
               }
             >
-              <Link to="/design-studio">
+              <Link to={`/design-studio/1`}>
                 {/* <i className="fa-solid fa-pen-nib"></i> */}
                 <div className="icon">
                   <svg
