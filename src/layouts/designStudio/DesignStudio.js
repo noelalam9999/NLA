@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import "../../css/style.css";
 import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
@@ -10,6 +9,8 @@ import saveAs from "../../assets/images/icon-save-as.svg";
 import plus from "../../assets/images/feather-file-plus.svg";
 import RightSideBarDesignStudio from "../../components/rightSideBarDesignStudio/RightSideBarDesignStudio";
 import Flow from "../../components/flow/Flow";
+import { Link, useParams } from "react-router-dom";
+import Api from "../../services/Api";
 import {
   BsFillArrowLeftCircleFill,
   BsFillPenFill,
@@ -31,12 +32,29 @@ import ReactFlow, {
   getEdgeCenter,
   Controls,
 } from "react-flow-renderer";
+
 const DesignStudio = () => {
+  const project_id = useParams().id;
+  const [project, setProject] = useState([]);
+
   const [save, setState] = useState(false);
   const saveHandler = () => {
     setState(true);
     localStorage.setItem("save", 1);
   };
+
+  //UseEffect
+
+  useEffect(() => {
+    async function fetchProject() {
+      const { data } = await Api("GET", `api/project/${project_id}`);
+      setProject(data[0]);
+      // console.log("Project data: ", project?.project_name);
+    }
+    fetchProject();
+  }, []);
+
+  // =====================================================================================================================
   return (
     <div>
       <Header />
@@ -57,7 +75,7 @@ const DesignStudio = () => {
                   </Link>
                   <div className="nla-name">
                     <span>Back to Home Page</span>
-                    <p>Project Name Here</p>
+                    <p>{project?.project_name || "Project name here"}</p>
                   </div>
                   <a href="#" className="nla-edit-name">
                     <i className="fa-solid fa-pen"></i>

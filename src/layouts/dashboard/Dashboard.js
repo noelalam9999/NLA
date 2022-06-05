@@ -562,10 +562,8 @@ const Dashboard = () => {
   // Edit Project Modal
 
   const handleEditProjectModal = (project_id) => {
-    console.log("I am in Edit Modal");
     setProjectID(project_id);
     setModalShow(true);
-    console.log("After Modal");
   };
 
   function MyVerticallyCenteredModal(props) {
@@ -873,13 +871,18 @@ const Dashboard = () => {
                                 </OverlayTrigger>
                               </div>
                               <div className="nla_additional_links">
-                                <Link to="/design-studio">
+                                {/* <Link to="/design-studio">
+                                  Design Studio{" "}
+                                  <i className="fa-solid fa-pencil"></i>
+                                </Link> */}
+                                <Link to={`/design-studio/${elem?.project_id}`}>
                                   Design Studio{" "}
                                   <i className="fa-solid fa-pencil"></i>
                                 </Link>
-                                <a href="#">
+
+                                <Link to={`/insights/${elem?.project_id}`}>
                                   Insights <i className="fa-solid fa-eye"></i>
-                                </a>
+                                </Link>
                               </div>
                             </div>
                           </div>
@@ -1007,13 +1010,13 @@ const Dashboard = () => {
                                 </OverlayTrigger>
                               </div>
                               <div className="nla_additional_links">
-                                <a href="#">
+                                <Link to={`/design-studio/${elem?.project_id}`}>
                                   Design Studio{" "}
                                   <i className="fa-solid fa-pencil"></i>
-                                </a>
-                                <a href="#">
+                                </Link>
+                                <Link to={`/insights/${elem?.project_id}`}>
                                   Insights <i className="fa-solid fa-eye"></i>
-                                </a>
+                                </Link>
                               </div>
                             </div>
                           </div>
@@ -1130,13 +1133,15 @@ const Dashboard = () => {
                                   </OverlayTrigger>
                                 </div>
                                 <div className="nla_additional_links">
-                                  <a href="#">
+                                  <Link
+                                    to={`/design-studio/${elem?.project_id}`}
+                                  >
                                     Design Studio{" "}
                                     <i className="fa-solid fa-pencil"></i>
-                                  </a>
-                                  <a href="#">
+                                  </Link>
+                                  <Link to={`/insights/${elem?.project_id}`}>
                                     Insights <i className="fa-solid fa-eye"></i>
-                                  </a>
+                                  </Link>
                                 </div>
                               </div>
                             </div>
@@ -1232,23 +1237,36 @@ const Dashboard = () => {
                             </div>
                             <div className="nla_action">
                               <div>
+                                <p>{elem?.date_created?.substring(0, 10)}</p>
+                              </div>
+                              <div>
                                 Insights{" "}
-                                <a href="#">
+                                <Link to={`/insights/${elem?.project_id}`}>
                                   <img src={featherEye} alt="eye" />
-                                </a>
+                                </Link>
                               </div>
                               <div>
                                 Design Studio{" "}
-                                <a href="#">
-                                  {" "}
+                                <Link to={`/design-studio/${elem?.project_id}`}>
                                   <img src={openPencil} alt="Pencil" />{" "}
-                                </a>
+                                </Link>
                               </div>
                               <div>
                                 Share{" "}
                                 <a href="#">
                                   {" "}
                                   <img src={share} alt="Share" />{" "}
+                                </a>
+                              </div>
+                              <div>
+                                Edit{" "}
+                                <a
+                                  onClick={() =>
+                                    handleEditProjectModal(elem?.project_id)
+                                  }
+                                >
+                                  {" "}
+                                  <img src={openPencil} alt="Pencil" />{" "}
                                 </a>
                               </div>
                               <div>

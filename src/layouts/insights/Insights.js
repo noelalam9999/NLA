@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+// import { Link } from "react-router-dom";
 import "../../css/style.css";
 import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
@@ -16,7 +16,16 @@ import featherInfo from "../../assets/images/feather-info.svg";
 import Chartjs from "../../components/Chartjs";
 import { useClickAway } from "react-use";
 import ChartjsBar from "../../components/ChartjsBar";
+import { Link, useParams } from "react-router-dom";
+import Api from "../../services/Api";
+
 const Insights = () => {
+  const project_id = useParams().id;
+
+  const [project, setProject] = useState([]);
+
+  // console.log("ID: ", id);
+
   const [valuesDropDown, setValueDropDown] = useState(false);
   const [valuesDropDown1, setValueDropDown1] = useState(false);
   const [valuesDropDown2, setValueDropDown2] = useState(false);
@@ -75,6 +84,19 @@ const Insights = () => {
       ? setValueDropDown2(true)
       : setValueDropDown2(false);
   };
+
+  //UseEffect
+
+  useEffect(() => {
+    async function fetchProject() {
+      const { data } = await Api("GET", `api/project/${project_id}`);
+      setProject(data[0]);
+      // console.log("Project data: ", project?.project_name);
+    }
+    fetchProject();
+  }, []);
+
+  // =====================================================================================================================
   return (
     <div>
       <Header />
@@ -92,7 +114,7 @@ const Insights = () => {
                   </Link>
                   <div className="nla-name">
                     <span>Back to Home Page</span>
-                    <p>Project Name Here</p>
+                    <p>{project?.project_name || "Project name here"}</p>
                   </div>
                   <a href="#" className="nla-edit-name">
                     {/* <i className="fa-solid fa-pen"></i> */}

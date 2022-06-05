@@ -38,12 +38,12 @@ const Config = () => {
           ></Route>
           <Route
             exact
-            path="/insights"
+            path="/insights/:id"
             element={<ProtectedRoute component={InsightsPage}></ProtectedRoute>}
           ></Route>
           <Route
             exact
-            path="/design-studio"
+            path="/design-studio/:id"
             element={
               <ProtectedRoute component={DesignStudioPage}></ProtectedRoute>
             }

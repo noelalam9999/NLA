@@ -1206,7 +1206,7 @@ header .theme-title h1 span {
   -webkit-box-flex: 0;
   -ms-flex: 0 0 36%;
   flex: 0 0 36%;
-  max-width: 36%;
+  max-width: 25%;
 }
 
 @media screen and (max-width: 1199px) {
@@ -1291,7 +1291,7 @@ header .theme-title h1 span {
   -webkit-box-flex: 0;
   -ms-flex: 0 0 20%;
   flex: 0 0 20%;
-  max-width: 20%;
+  max-width: 14%;
   color: #707070;
   padding-left: 12px;
 }
