@@ -29,3 +29,13 @@
 .nla_form_field_block select:invalid {
   color: #acb0b1;
 }
+.design-studio-topbar .btn-wrapper .btn:hover svg path {
+  stroke: #174f73;
+}
+.nla_accordion-content-title-with-filter-block .nla_heading a {
+  display: inline-block;
+  margin-right: 10px;
+}
+.nla_brand_logo h3 {
+  color: #174f73;
+}

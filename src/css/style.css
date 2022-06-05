@@ -2638,7 +2638,7 @@ header .theme-title h1 span {
 
 .nla_insight-tab-wrapper {
   margin: 0 0 0 84px;
-  padding: 20px 0px 0 40px;
+  padding: 20px 0px 40px 40px;
   border-top: 1px solid #c9c9c9;
 }
 
@@ -2648,7 +2648,7 @@ header .theme-title h1 span {
   display: inline-flex;
   border-width: 0 0 2px;
   border-color: #f3f9fa;
-  margin-bottom: 30px;
+  margin-bottom: 30px !important;
 }
 
 .nla_insight-tab-wrapper .nav-tabs .nav-item .nav-link {
@@ -2754,7 +2754,7 @@ header .theme-title h1 span {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  padding: 0 40px 15px 0;
+  padding: 0 0px 15px 0;
   font-size: 14px;
 }
 

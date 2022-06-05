@@ -16,8 +16,6 @@ import share from "../../assets/images/feather-share.svg";
 import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
 import createImg from "../../assets/images/new_project_create_image.png";
-// import Modal from "react-bootstrap/Modal";
-import axios from "axios";
 import projectDiagram from "../../assets/newIcons/awesome-project-diagram.svg";
 import mergeType from "../../assets/newIcons/material-merge-type.svg";
 import featherUser from "../../assets/newIcons/feather-user.svg";
@@ -1185,9 +1183,23 @@ const Dashboard = () => {
                           Create New Project
                         </p>
                       </div>
-                      <a href="#">
-                        <img src={feather} alt="" />
-                      </a>
+                      <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 250 }}
+                        overlay={
+                          <Tooltip id="overlay-example">
+                            Create new project
+                          </Tooltip>
+                        }
+                      >
+                        <a href="#">
+                          <img
+                            src={feather}
+                            alt=""
+                            style={{ marginLeft: "5px" }}
+                          />
+                        </a>
+                      </OverlayTrigger>
                     </div>
                   </div>
                 </div>
