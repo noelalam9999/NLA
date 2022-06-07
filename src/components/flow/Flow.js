@@ -7,6 +7,7 @@ import "./flow.css";
 //   BsPatchExclamation,
 // } from "react-icons/bs";
 import { Modal, Button } from "react-bootstrap";
+import CustomNode from "../customNode/customNode";
 import ReactFlow, {
   ReactFlowProvider,
   useNodesState,
@@ -19,6 +20,7 @@ import ReactFlow, {
   getEdgeCenter,
   Controls,
 } from "react-flow-renderer";
+const nodeTypes = { textUpdater: CustomNode };
 const Flow = () => {
   const flowKey = "example-flow";
   const getNodeId = () => `randomnode_${+new Date()}`;
@@ -236,6 +238,7 @@ const Flow = () => {
             onDragOver={onDragOver}
             style={graphStyles}
             edgeTypes={edgeTypes}
+            nodeTypes={nodeTypes}
           >
             <div className="save__controls">
               <button onClick={onSave}>save</button>

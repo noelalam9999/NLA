@@ -203,7 +203,7 @@ const Insights = () => {
                       </a>
                     </div>
                     <div>
-                      <a href="#" className="btn btn-primary">
+                      <a href="#" className="btn btn-primary ms-3">
                         Save
                         {/* <i className="fa-solid fa-floppy-disk"></i> */}
                         <svg

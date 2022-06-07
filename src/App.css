@@ -43,51 +43,78 @@
   width: 60%;
   text-align: center;
 }
-.nla_date{
-  width:15%;
+.nla_date {
+  width: 15%;
 }
-.rs-picker-daterange.rs-picker-cleanable.rs-picker-has-value .rs-picker-toggle{
+.rs-picker-daterange.rs-picker-cleanable.rs-picker-has-value .rs-picker-toggle {
   border-color: #f3f9fa;
-    background-color: #f3f9fa;
-    margin-bottom: 17px;
-    border-radius: 10px;
-    padding: 17px 20px;
-    color: #111111;
-    font-size: 14px;
-    line-height: 17px;
-    font-weight: 500;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background-color: #f3f9fa;
+  border-radius: 10px;
+  padding: 17px 20px;
+  color: #111111;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.form-select option{
-  background: rgba(0, 0, 0);
-  color:#fff
+.form-select option {
+  color: #000;
 }
-.rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value{
-  color:#111 !important;
+.rs-picker-has-value .rs-btn .rs-picker-toggle-value,
+.rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
+  color: #111 !important;
 }
-.nla_form_field_block datalist option{
-  background: rgba(0, 0, 0);
-  color:#fff
+.nla_form_field_block datalist option {
+  color: #fff;
 }
-.rs-picker-toggle-wrapper{
-display:flex;align-items:center;
+.rs-picker-toggle-wrapper {
+  display: flex;
+  align-items: center;
 }
 .rs-picker-daterange .rs-picker-toggle.rs-btn .rs-picker-toggle-clean {
-  top:15px !important;
+  top: 15px !important;
 }
 .rs-picker-daterange .rs-picker-toggle.rs-btn .rs-picker-toggle-caret {
-  top:15px !important;
+  top: 15px !important;
 }
-.nla_form_field_block option{
-  background: rgba(0, 0, 0);
-  color:#fff
+.rs-picker-default .rs-picker-toggle.rs-btn {
+  padding: 17px 20px !important;
+  border-color: #f3f9fa;
+  background-color: #f3f9fa !important;
+  border-radius: 10px;
+  padding: 17px 20px;
+  color: #111111;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 500;
+  margin-left: 1rem !important;
 }
-.my-option:hover{
-   background-color:'red';
+.nla_form_field_block option {
+  color: #000;
+}
+.my-option:hover {
+  background-color: "red";
 }
 input[list] {
-	color:black;
-	background-color:white;
+  color: black;
+  background-color: white;
+}
+.nla_item_box .badge {
+  border-radius: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 0.9;
+}
+.right_sidebar .accordion-button {
+  padding: 0rem 1.25rem;
+}
+.right_sidebar .accordion-body {
+  padding: 0rem 1.25rem 0.5rem;
+}
+.alertAligns {
+  margin-left: 5px;
+  margin-bottom: 3px;
 }

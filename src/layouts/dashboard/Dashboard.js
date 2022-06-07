@@ -280,17 +280,16 @@ const Dashboard = () => {
       document.querySelector("#companyLogo").style.borderColor = "#86b7fe";
     }
   };
- // <--------------------date Range Picker-------------------------->
+  // <--------------------date Range Picker-------------------------->
   const [selectedDate, setDate] = useState(new Date().toLocaleString() + "");
-  const [value, setValue] = React.useState([new Date(), new Date()]);
-  const [start_date,setStartDate]=useState()
-  const [end_date,setEndDate]=useState()
-  const handleChange=(value)=>{
-    setValue(value)
-    setStartDate(value?value[0].toISOString():"")
-    setEndDate(value?value[1].toISOString():"")
-    
-  }
+  const [value, setValue] = React.useState();
+  const [start_date, setStartDate] = useState();
+  const [end_date, setEndDate] = useState();
+  const handleChange = (value) => {
+    setValue(value);
+    setStartDate(value ? value[0].toISOString() : "");
+    setEndDate(value ? value[1].toISOString() : "");
+  };
   //Search
   const searchDataHandler = async () => {
     const config = {
@@ -327,19 +326,18 @@ const Dashboard = () => {
         setFilterVisible(true);
       }
     } else if (start_date && end_date) {
-      console.log("start_date",start_date)
-  console.log(end_date)
+      console.log("start_date", start_date);
+      console.log(end_date);
       const res = await Api(
         "POST",
         "api/project/date",
-        { start_date,end_date, user_id },
+        { start_date, end_date, user_id },
         config
       );
       setFilteredData(res.data);
       if (res.status === 200) {
         setFilterVisible(true);
-      console.log(res)
-
+        console.log(res);
       }
     } else if (searchByAuthor) {
       console.log("searchByAuthor", searchByAuthor);
@@ -402,9 +400,9 @@ const Dashboard = () => {
     }
   };
   const unsetSearchData = () => {
-    // setSearchByAuthor("");
-    // setSearchByProjectName("");
-    // setProjectDate("");
+    setSearchByAuthor("");
+    setSearchByProjectName("");
+    setValue("");
     setFilteredData("");
     setFilterVisible(false);
   };
@@ -684,6 +682,7 @@ const Dashboard = () => {
                   type="search"
                   className="form-control mb-0 ms-3"
                   placeholder="Search Model by Author"
+                  value={searchByAuthor}
                   onChange={(e) => setSearchByAuthor(e.target.value)}
                 />
               </div>
@@ -696,6 +695,7 @@ const Dashboard = () => {
                   type="search"
                   className="form-control mb-0 ms-3"
                   placeholder="Search by Project Name"
+                  value={project_name}
                   onChange={(e) => setSearchByProjectName(e.target.value)}
                 />
               </div>
@@ -713,12 +713,13 @@ const Dashboard = () => {
                    => setProjectDate(e.target.value)}
                 /> */}
                 <DateRangePicker
-            className=""
-            appearance="default"
-            placeholder="Date Range"
-            style={{ width: 230 }}
-            value={value} onChange={handleChange}
-          />
+                  className=""
+                  appearance="default"
+                  placeholder="Date Range"
+                  style={{ width: 230 }}
+                  value={value}
+                  onChange={handleChange}
+                />
               </div>
             </div>
             <div className="col-lg-3">
@@ -774,8 +775,8 @@ const Dashboard = () => {
                             <a>
                               <img
                                 src={feather}
-                                style={{ marginLeft: 5 }}
                                 alt=""
+                                className="alertAligns"
                               />
                             </a>
                           </OverlayTrigger>
@@ -810,7 +811,7 @@ const Dashboard = () => {
                               <img
                                 src={feather}
                                 alt=""
-                                style={{ marginLeft: "5px" }}
+                                className="alertAligns"
                               />
                             </a>
                           </OverlayTrigger>
@@ -913,32 +914,36 @@ const Dashboard = () => {
                         ))
                       : null}
                   </div>
-                  <div className="nla_view_top_title_and_add_new_block">
-                    <div className="row align-items-center">
-                      <div className="col-lg-5">
-                        <p className="mb-3">
-                          Recently Created
-                          <OverlayTrigger
-                            placement="top"
-                            delay={{ show: 250, hide: 250 }}
-                            overlay={
-                              <Tooltip id="overlay-example">
-                                Recently created projects
-                              </Tooltip>
-                            }
-                          >
-                            <a>
-                              <img
-                                src={feather}
-                                style={{ marginLeft: 5 }}
-                                alt=""
-                              />
-                            </a>
-                          </OverlayTrigger>
-                        </p>
+                  {filteredUnPinData === "" ? null : (
+                    <>
+                      <div className="nla_view_top_title_and_add_new_block">
+                        <div className="row align-items-center">
+                          <div className="col-lg-5">
+                            <p className="mb-3">
+                              Recently Created
+                              <OverlayTrigger
+                                placement="top"
+                                delay={{ show: 250, hide: 250 }}
+                                overlay={
+                                  <Tooltip id="overlay-example">
+                                    Recently created projects
+                                  </Tooltip>
+                                }
+                              >
+                                <a href="#">
+                                  <img
+                                    src={feather}
+                                    className="alertAligns"
+                                    alt=""
+                                  />
+                                </a>
+                              </OverlayTrigger>
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
+                    </>
+                  )}
 
                   <div className={`nla_grid_view_wrapper ${columnState}`}>
                     {filteredUnPinData !== ""
@@ -1061,7 +1066,11 @@ const Dashboard = () => {
                             <p className="mb-0">
                               Searched Results
                               <a href="#">
-                                <img src={feather} alt="" />
+                                <img
+                                  src={feather}
+                                  alt=""
+                                  className="alertAligns"
+                                />
                               </a>
                             </p>
                           </div>
@@ -1222,11 +1231,7 @@ const Dashboard = () => {
                         }
                       >
                         <a href="#">
-                          <img
-                            src={feather}
-                            alt=""
-                            style={{ marginLeft: "5px" }}
-                          />
+                          <img src={feather} alt="" className="alertAligns" />
                         </a>
                       </OverlayTrigger>
                     </div>
@@ -1613,7 +1618,7 @@ const Dashboard = () => {
                       placeholder="Select Type*"
                       onChange={(e) => setType(e.target.value)}
                     />
-                    <datalist id="selectType" className="my-option" >
+                    <datalist id="selectType" className="my-option">
                       <option value="Pricing" />
                       <option value="Optimization" />
                       <option value="Forecasting" />

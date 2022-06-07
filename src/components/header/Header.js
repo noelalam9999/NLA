@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
 import { useClickAway } from "react-use";
-import logo from "../../assets/images/Northlight_Analytics_Final_Logo.png";
+// import logo from "../../assets/images/Northlight_Analytics_Final_Logo.png";
 import placeHoldImg from "../../assets/images/placeholde_100.png";
+import logo from "../../assets/images/logo.png";
 import { Link } from "react-router-dom";
 const Header = () => {
   const [notifState, notifSetState] = useState(false);
@@ -29,13 +30,13 @@ const Header = () => {
           <div className="col-lg-6 col-md-6">
             <div className="nla_header_left">
               <div className="nla_logo">
-                <a href="#">
+                <Link to="/dashboard">
                   <img
                     src={logo}
                     alt="Northlight Analytics Logo"
                     className="img-fluid navbar-brand"
                   />
-                </a>
+                </Link>
               </div>
               <div className="nla_title">
                 <p className="mb-0">Gazelle</p>
