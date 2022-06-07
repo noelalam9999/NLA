@@ -1285,6 +1285,7 @@ header .theme-title h1 span {
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
+  justify-content: space-evenly;
 }
 
 .nla_list_view_wrapper .nla_list_view_body_content .nla_action div {

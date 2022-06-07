@@ -27,7 +27,11 @@ import EditProject from "./EditProject";
 import Snackbar from "@mui/material/Snackbar";
 import copyIcon from "../../assets/newIcons/ionic-md-copy.svg";
 import downloadIcon from "../../assets/newIcons/feather-download.svg";
-
+// import DateRangePicker from "react-daterange-picker";
+// import "react-daterange-picker/dist/css/react-calendar.css";
+// import { extendMoment } from "moment-range";
+// const momentAg = extendMoment(moment);
+import { DateRangePicker } from "rsuite";
 const Dashboard = () => {
   const [modalShow, setModalShow] = useState(false);
   const [projectID, setProjectID] = useState("");
@@ -276,7 +280,17 @@ const Dashboard = () => {
       document.querySelector("#companyLogo").style.borderColor = "#86b7fe";
     }
   };
-
+ // <--------------------date Range Picker-------------------------->
+  const [selectedDate, setDate] = useState(new Date().toLocaleString() + "");
+  const [value, setValue] = React.useState([new Date(), new Date()]);
+  const [start_date,setStartDate]=useState()
+  const [end_date,setEndDate]=useState()
+  const handleChange=(value)=>{
+    setValue(value)
+    setStartDate(value?value[0].toISOString():"")
+    setEndDate(value?value[1].toISOString():"")
+    
+  }
   //Search
   const searchDataHandler = async () => {
     const config = {
@@ -312,17 +326,20 @@ const Dashboard = () => {
       if (res.status === 200) {
         setFilterVisible(true);
       }
-    } else if (project_date) {
+    } else if (start_date && end_date) {
+      console.log("start_date",start_date)
+  console.log(end_date)
       const res = await Api(
         "POST",
         "api/project/date",
-        { project_date, user_id },
+        { start_date,end_date, user_id },
         config
       );
-
       setFilteredData(res.data);
       if (res.status === 200) {
         setFilterVisible(true);
+      console.log(res)
+
       }
     } else if (searchByAuthor) {
       console.log("searchByAuthor", searchByAuthor);
@@ -603,7 +620,6 @@ const Dashboard = () => {
     }
   };
 
-  // ==========================================================================================================================
   return (
     <div>
       <Header />
@@ -687,14 +703,22 @@ const Dashboard = () => {
             <div className="col-lg-3">
               <div className="nla_search">
                 <img src={calenderSvg} alt="list" className="img-fluid" />
-                <input
+                {/* <input
                   placeholder="mm/dd/yyyy"
                   type={dateType}
                   onFocus={() => setDateType("date")}
                   // onBlur={() => setDateType("text")}
                   className="form-control mb-0 ms-3"
-                  onChange={(e) => setProjectDate(e.target.value)}
-                />
+                  onChange={(e)
+                   => setProjectDate(e.target.value)}
+                /> */}
+                <DateRangePicker
+            className=""
+            appearance="default"
+            placeholder="Date Range"
+            style={{ width: 230 }}
+            value={value} onChange={handleChange}
+          />
               </div>
             </div>
             <div className="col-lg-3">
@@ -1212,7 +1236,8 @@ const Dashboard = () => {
 
               <div className="nla_list_view_wrapper">
                 <div className="nla_list_view_header">
-                  <div className="nla_modal">Models</div>
+                  <div className="nla_modal">Projects</div>
+                  <div className="nla_date">Create Date</div>
                   <div className="nla_action">Actions</div>
                 </div>
                 <div className="nla_list_view_body_content">
@@ -1235,10 +1260,14 @@ const Dashboard = () => {
                               ></i>
                               {elem.project_name}
                             </div>
-                            <div className="nla_action">
+                            <div className="nla_date">
                               <div>
-                                <p>{elem?.date_created?.substring(0, 10)}</p>
+                                <p style={{ paddingLeft: "21px" }}>
+                                  {elem?.date_created?.substring(0, 10)}
+                                </p>
                               </div>
+                            </div>
+                            <div className="nla_action">
                               <div>
                                 Insights{" "}
                                 <Link to={`/insights/${elem?.project_id}`}>
@@ -1584,7 +1613,7 @@ const Dashboard = () => {
                       placeholder="Select Type*"
                       onChange={(e) => setType(e.target.value)}
                     />
-                    <datalist id="selectType">
+                    <datalist id="selectType" className="my-option" >
                       <option value="Pricing" />
                       <option value="Optimization" />
                       <option value="Forecasting" />
