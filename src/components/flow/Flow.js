@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  useMemo,
+} from "react";
 import "./flow.css";
-// import {
-//   BsFillArrowLeftCircleFill,
-//   BsFillPenFill,
-//   BsFillPlayFill,
-//   BsPatchExclamation,
-// } from "react-icons/bs";
 import { Modal, Button } from "react-bootstrap";
-import CustomNode from "../customNode/customNode";
+import TextUpdaterNode from "../customNode/TextUpdaterNode";
 import ReactFlow, {
   ReactFlowProvider,
   useNodesState,
@@ -20,11 +20,10 @@ import ReactFlow, {
   getEdgeCenter,
   Controls,
 } from "react-flow-renderer";
-const nodeTypes = { textUpdater: CustomNode };
+const nodeTypes = { textUpdater: TextUpdaterNode };
 const Flow = () => {
   const flowKey = "example-flow";
   const getNodeId = () => `randomnode_${+new Date()}`;
-
   const initialNodes = [
     // {
     //   id: "1",
@@ -124,11 +123,10 @@ const Flow = () => {
       });
       const newNode = {
         id: getNodeId(),
-        type: "default",
+        type: "textUpdater",
         position,
         data: { label: `${node_data} ` },
       };
-
       setNodes((nds) => nds.concat(newNode));
     },
     [rfInstance]
@@ -195,27 +193,6 @@ const Flow = () => {
 
     saveclass.current = "save-button-unsaved";
   }, [nodes, edges]);
-
-  // useEffect(() => {
-  //   window.addEventListener("beforeunload", alertUser);
-  //   return () => {
-  //     window.removeEventListener("beforeunload", alertUser);
-  //   };
-  // }, []);
-  // const alertUser = (e) => {
-  //   e.preventDefault();
-  //   e.returnValue = "";
-  //   console.log(e);
-  // };
-  // useEffect(()=>{
-  //   onRestore();
-  //    },[pagereloaded]);
-  // const [ab, set] = useState(localStorage.getItem("save"));
-  // useEffect(() => {
-  //   if (localStorage.getItem("save")) {
-  //     // onSave();
-  //   }
-  // }, [ab]);
   const onShowOutput = () => {
     if (rfInstance) {
       const flow = rfInstance.toObject();

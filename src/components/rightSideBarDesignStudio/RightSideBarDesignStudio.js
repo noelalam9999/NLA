@@ -6,10 +6,8 @@ const RightSideBarDesignStudio = () => {
   const onDragStart = (event, node_type, node_label) => {
     event.dataTransfer.setData("application/reactflow", node_type);
     event.dataTransfer.setData("node_data", node_label);
-    //alert(node_type);
     event.dataTransfer.effectAllowed = "move";
   };
-
   const [menu, setMenu] = useState("head1");
 
   function onMenuClick() {

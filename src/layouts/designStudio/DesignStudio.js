@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import "../../css/style.css";
 import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
@@ -38,10 +38,6 @@ const DesignStudio = () => {
   const [project, setProject] = useState([]);
 
   const [save, setState] = useState(false);
-  const saveHandler = () => {
-    setState(true);
-    localStorage.setItem("save", 1);
-  };
 
   //UseEffect
 
@@ -53,7 +49,18 @@ const DesignStudio = () => {
     }
     fetchProject();
   }, []);
-
+  const [rfInstance, setRfInstance] = useState(null);
+  const flowKey = "example-flow";
+  const saveclass = useRef("save-button");
+  const onSave = useCallback(() => {
+    if (rfInstance) {
+      const flow = rfInstance.toObject();
+      localStorage.setItem(flowKey, JSON.stringify(flow));
+      saveclass.current = "save-button";
+      // console.log("Current Flow is \n",flow);
+      console.log("working");
+    }
+  }, [rfInstance]);
   // =====================================================================================================================
   return (
     <div>
@@ -157,7 +164,7 @@ const DesignStudio = () => {
                       <button
                         // href=""
                         className="btn btn-primary"
-                        onClick={saveHandler}
+                        onClick={onSave}
                       >
                         Save <i className="fa-solid fa-floppy-disk"></i>
                       </button>
@@ -169,7 +176,7 @@ const DesignStudio = () => {
           </div>
         </div>
         <RightSideBarDesignStudio />
-        <Flow onSave={save} />
+        <Flow />
         <div className="design-studio-additional-block position-relative">
           {/* <div className="heading">
             <h6>Design Studio</h6>

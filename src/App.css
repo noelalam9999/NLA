@@ -118,3 +118,19 @@ input[list] {
   margin-left: 5px;
   margin-bottom: 3px;
 }
+.nla_insight-tab-wrapper .accordion-button:not(.collapsed):after {
+  margin-bottom: 0px !important;
+}
+.nla_insight-tab-wrapper .accordion-button::after {
+  margin-bottom: 5px !important;
+}
+.xyz {
+  background: #fff;
+  border: 1px solid #1a192b;
+  border-radius: 3px;
+  color: #222;
+  font-size: 12px;
+  padding: 10px;
+  text-align: center;
+  width: 150px;
+}
