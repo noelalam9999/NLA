@@ -1,0 +1,222 @@
+.heads {
+  width: 100%;
+  height: 30%;
+  background-color: rgb(247, 247, 247);
+  text-align: center;
+}
+.head1 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: black;
+  width: 50%;
+  float: left;
+  border: 0px;
+  border-top: 2px solid black;
+  text-align: left;
+  padding-left: 10px;
+  padding-right: 5px;
+  background-color: rgb(255, 255, 255);
+  height: 50px;
+}
+
+.head1-2 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: rgb(141, 141, 141);
+  width: 50%;
+  float: left;
+  border: 0px;
+  text-align: left;
+  padding-left: 8px;
+  padding-right: 5px;
+  background-color: rgb(255, 255, 255);
+  height: 50px;
+}
+
+.head2 h6 {
+  display: inline;
+  padding-left: 4px;
+  font-size: 22px;
+}
+
+.head1 h6 {
+  display: inline;
+  padding-left: 7px;
+  font-size: 22px;
+}
+
+.head2-1 h6 {
+  display: inline;
+  padding-left: 4px;
+  font-size: 22px;
+}
+
+.head1-2 h6 {
+  display: inline;
+  padding-left: 7px;
+  font-size: 22px;
+}
+
+.head-icon1 {
+}
+.head2 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: rgb(141, 141, 141);
+  width: 50%;
+  float: right;
+  border: 0px;
+  text-align: left;
+  padding-left: 8px;
+  padding-right: 5px;
+  background-color: rgb(255, 255, 255);
+  height: 50px;
+}
+.head2-1 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: black;
+  width: 50%;
+  float: right;
+  border: 0px;
+  border-top: 2px solid black;
+  text-align: left;
+  padding-left: 10px;
+  padding-right: 5px;
+  background-color: rgb(255, 255, 255);
+  height: 50px;
+}
+
+.search-field {
+  outline: none;
+  text-indent: 33px;
+  border-radius: 20px;
+  margin-left: 12px;
+  float: left;
+  box-shadow: none;
+  border: none;
+  height: 17%;
+  width: 90%;
+  margin-top: 2%;
+  font-size: large;
+  padding: 8px;
+  color: black;
+  background-color: white;
+  border: 1px solid rgb(190, 190, 190);
+  padding-left: 0px !important;
+  margin-bottom: 25px;
+  z-index: 5;
+}
+.search-field:focus {
+  border: 1px solid rgb(3, 3, 3);
+}
+.searchIcon {
+  background-color: transparent;
+  color: rgb(190, 190, 190);
+  z-index: 10;
+  position: relative;
+  float: right;
+  margin-right: 20px;
+  top: 35px;
+  right: 25px;
+}
+.nodes-list {
+  /* padding-left: 15px;
+          padding-right: 15px; */
+}
+.accordion-header {
+  text-align: left;
+}
+
+.node {
+  cursor: grab;
+  padding: 15px;
+  margin-left: 55px;
+  margin-right: 55px;
+  border-radius: 20px;
+  background-color: rgb(234, 253, 246);
+  outline: none;
+  margin-top: 10px;
+}
+.node:hover {
+  background-color: rgb(224, 255, 243);
+}
+::-webkit-scrollbar {
+  width: 3px;
+  cursor: grab;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px transparent;
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(rgb(5, 5, 5), rgb(0, 0, 0));
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0));
+}
+
+.form-select {
+  display: block;
+  width: 80%;
+  padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+  -moz-padding-start: calc(0.75rem - 3px);
+  font-size: 1rem;
+  font-weight: 400;
+  margin-left: 10px;
+  line-height: 1.5;
+  color: #212529;
+
+  background-color: #fff;
+  background-image: url(
+    data:image/svg + xml;charset=utf-8,
+    %3Csvgxmlns="http://www.w3.org/2000/svg"viewBox="0 0 16 16"%3E%3Cpathfill="none"stroke="%23343a40"stroke-linecap="round"stroke-linejoin="round"stroke-width="2"d="M2 5l6 6 6-6"/%3E%3C/svg%3E
+  );
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.dropdowns {
+  border-radius: 20px;
+  height: 17%;
+  margin-top: 10%;
+}
+
+.p-bt {
+  margin-bottom: 50px;
+}
+.align-left {
+  text-align: left;
+  margin-left: 10px;
+}
+
+.form-control {
+  display: block;
+  width: 80%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  margin-left: 10px;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
