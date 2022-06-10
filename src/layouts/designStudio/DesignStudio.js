@@ -105,6 +105,7 @@ const DesignStudio = () => {
                       data-bs-toggle="tooltip"
                       data-bs-placement="bottom"
                       title="Dolor eligendi natus praesentium voluptatum, nisi veritatis ut minus, distinctio saepe veniam suscipit corporis molestiae voluptatibus cupiditate vel. Laboriosam, repellat officia. Labore?"
+                      className="alertAligns"
                     >
                       <img src={info} alt="info" className="img-fluid" />
                     </a>
@@ -123,6 +124,7 @@ const DesignStudio = () => {
                         href="#"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
+                        className="alertAligns"
                         title="Dolor eligendi natus praesentium voluptatum, nisi veritatis ut minus, distinctio saepe veniam suscipit corporis molestiae voluptatibus cupiditate vel. Laboriosam, repellat officia. Labore?"
                       >
                         <img src={info} alt="info" className="img-fluid" />
@@ -141,6 +143,7 @@ const DesignStudio = () => {
                         href="#"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
+                        className="alertAligns"
                         title="Dolor eligendi natus praesentium voluptatum, nisi veritatis ut minus, distinctio saepe veniam suscipit corporis molestiae voluptatibus cupiditate vel. Laboriosam, repellat officia. Labore?"
                       >
                         <img src={info} alt="info" className="img-fluid" />
@@ -155,6 +158,7 @@ const DesignStudio = () => {
                         href="#"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
+                        className="alertAligns"
                         title="Dolor eligendi natus praesentium voluptatum, nisi veritatis ut minus, distinctio saepe veniam suscipit corporis molestiae voluptatibus cupiditate vel. Laboriosam, repellat officia. Labore?"
                       >
                         <img src={info} alt="info" className="img-fluid" />

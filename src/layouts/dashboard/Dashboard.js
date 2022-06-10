@@ -1221,19 +1221,9 @@ const Dashboard = () => {
                           Create New Project
                         </p>
                       </div>
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 250 }}
-                        overlay={
-                          <Tooltip id="overlay-example">
-                            Create new project
-                          </Tooltip>
-                        }
-                      >
-                        <a href="#">
-                          <img src={feather} alt="" className="alertAligns" />
-                        </a>
-                      </OverlayTrigger>
+                      <a href="#">
+                        <img src={feather} alt="" />
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -1242,7 +1232,7 @@ const Dashboard = () => {
               <div className="nla_list_view_wrapper">
                 <div className="nla_list_view_header">
                   <div className="nla_modal">Projects</div>
-                  <div className="nla_date">Create Date</div>
+                  <div className="nla_date">Created Date</div>
                   <div className="nla_action">Actions</div>
                 </div>
                 <div className="nla_list_view_body_content">
