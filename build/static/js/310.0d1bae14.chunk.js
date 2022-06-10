@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunknla=self.webpackChunknla||[]).push([[310],{90310:function(n,e,l){l.r(e);l(72791);var t=l(16871),a=l(80184);e.default=function(n){var e=n.component,l=localStorage.getItem("auth");return console.log(),(0,a.jsx)(a.Fragment,{children:null!==l?(0,a.jsx)(e,{}):(0,a.jsx)(t.Fg,{to:"/login"})})}}}]);
+//# sourceMappingURL=310.0d1bae14.chunk.js.map

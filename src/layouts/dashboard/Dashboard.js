@@ -33,6 +33,9 @@ import downloadIcon from "../../assets/newIcons/feather-download.svg";
 // const momentAg = extendMoment(moment);
 import { DateRangePicker } from "rsuite";
 const Dashboard = () => {
+  const [vertical, setVertical] = useState("top");
+  const [horizontal, setHorizontal] = useState("right");
+
   const [modalShow, setModalShow] = useState(false);
   const [projectID, setProjectID] = useState("");
   const [projectCreatedAlert, setProjectCreatedAlert] = useState(false);
@@ -111,6 +114,8 @@ const Dashboard = () => {
     setCustomTabPinnedProject(false);
     setCustomTabRecentProject(true);
 
+    // console.log("orderByPinPage: ", orderByPinPage);
+
     try {
       let { data } = await Api(
         "GET",
@@ -118,10 +123,18 @@ const Dashboard = () => {
       );
 
       if (data) {
-        setProjectsOrderByPin(data.rows);
-        setOrderByPinProjectPagination(data.pagination);
-        console.log("\n\ndata of Order by Pin: ", data.rows);
-        console.log("\n\nOrder by Pin Pagination: ", data.pagination);
+        if (data?.message === "greater" || data?.message === "lesser") {
+          // console.log("I am in greater");
+          setOrderByPinProjectsHandler(data?.page);
+        } else {
+          setProjectsOrderByPin(data?.rows);
+          setOrderByPinProjectPagination(data?.pagination);
+        }
+
+        console.log("\n\nData of OrderbyPin: ", data?.message);
+
+        // console.log("\n\ndata of Order by Pin: ", data.rows);
+        // console.log("\n\nOrder by Pin Pagination: ", data.pagination);
       }
     } catch (error) {
       console.log("Error", error.response);
@@ -319,9 +332,17 @@ const Dashboard = () => {
         config
       );
 
-      setFilteredData(res.data.rows);
-      setSearchResultpagination(res.data.pagination);
-      console.log("setSearchResultpagination: ", searchResultpagination);
+      console.log("res: ", res.data);
+
+      if (res?.data?.message === "greater" || res?.data?.message === "lesser") {
+        searchedPageHandler(res?.data?.page);
+      } else {
+        setFilteredData(res.data.rows);
+        setSearchResultpagination(res.data.pagination);
+      }
+
+      // setFilteredData(res.data.rows);
+      // setSearchResultpagination(res.data.pagination);
       if (res.status === 200) {
         setFilterVisible(true);
       }
@@ -449,6 +470,13 @@ const Dashboard = () => {
     }
   };
 
+  const searchedPageHandler = (page_no) => {
+    if (page_no) {
+      setSearchResultPage(page_no);
+      setLoad(true);
+    }
+  };
+
   const setOrderByPinProjectsHandler = (page_no) => {
     if (page_no) {
       setOrderByPinPage(page_no);
@@ -466,40 +494,53 @@ const Dashboard = () => {
       },
     };
 
-    async function fetchProjects() {
-      const { data } = await Api(
-        "GET",
-        `api/projects/${userID}/?page=${page}&limit=${limit}`
-        // config
-      );
-      setProjects(data.rows);
-      setPagination(data.pagination);
-
-      const filteredPin = data.rows?.filter((val) => {
-        return val.pin_project === 1;
-      });
-
-      //Getting Pinned Projects
-      if (page <= pinnedProjectsTotalPages) {
-        const response = await Api(
-          "POST",
-          `api/pinned/projects/?page=${page}&limit=${limit}`,
-          { user_id },
-          config
+    if (customTabPinnedProject === true) {
+      async function fetchProjects() {
+        const { data } = await Api(
+          "GET",
+          `api/projects/${userID}/?page=${page}&limit=${limit}`
+          // config
         );
-        setPinnedProjectsTotalPages(response.data.pagination.numberOfPages);
-        setFilteredPinDataByDate(response.data.rows);
+
+        if (data) {
+          if (data?.message === "greater" || data?.message === "lesser") {
+            // console.log("I am in greater");
+            setPageHandler(data?.page);
+          } else {
+            setProjects(data.rows);
+            setPagination(data.pagination);
+
+            const filteredPin = data.rows?.filter((val) => {
+              return val.pin_project === 1;
+            });
+
+            //Getting Pinned Projects
+            if (page <= pinnedProjectsTotalPages) {
+              const response = await Api(
+                "POST",
+                `api/pinned/projects/?page=${page}&limit=${limit}`,
+                { user_id },
+                config
+              );
+              setPinnedProjectsTotalPages(
+                response.data.pagination.numberOfPages
+              );
+              setFilteredPinDataByDate(response.data.rows);
+            }
+
+            const filteredUnPin = data.rows?.filter((val) => {
+              return val.pin_project === 0;
+            });
+
+            // setFilteredPinDataByDate(filteredPin);
+            setFilteredPinData(filteredPin);
+            setFilteredUnPinData(filteredUnPin);
+          }
+        }
       }
-
-      const filteredUnPin = data.rows?.filter((val) => {
-        return val.pin_project === 0;
-      });
-
-      // setFilteredPinDataByDate(filteredPin);
-      setFilteredPinData(filteredPin);
-      setFilteredUnPinData(filteredUnPin);
+      fetchProjects();
     }
-    fetchProjects();
+
     setLoad(false);
   }, [load, limit]);
 
@@ -715,8 +756,8 @@ const Dashboard = () => {
                 <DateRangePicker
                   className=""
                   appearance="default"
-                  placeholder="Date Range"
-                  style={{ width: 230 }}
+                  placeholder="Search by date range"
+                  style={{ width: 260 }}
                   value={value}
                   onChange={handleChange}
                 />
@@ -1755,18 +1796,33 @@ const Dashboard = () => {
           />
         </div>
       </div>
-      <Snackbar open={searchEmptyChecker} autoHideDuration={3000}>
+      <Snackbar
+        open={searchEmptyChecker}
+        autoHideDuration={3000}
+        key={vertical + horizontal}
+        anchorOrigin={{ vertical, horizontal }}
+      >
         <Alert severity="error" sx={{ width: "100%" }}>
           Please fill at least one field
         </Alert>
       </Snackbar>
-      <Snackbar open={projectCreatedAlert} autoHideDuration={3000}>
+      <Snackbar
+        open={projectCreatedAlert}
+        autoHideDuration={3000}
+        key={vertical + horizontal}
+        anchorOrigin={{ vertical, horizontal }}
+      >
         <Alert severity="success" sx={{ width: "100%" }}>
           Project created successfully!
         </Alert>
       </Snackbar>
 
-      <Snackbar open={projectPinAlert} autoHideDuration={3000}>
+      <Snackbar
+        open={projectPinAlert}
+        autoHideDuration={3000}
+        key={vertical + horizontal}
+        anchorOrigin={{ vertical, horizontal }}
+      >
         <Alert severity="success" sx={{ width: "100%" }}>
           {pinAlertText}
         </Alert>
