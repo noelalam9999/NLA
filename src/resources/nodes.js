@@ -7,6 +7,22 @@ const topics = [
     id: "2",
     name: "Demand Forcasting",
   },
+  {
+    id: "3",
+    name: "Marketing Mix",
+  },
+  {
+    id: "4",
+    name: "Assortment Optimization",
+  },
+  {
+    id: "5",
+    name: "Trendspotting",
+  },
+  {
+    id: "6",
+    name: "Brandspotting",
+  },
 ];
 
 const dataAcess = [
@@ -17,6 +33,26 @@ const dataAcess = [
   {
     id: "2",
     name: "Write File",
+  },
+  {
+    id: "3",
+    name: "DB Read",
+  },
+  {
+    id: "4",
+    name: "DB Write",
+  },
+  {
+    id: "5",
+    name: "Cloud AmazonS3 Read",
+  },
+  {
+    id: "6",
+    name: "Cloud AmazonS3 Write",
+  },
+  {
+    id: "7",
+    name: "Cloud Google Read",
   },
 ];
 
@@ -33,6 +69,22 @@ const modeling = [
     id: "3",
     name: "Price Elasticity",
   },
+  {
+    id: "4",
+    name: "Logistic Regression",
+  },
+  {
+    id: "5",
+    name: "SVM",
+  },
+  {
+    id: "6",
+    name: "XGBOOST",
+  },
+  {
+    id: "7",
+    name: "GBM",
+  },
 ];
 
 const cleansing = [
@@ -43,6 +95,26 @@ const cleansing = [
   {
     id: "2",
     name: "Denormalize",
+  },
+  {
+    id: "3",
+    name: "Statistics",
+  },
+  {
+    id: "4",
+    name: "Scale By Weights",
+  },
+  {
+    id: "5",
+    name: "Quality Measures",
+  },
+  {
+    id: "6",
+    name: "Cross Validation",
+  },
+  {
+    id: "7",
+    name: "Split Validation",
   },
 ];
 
