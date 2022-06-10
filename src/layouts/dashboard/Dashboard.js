@@ -1262,9 +1262,19 @@ const Dashboard = () => {
                           Create New Project
                         </p>
                       </div>
-                      <a href="#">
-                        <img src={feather} alt="" />
-                      </a>
+                      <OverlayTrigger
+                        placement="top"
+                        delay={{ show: 250, hide: 250 }}
+                        overlay={
+                          <Tooltip id="overlay-example">
+                            Create new project
+                          </Tooltip>
+                        }
+                      >
+                        <a href="#">
+                          <img src={feather} alt="" className="alertAligns" />
+                        </a>
+                      </OverlayTrigger>
                     </div>
                   </div>
                 </div>

@@ -2195,6 +2195,8 @@ header .theme-title h1 span {
 
 .right_sidebar .tab-content {
   padding: 0 0;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .right_sidebar .tab-content .accordion .accordion-item {
