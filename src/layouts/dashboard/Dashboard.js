@@ -1584,7 +1584,7 @@ const Dashboard = () => {
                 <option value="10">10 Project</option>
                 <option value="15">15 Project</option>
                 <option value="20">20 Project</option>
-                <option value="35">25 Project</option>
+                <option value="25">25 Project</option>
               </select>
             </div>
             <div>
