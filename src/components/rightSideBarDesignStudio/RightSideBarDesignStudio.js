@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "../../css/style.css";
 import { Accordion, Form } from "react-bootstrap";
 import info from "../../assets/images/feather-info.svg";
+import { topics, dataAcess, modeling, cleansing } from "../../resources/nodes";
+
 const RightSideBarDesignStudio = () => {
   const onDragStart = (event, node_type, node_label) => {
     event.dataTransfer.setData("application/reactflow", node_type);
@@ -107,7 +109,24 @@ const RightSideBarDesignStudio = () => {
                 <Accordion.Header>Topics</Accordion.Header>
                 <Accordion.Body>
                   <div className="data-access_btn">
-                    <div
+                    {topics.map((elem, id) => (
+                      <div
+                        key={id}
+                        onDragStart={(event) =>
+                          onDragStart(event, "input", `${elem.name}`)
+                        }
+                        draggable
+                      >
+                        <button className="btn btn-secondary">
+                          <i className="fa-solid fa-book-open"></i>
+                          {elem.name}
+                        </button>
+                        <a href="#">
+                          <img src={info} alt="info" className="img-fluid" />
+                        </a>
+                      </div>
+                    ))}
+                    {/* <div
                       onDragStart={(event) =>
                         onDragStart(event, "input", "Price Elasticity")
                       }
@@ -120,8 +139,8 @@ const RightSideBarDesignStudio = () => {
                       <a href="#">
                         <img src={info} alt="info" className="img-fluid" />
                       </a>
-                    </div>
-                    <div
+                    </div> */}
+                    {/* <div
                       onDragStart={(event) =>
                         onDragStart(event, "input", "Demand Forecast")
                       }
@@ -134,7 +153,7 @@ const RightSideBarDesignStudio = () => {
                       <a href="#">
                         <img src={info} alt="info" className="img-fluid" />
                       </a>
-                    </div>
+                    </div> */}
                   </div>
                 </Accordion.Body>
               </Accordion.Item>
@@ -142,21 +161,25 @@ const RightSideBarDesignStudio = () => {
                 <Accordion.Header>Data Access</Accordion.Header>
                 <Accordion.Body>
                   <div className="data-access_btn">
-                    <div
-                      onDragStart={(event) =>
-                        onDragStart(event, "input", "Read File")
-                      }
-                      draggable
-                    >
-                      <button className="btn btn-secondary">
-                        <i className="fa-solid fa-book-open"></i>
-                        Read File
-                      </button>
-                      <a href="#">
-                        <img src={info} alt="info" className="img-fluid" />
-                      </a>
-                    </div>
-                    <div
+                    {dataAcess.map((elem, id) => (
+                      <div
+                        key={id}
+                        onDragStart={(event) =>
+                          onDragStart(event, "input", `${elem.name}`)
+                        }
+                        draggable
+                      >
+                        <button className="btn btn-secondary">
+                          <i className="fa-solid fa-book-open"></i>
+                          {elem.name}
+                        </button>
+                        <a href="#">
+                          <img src={info} alt="info" className="img-fluid" />
+                        </a>
+                      </div>
+                    ))}
+
+                    {/* <div
                       onDragStart={(event) =>
                         onDragStart(event, "input", "Write File")
                       }
@@ -169,17 +192,6 @@ const RightSideBarDesignStudio = () => {
                       <a href="#">
                         <img src={info} alt="info" className="img-fluid" />
                       </a>
-                    </div>
-                    {/* <div
-                      onDragStart={(event) =>
-                        onDragStart(event, "input", "Pricing")
-                      }
-                      draggable
-                    >
-                      <button className="btn btn-secondary">$ Pricing</button>
-                      <a href="#">
-                        <img src={info} alt="info" className="img-fluid" />
-                      </a>
                     </div> */}
                   </div>
                 </Accordion.Body>
@@ -188,7 +200,24 @@ const RightSideBarDesignStudio = () => {
                 <Accordion.Header>Modeling</Accordion.Header>
                 <Accordion.Body>
                   <div className="data-access_btn">
-                    <div
+                    {modeling.map((elem, id) => (
+                      <div
+                        key={id}
+                        onDragStart={(event) =>
+                          onDragStart(event, "input", `${elem.name}`)
+                        }
+                        draggable
+                      >
+                        <button className="btn btn-secondary">
+                          <i className="fa-solid fa-book-open"></i>
+                          {elem.name}
+                        </button>
+                        <a href="#">
+                          <img src={info} alt="info" className="img-fluid" />
+                        </a>
+                      </div>
+                    ))}
+                    {/* <div
                       onDragStart={(event) =>
                         onDragStart(event, "input", "Linear Regression")
                       }
@@ -201,35 +230,7 @@ const RightSideBarDesignStudio = () => {
                       <a href="#">
                         <img src={info} alt="info" className="img-fluid" />
                       </a>
-                    </div>
-                    <div
-                      onDragStart={(event) =>
-                        onDragStart(event, "input", "Arima")
-                      }
-                      draggable
-                    >
-                      <button className="btn btn-secondary">
-                        <i className="fa-solid fa-pen-nib"></i>
-                        Arima
-                      </button>
-                      <a href="#">
-                        <img src={info} alt="info" className="img-fluid" />
-                      </a>
-                    </div>
-                    <div
-                      onDragStart={(event) =>
-                        onDragStart(event, "input", "Price Elasticity")
-                      }
-                      draggable
-                    >
-                      <button className="btn btn-secondary">
-                        <i className="fa-solid fa-pen-nib"></i>
-                        Price Elasticity{" "}
-                      </button>
-                      <a href="#">
-                        <img src={info} alt="info" className="img-fluid" />
-                      </a>
-                    </div>
+                    </div> */}
                   </div>
                 </Accordion.Body>
               </Accordion.Item>
@@ -237,7 +238,24 @@ const RightSideBarDesignStudio = () => {
                 <Accordion.Header>Cleansing</Accordion.Header>
                 <Accordion.Body>
                   <div className="data-access_btn">
-                    <div
+                    {cleansing.map((elem, id) => (
+                      <div
+                        key={id}
+                        onDragStart={(event) =>
+                          onDragStart(event, "input", `${elem.name}`)
+                        }
+                        draggable
+                      >
+                        <button className="btn btn-secondary">
+                          <i className="fa-solid fa-book-open"></i>
+                          {elem.name}
+                        </button>
+                        <a href="#">
+                          <img src={info} alt="info" className="img-fluid" />
+                        </a>
+                      </div>
+                    ))}
+                    {/* <div
                       onDragStart={(event) =>
                         onDragStart(event, "input", "Cleansing")
                       }
@@ -250,21 +268,7 @@ const RightSideBarDesignStudio = () => {
                       <a href="#">
                         <img src={info} alt="info" className="img-fluid" />
                       </a>
-                    </div>
-                    <div
-                      onDragStart={(event) =>
-                        onDragStart(event, "input", "Denormalize")
-                      }
-                      draggable
-                    >
-                      <button className="btn btn-secondary">
-                        <i className="fa-solid fa-pen-nib"></i>
-                        Denormalize
-                      </button>
-                      <a href="#">
-                        <img src={info} alt="info" className="img-fluid" />
-                      </a>
-                    </div>
+                    </div> */}
                   </div>
                 </Accordion.Body>
               </Accordion.Item>

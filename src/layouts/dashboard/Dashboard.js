@@ -715,8 +715,8 @@ const Dashboard = () => {
                 <DateRangePicker
                   className=""
                   appearance="default"
-                  placeholder="Date Range"
-                  style={{ width: 230 }}
+                  placeholder="Search by date range"
+                  style={{ width: 260 }}
                   value={value}
                   onChange={handleChange}
                 />
