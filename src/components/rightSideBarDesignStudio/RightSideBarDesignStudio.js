@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import "../../css/style.css";
-import { Accordion, Form } from "react-bootstrap";
+import { Accordion } from "react-bootstrap";
 import info from "../../assets/images/feather-info.svg";
 import { topics, dataAcess, modeling, cleansing } from "../../resources/nodes";
-
 const RightSideBarDesignStudio = () => {
   const onDragStart = (event, node_type, node_label) => {
     event.dataTransfer.setData("application/reactflow", node_type);
@@ -11,14 +10,21 @@ const RightSideBarDesignStudio = () => {
     event.dataTransfer.effectAllowed = "move";
   };
   const [menu, setMenu] = useState("head1");
-
+  const [tabState, setTabState] = useState("false");
+  const [paramState, setParamState] = useState({});
   function onMenuClick() {
-    if (menu == "head1") {
+    if (menu === "head1") {
       setMenu("head2");
     } else {
       setMenu("head1");
     }
   }
+  const paramSwitchHandler = (props) => {
+    if (props.params) {
+      setMenu("head2");
+      setParamState(props.params);
+    }
+  };
   return (
     <div className="right_sidebar" data-position="right">
       <span className="nla-toggle-line"></span>
@@ -97,14 +103,9 @@ const RightSideBarDesignStudio = () => {
         )}
       </ul>
       <div className="tab-content" id="pills-tabContent">
-        {menu == "head1" && (
-          <div
-            className="tab-pane fade show active"
-            id="pills-home"
-            role="tabpanel"
-            aria-labelledby="pills-home-tab"
-          >
-            <Accordion defaultActiveKey={["1"]}>
+        {menu === "head1" && (
+          <div className="tab-pane fade show active" id="pills-home">
+            <Accordion defaultActiveKey="1">
               <Accordion.Item eventKey="0">
                 <Accordion.Header>Topics</Accordion.Header>
                 <Accordion.Body>
@@ -169,7 +170,12 @@ const RightSideBarDesignStudio = () => {
                         }
                         draggable
                       >
-                        <button className="btn btn-secondary">
+                        <button
+                          className="btn btn-secondary"
+                          onClick={() => {
+                            paramSwitchHandler(elem);
+                          }}
+                        >
                           <i className="fa-solid fa-book-open"></i>
                           {elem.name}
                         </button>
@@ -284,18 +290,28 @@ const RightSideBarDesignStudio = () => {
               aria-labelledby="pills-profile-tab"
             >
               <div className="parameters-content">
-                <h5>Default</h5>
-                <div className="nla-select-box-with-lbl">
-                  <label htmlFor="Logverbosity">Logverbosity</label>
-                  <select className="form-select" aria-label="Logverbosity">
-                    <option selected>Warning</option>
+                <h5>
+                  Modify {paramState.name ? paramState.name : "null"} File
+                  Parameters
+                </h5>
+                {paramState.fileFormat ? (
+                  <>
+                    <div className="nla-select-box-with-lbl">
+                      <label htmlFor="Logverbosity">FileFormat</label>
+                      <select className="form-select">
+                        <option value={paramState.fileFormat}>
+                          {paramState.fileFormat}
+                        </option>
+                        {/* <option selected>Warning</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
-                </div>
+                    <option value="3">Three</option> */}
+                      </select>
+                    </div>
+                  </>
+                ) : null}
 
-                <div className="nla-select-box-with-lbl">
+                {/* <div className="nla-select-box-with-lbl">
                   <label htmlFor="sendMail">Send Mail</label>
                   <select className="form-select" aria-label="sendMail">
                     <option selected>Always</option>
@@ -303,9 +319,11 @@ const RightSideBarDesignStudio = () => {
                     <option value="2">Two</option>
                     <option value="3">Three</option>
                   </select>
-                </div>
+                </div> */}
 
-                <label htmlFor="send Mail">Log File</label>
+                <label htmlFor="send Mail">
+                  {paramState.name === "Read" ? "UploadFile" : "Write File"}
+                </label>
                 <div className="nla-select-box-with-lbl">
                   <input type="file" className="form-control" id="sendMail" />
                   <label htmlFor="sendMail">

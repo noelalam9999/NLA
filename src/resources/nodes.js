@@ -29,10 +29,18 @@ const dataAcess = [
   {
     id: "1",
     name: "Read File",
+    params: {
+      name: "Read",
+      fileFormat: ".csv",
+    },
   },
   {
     id: "2",
     name: "Write File",
+    params: {
+      name: "Write",
+      fileFormat: ".csv",
+    },
   },
   {
     id: "3",
