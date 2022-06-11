@@ -14,7 +14,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="left_sidebar" data-position="right">
+      <div className="left_sidebar" data-position="right" id="leftSideBar">
         <span className="nla-toggle-line" onClick={sidebarHandler}></span>
         <ul className="nav">
           <li className="active">

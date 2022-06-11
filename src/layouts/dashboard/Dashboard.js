@@ -3,6 +3,8 @@ import Alert from "@mui/material/Alert";
 import { Link } from "react-router-dom";
 import { Tooltip, OverlayTrigger, Badge, Modal } from "react-bootstrap";
 import moment from "moment";
+import Tour from "reactour";
+import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 import Sidebar from "../../components/sidebar/Sidebar";
 import "../../css/style.css";
 import awUser from "../../assets/images/awesome-user-alt.svg";
@@ -27,6 +29,7 @@ import EditProject from "./EditProject";
 import Snackbar from "@mui/material/Snackbar";
 import copyIcon from "../../assets/newIcons/ionic-md-copy.svg";
 import downloadIcon from "../../assets/newIcons/feather-download.svg";
+import introImg from "../../assets/images/main-navigation-intro-image.png";
 // import DateRangePicker from "react-daterange-picker";
 // import "react-daterange-picker/dist/css/react-calendar.css";
 // import { extendMoment } from "moment-range";
@@ -659,12 +662,123 @@ const Dashboard = () => {
     }
   };
 
+  //Pop up model open for once
+  const [isTourOpen, setIsTourOpen] = useState(true);
+  const steps = [
+    {
+      selector: "#leftSideBar",
+      mutationObservables: [`[data-tour-id="mask-position-recompute"]`],
+      content: () => (
+        <>
+          <div class="tooltip-wrapper-cb">
+            <img height="150" src={introImg} class="img-fluid" alt="" />
+            <h3 class="tooltip-title-cb">Main Navigation</h3>
+            <p>
+              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+              nonumy eirmod tempor invidunt.
+            </p>
+            <div class="custom-checkbox">
+              <input
+                type="checkbox"
+                id="tootltip-show-box"
+                name="tootltip-show-box"
+                value="Show"
+              />
+              <label for="tootltip-show-box"> Don't show again</label>
+            </div>
+          </div>
+        </>
+      ),
+    },
+    {
+      selector: "#filter_box_wrapper",
+      content: () => (
+        <div class="tooltip-wrapper-cb">
+          <img
+            height="150"
+            src={require("../../assets/images/model-search-intro-image.png")}
+            class="img-fluid"
+            alt=""
+          />
+          <h3 class="tooltip-title-cb">Model Search</h3>
+          <p>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+            nonumy eirmod tempor invidunt.
+          </p>
+          <div class="custom-checkbox">
+            <input
+              type="checkbox"
+              id="tootltip-show-box"
+              name="tootltip-show-box"
+              value="Show"
+            />
+            <label for="tootltip-show-box"> Don't show again</label>
+          </div>
+        </div>
+      ),
+      // position: [160, 250],
+      style: {
+        position: "absolute",
+        left: "0px",
+        top: "20px",
+        maxWidth: "340px",
+        width: "100%",
+        // webkitTransform: "none",
+        // transform: "translate(128px,360px)",
+      },
+    },
+    {
+      selector: "#circleS",
+      content: () => (
+        <div class="tooltip-wrapper-cb">
+          <img
+            height="150"
+            src={require("../../assets/images/new_project_create_image.png")}
+            class="img-fluid"
+            alt=""
+          />
+          <h3 class="tooltip-title-cb">Create New Model</h3>
+          <p>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+            nonumy eirmod tempor invidunt.
+          </p>
+          <div class="custom-checkbox">
+            <input
+              type="checkbox"
+              id="tootltip-show-box"
+              name="tootltip-show-box"
+              value="Show"
+            />
+            <label for="tootltip-show-box"> Don't show again</label>
+          </div>
+        </div>
+      ),
+      position: "-10px",
+    },
+  ];
+  const disableBody = (target) => disableBodyScroll(target);
+  const enableBody = (target) => enableBodyScroll(target);
   return (
     <div>
       <Header />
       {/* <!-- Sidebar Start --> */}
       <Sidebar />
       {/* <!-- Body Content Start --> */}
+      <Tour
+        steps={steps}
+        isOpen={isTourOpen}
+        className="introjs-tooltip"
+        onRequestClose={() => setIsTourOpen(false)}
+        prevButton={"prev"}
+        nextButton={"Next"}
+        showNumber={false}
+        maskSpace={0}
+        showNavigationNumber={false}
+        lastStepNextButton={"Done"}
+        getCurrentStep={(curr) => console.log(curr)}
+        // onAfterOpen={disableBody}
+        // onBeforeClose={enableBody}
+      />
       <div className="main-content-wrapper">
         <div className="dashboard_banner">
           <div className="banner_content">
@@ -714,7 +828,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="filter_box_wrapper">
+        <div className="filter_box_wrapper" id="filter_box_wrapper">
           <div className="row">
             <div className="col-lg-3">
               <div className="nla_search">
@@ -824,7 +938,10 @@ const Dashboard = () => {
                         </p>
                       </div>
                       <div className="col-lg-7 text-end">
-                        <div className="nla_add_new_project_btn">
+                        <div
+                          className="nla_add_new_project_btn"
+                          id="nla_add_new_project_btn"
+                        >
                           <div
                             onClick={handleShow}
                             style={{ cursor: "pointer" }}
@@ -832,6 +949,7 @@ const Dashboard = () => {
                             <p>
                               <span>
                                 <img
+                                  id="circleS"
                                   src={plusCircle}
                                   alt="Create New Project"
                                 />
