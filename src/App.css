@@ -176,3 +176,7 @@ input[list] {
   left: 15px !important;
   position: fixed !important;
 }
+.step3 {
+  left: -10px !important;
+  position: absolute !important;
+}

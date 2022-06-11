@@ -664,6 +664,7 @@ const Dashboard = () => {
 
   //Pop up model open for once
   const [isTourOpen, setIsTourOpen] = useState(true);
+  const [currentStep, setStep] = useState();
   const steps = [
     {
       selector: "#leftSideBar",
@@ -756,6 +757,23 @@ const Dashboard = () => {
       position: "-10px",
     },
   ];
+  useEffect(() => {
+    if (currentStep === 1) {
+      const ab = document.getElementsByClassName("beJLEE");
+      ab[0].style.position = "absolute";
+    }
+    if (currentStep === 2) {
+      const ab = document.getElementsByClassName("beJLEE");
+      ab[0].style.position = "absolute";
+      const element = document.getElementsByClassName("sc-eCYdqJ");
+      element[0].classList.add("step3");
+      const mask = document
+        .getElementById("mask-main")
+        .getElementsByTagName("rect")[1];
+      mask.style.rx = "25";
+      console.log(mask);
+    }
+  }, [currentStep]);
   const disableBody = (target) => disableBodyScroll(target);
   const enableBody = (target) => enableBodyScroll(target);
   return (
@@ -775,7 +793,7 @@ const Dashboard = () => {
         maskSpace={0}
         showNavigationNumber={false}
         lastStepNextButton={"Done"}
-        getCurrentStep={(curr) => console.log(curr)}
+        getCurrentStep={(curr) => setStep(curr)}
         // onAfterOpen={disableBody}
         // onBeforeClose={enableBody}
       />
