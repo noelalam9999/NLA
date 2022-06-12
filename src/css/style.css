@@ -1738,9 +1738,10 @@ header .theme-title h1 span {
 }
 
 .introjs-tooltip {
-  min-width: 240px;
-  border-radius: 20px;
-  padding: 30px 20px 20px;
+  min-width: 240px !important;
+  border-radius: 20px !important;
+  padding: 30px 20px 20px !important;
+  width: 280px;
 }
 
 .introjs-tooltip .tooltip-wrapper-cb {
@@ -1864,7 +1865,7 @@ header .theme-title h1 span {
   vertical-align: text-top;
   width: 12px;
   height: 12px;
-  background: white;
+  background: #174f73;
 }
 
 .custom-checkbox input[type="checkbox"]:hover + label:before {
