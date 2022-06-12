@@ -34,7 +34,7 @@ import downloadIcon from "../../assets/newIcons/feather-download.svg";
 import { DateRangePicker } from "rsuite";
 const Dashboard = () => {
   const [vertical, setVertical] = useState("top");
-  const [horizontal, setHorizontal] = useState("right");
+  const [horizontal, setHorizontal] = useState("center");
 
   const [modalShow, setModalShow] = useState(false);
   const [projectID, setProjectID] = useState("");

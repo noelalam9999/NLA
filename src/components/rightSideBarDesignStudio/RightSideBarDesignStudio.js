@@ -10,6 +10,13 @@ const RightSideBarDesignStudio = () => {
     event.dataTransfer.effectAllowed = "move";
   };
   const [menu, setMenu] = useState("head1");
+
+  //Parameters
+  const [modelingParameter, setModelingParameter] = useState("");
+  const [dataAccessParameter, setDataAccessParameter] = useState("");
+
+  console.log("dataAccessParameter: ", dataAccessParameter);
+
   const [tabState, setTabState] = useState("false");
   const [paramState, setParamState] = useState({});
   function onMenuClick() {
@@ -20,9 +27,23 @@ const RightSideBarDesignStudio = () => {
     }
   }
   const paramSwitchHandler = (props) => {
+    // console.log("props.params: ", props.params);
     if (props.params) {
       setMenu("head2");
-      setParamState(props.params);
+      if (props.params.name === "Price Elasticity") {
+        setDataAccessParameter("");
+        console.log("In Price: ");
+        setModelingParameter("modelingHead");
+        setParamState(props.params);
+      } else if (
+        props.params.name === "Write" ||
+        props.params.name === "Read"
+      ) {
+        setDataAccessParameter("dataHead");
+        setParamState(props.params);
+      } else {
+        // setParamState(props.params);
+      }
     }
   };
   return (
@@ -175,6 +196,10 @@ const RightSideBarDesignStudio = () => {
                           onClick={() => {
                             paramSwitchHandler(elem);
                           }}
+                          onDragEnd={() => {
+                            paramSwitchHandler(elem);
+                          }}
+                          draggable
                         >
                           <i className="fa-solid fa-book-open"></i>
                           {elem.name}
@@ -184,21 +209,6 @@ const RightSideBarDesignStudio = () => {
                         </a>
                       </div>
                     ))}
-
-                    {/* <div
-                      onDragStart={(event) =>
-                        onDragStart(event, "input", "Write File")
-                      }
-                      draggable
-                    >
-                      <button className="btn btn-secondary">
-                        <i className="fa-solid fa-pen-nib"></i>
-                        Write File
-                      </button>
-                      <a href="#">
-                        <img src={info} alt="info" className="img-fluid" />
-                      </a>
-                    </div> */}
                   </div>
                 </Accordion.Body>
               </Accordion.Item>
@@ -214,7 +224,16 @@ const RightSideBarDesignStudio = () => {
                         }
                         draggable
                       >
-                        <button className="btn btn-secondary">
+                        <button
+                          className="btn btn-secondary"
+                          onClick={() => {
+                            paramSwitchHandler(elem);
+                          }}
+                          onDragEnd={() => {
+                            paramSwitchHandler(elem);
+                          }}
+                          draggable
+                        >
                           <i className="fa-solid fa-book-open"></i>
                           {elem.name}
                         </button>
@@ -281,7 +300,7 @@ const RightSideBarDesignStudio = () => {
             </Accordion>
           </div>
         )}
-        {menu == "head2" && (
+        {/* {menu == "head2" && dataAccessParameter == "dataHead" && (
           <>
             <div
               className="tab-pane show active"
@@ -291,8 +310,8 @@ const RightSideBarDesignStudio = () => {
             >
               <div className="parameters-content">
                 <h5>
-                  Modify {paramState.name ? paramState.name : "null"} File
-                  Parameters
+                  Modify {paramState.name ? paramState.name : "null"} i am in
+                  head 2 and datahead Parameters
                 </h5>
                 {paramState.fileFormat ? (
                   <>
@@ -302,24 +321,10 @@ const RightSideBarDesignStudio = () => {
                         <option value={paramState.fileFormat}>
                           {paramState.fileFormat}
                         </option>
-                        {/* <option selected>Warning</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option> */}
                       </select>
                     </div>
                   </>
                 ) : null}
-
-                {/* <div className="nla-select-box-with-lbl">
-                  <label htmlFor="sendMail">Send Mail</label>
-                  <select className="form-select" aria-label="sendMail">
-                    <option selected>Always</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
-                </div> */}
 
                 <label htmlFor="send Mail">
                   {paramState.name === "Read" ? "UploadFile" : "Write File"}
@@ -332,6 +337,152 @@ const RightSideBarDesignStudio = () => {
                 </div>
               </div>
             </div>
+          </>
+        )}
+
+        {menu == "head2" && modelingParameter == "modelingHead" && (
+          <>
+            <div
+              className="tab-pane show active"
+              id="pills-profile"
+              role="tabpanel"
+              aria-labelledby="pills-profile-tab"
+            >
+              <div className="parameters-content">
+                <h5>
+                  Modify {paramState.name ? paramState.name : "null"}
+                  Parameters
+                </h5>
+                {paramState.fileFormat ? (
+                  <>
+                    <div className="nla-select-box-with-lbl">
+                      <label htmlFor="Logverbosity">FileFormat</label>
+                      <select className="form-select">
+                        <option value={paramState.fileFormat}>
+                          {paramState.fileFormat}
+                        </option>
+                      </select>
+                    </div>
+                  </>
+                ) : null}
+
+                <label htmlFor="send Mail">
+                  {paramState.name === "Read" ? "UploadFile" : "Write File"}
+                </label>
+                <div className="nla-select-box-with-lbl">
+                  <input type="file" className="form-control" id="sendMail" />
+                  <label htmlFor="sendMail">
+                    <i className="fa-solid fa-paperclip"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </>
+        )} */}
+
+        {menu == "head2" && (
+          <>
+            {dataAccessParameter == "dataHead" ? (
+              <>
+                <div
+                  className="tab-pane show active"
+                  id="pills-profile"
+                  role="tabpanel"
+                  aria-labelledby="pills-profile-tab"
+                >
+                  <div className="parameters-content">
+                    <h5>
+                      Modify {paramState.name ? paramState.name : "null"}{" "}
+                      Parameters
+                    </h5>
+                    {paramState.fileFormat ? (
+                      <>
+                        <div className="nla-select-box-with-lbl">
+                          <label htmlFor="Logverbosity">FileFormat</label>
+                          <select className="form-select">
+                            <option value={paramState.fileFormat}>
+                              {paramState.fileFormat}
+                            </option>
+                          </select>
+                        </div>
+                      </>
+                    ) : null}
+
+                    <label htmlFor="send Mail">
+                      {paramState.name === "Read" ? "UploadFile" : "Write File"}
+                    </label>
+                    <div className="nla-select-box-with-lbl">
+                      <input
+                        type="file"
+                        className="form-control"
+                        id="sendMail"
+                      />
+                      <label htmlFor="sendMail">
+                        <i className="fa-solid fa-paperclip"></i>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : modelingParameter == "modelingHead" ? (
+              <>
+                <div
+                  className="tab-pane show active"
+                  id="pills-profile"
+                  role="tabpanel"
+                  aria-labelledby="pills-profile-tab"
+                >
+                  <div className="parameters-content">
+                    {paramState.name && (
+                      <h5>
+                        Modify {paramState.name ? paramState.name : "null"}{" "}
+                        Parameters
+                      </h5>
+                    )}
+
+                    <label htmlFor="send Mail">{paramState.pValue}</label>
+                    <div class="nla-select-box-with-lbl">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="p-value"
+                        aria-describedby="searchOperators"
+                      ></input>
+                    </div>
+
+                    <label htmlFor="send Mail">{paramState.train}</label>
+                    <div class="nla-select-box-with-lbl">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Train"
+                        aria-describedby="searchOperators"
+                      ></input>
+                    </div>
+
+                    <label htmlFor="send Mail">{paramState.test}</label>
+                    <div class="nla-select-box-with-lbl">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Test"
+                        aria-describedby="searchOperators"
+                      ></input>
+                    </div>
+
+                    <label htmlFor="send Mail">{paramState.validate}</label>
+                    <div class="nla-select-box-with-lbl">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Validate"
+                        aria-describedby="searchOperators"
+                      ></input>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : null}
           </>
         )}
       </div>

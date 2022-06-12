@@ -76,6 +76,13 @@ const modeling = [
   {
     id: "3",
     name: "Price Elasticity",
+    params: {
+      name: "Price Elasticity",
+      pValue: "P-value",
+      train: "Train",
+      test: "Test",
+      validate: "Validate",
+    },
   },
   {
     id: "4",
