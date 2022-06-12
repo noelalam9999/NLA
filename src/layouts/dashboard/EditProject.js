@@ -332,7 +332,7 @@ export default function EditProject(props) {
               <img src={uploadIcon} alt="" />
               {/* <label htmlFor="formFile">Upload Company Logo</label> */}
               {companyLogo?.length > 0 ? (
-                <label htmlFor="formFile">{companyLogo}</label>
+                <label htmlFor="formFile">{companyLogo.substring(48)}</label>
               ) : (
                 <label htmlFor="formFile">Upload Company Logo*</label>
               )}

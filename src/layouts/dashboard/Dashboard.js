@@ -244,8 +244,15 @@ const Dashboard = () => {
               setProjectCreatedAlert(false);
             }, 3000);
           })
-          .catch(function (response) {
-            console.log(response);
+          .catch(function (data) {
+            if (data?.response?.data === "Project exists") {
+              setShowAlert(true);
+              // setCreateProjectAlert("Project name already exists");
+              setAlertMsg("Project name already exists");
+              setTimeout(() => {
+                setShowAlert(false);
+              }, 3000);
+            }
           });
 
         if (data.status === 200) {
@@ -758,7 +765,7 @@ const Dashboard = () => {
     },
   ];
   useEffect(() => {
-    try{
+    try {
       if (currentStep === 0) {
         const mask = document
           .getElementById("mask-main")
@@ -783,9 +790,8 @@ const Dashboard = () => {
           .getElementsByTagName("rect")[1];
         mask.style.rx = "25";
       }
-    }
-    catch(e){
-      console.log("Issue")
+    } catch (e) {
+      console.log("Issue");
     }
   }, [currentStep]);
   const disableBody = (target) => disableBodyScroll(target);
