@@ -8,6 +8,7 @@ import output from "../../assets/images/icon-output.svg";
 import saveAs from "../../assets/images/icon-save-as.svg";
 import plus from "../../assets/images/feather-file-plus.svg";
 import RightSideBarDesignStudio from "../../components/rightSideBarDesignStudio/RightSideBarDesignStudio";
+import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import Flow from "../../components/flow/Flow";
 import { Link, useParams } from "react-router-dom";
 import Api from "../../services/Api";
@@ -93,23 +94,25 @@ const DesignStudio = () => {
               <div className="col-lg-9">
                 <div className="btn-wrapper">
                   <div className="nla-run-btn-and-info">
-                    <a
-                      href="#"
-                      className="btn btn-primary"
-                      data-bs-toggle="modal"
-                      data-bs-target="#progressStatusModal"
-                    >
+                    <a href="#" className="btn btn-primary">
                       Run <i className="fa-solid fa-play"></i>
                     </a>
-                    <a
-                      href="#"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="bottom"
-                      title="Dolor eligendi natus praesentium voluptatum, nisi veritatis ut minus, distinctio saepe veniam suscipit corporis molestiae voluptatibus cupiditate vel. Laboriosam, repellat officia. Labore?"
-                      className="alertAligns"
+                    <OverlayTrigger
+                      placement="bottom"
+                      delay={{ show: 250, hide: 250 }}
+                      overlay={
+                        <Tooltip id="overlay-example">
+                          Dolor eligendi natus praesentium voluptatum, nisi
+                          veritatis ut minus, distinctio saepe veniam suscipit
+                          corporis molestiae voluptatibus cupiditate vel.
+                          Laboriosam, repellat officia. Labore?
+                        </Tooltip>
+                      }
                     >
-                      <img src={info} alt="info" className="img-fluid" />
-                    </a>
+                      <a href="#">
+                        <img src={info} alt="" className="alertAligns" />
+                      </a>
+                    </OverlayTrigger>
                   </div>
                   <div className="other-design-studio-buttons">
                     <div>
@@ -121,15 +124,22 @@ const DesignStudio = () => {
                       >
                         Output <img src={output} alt="" />
                       </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        className="alertAligns"
-                        title="Dolor eligendi natus praesentium voluptatum, nisi veritatis ut minus, distinctio saepe veniam suscipit corporis molestiae voluptatibus cupiditate vel. Laboriosam, repellat officia. Labore?"
+                      <OverlayTrigger
+                        placement="bottom"
+                        delay={{ show: 250, hide: 250 }}
+                        overlay={
+                          <Tooltip id="overlay-example">
+                            Dolor eligendi natus praesentium voluptatum, nisi
+                            veritatis ut minus, distinctio saepe veniam suscipit
+                            corporis molestiae voluptatibus cupiditate vel.
+                            Laboriosam, repellat officia. Labore?
+                          </Tooltip>
+                        }
                       >
-                        <img src={info} alt="info" className="img-fluid" />
-                      </a>
+                        <a href="#">
+                          <img src={info} alt="" className="alertAligns" />
+                        </a>
+                      </OverlayTrigger>
                     </div>
                     <div>
                       <a
@@ -140,30 +150,44 @@ const DesignStudio = () => {
                       >
                         Create Project <img src={plus} alt="" />{" "}
                       </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        className="alertAligns"
-                        title="Dolor eligendi natus praesentium voluptatum, nisi veritatis ut minus, distinctio saepe veniam suscipit corporis molestiae voluptatibus cupiditate vel. Laboriosam, repellat officia. Labore?"
+                      <OverlayTrigger
+                        placement="bottom"
+                        delay={{ show: 250, hide: 250 }}
+                        overlay={
+                          <Tooltip id="overlay-example">
+                            Dolor eligendi natus praesentium voluptatum, nisi
+                            veritatis ut minus, distinctio saepe veniam suscipit
+                            corporis molestiae voluptatibus cupiditate vel.
+                            Laboriosam, repellat officia. Labore?
+                          </Tooltip>
+                        }
                       >
-                        <img src={info} alt="info" className="img-fluid" />
-                      </a>
+                        <a href="#">
+                          <img src={info} alt="" className="alertAligns" />
+                        </a>
+                      </OverlayTrigger>
                     </div>
                     <div>
                       <a href="#" className="btn btn-secondary">
                         Save As
                         <img src={saveAs} alt="" />
                       </a>
-                      <a
-                        href="#"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        className="alertAligns"
-                        title="Dolor eligendi natus praesentium voluptatum, nisi veritatis ut minus, distinctio saepe veniam suscipit corporis molestiae voluptatibus cupiditate vel. Laboriosam, repellat officia. Labore?"
+                      <OverlayTrigger
+                        placement="left"
+                        delay={{ show: 250, hide: 250 }}
+                        overlay={
+                          <Tooltip id="overlay-example">
+                            Dolor eligendi natus praesentium voluptatum, nisi
+                            veritatis ut minus, distinctio saepe veniam suscipit
+                            corporis molestiae voluptatibus cupiditate vel.
+                            Laboriosam, repellat officia. Labore?
+                          </Tooltip>
+                        }
                       >
-                        <img src={info} alt="info" className="img-fluid" />
-                      </a>
+                        <a href="#">
+                          <img src={info} alt="" className="alertAligns" />
+                        </a>
+                      </OverlayTrigger>
                     </div>
                     <div>
                       <button

@@ -1738,9 +1738,10 @@ header .theme-title h1 span {
 }
 
 .introjs-tooltip {
-  min-width: 240px;
-  border-radius: 20px;
-  padding: 30px 20px 20px;
+  min-width: 240px !important;
+  border-radius: 20px !important;
+  padding: 30px 20px 20px !important;
+  width: 280px;
 }
 
 .introjs-tooltip .tooltip-wrapper-cb {
@@ -1864,7 +1865,7 @@ header .theme-title h1 span {
   vertical-align: text-top;
   width: 12px;
   height: 12px;
-  background: white;
+  background: #174f73;
 }
 
 .custom-checkbox input[type="checkbox"]:hover + label:before {
@@ -2195,6 +2196,8 @@ header .theme-title h1 span {
 
 .right_sidebar .tab-content {
   padding: 0 0;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .right_sidebar .tab-content .accordion .accordion-item {
@@ -3226,4 +3229,51 @@ header .theme-title h1 span {
 .nla_help-and-faqs-poppup a.btn i {
   margin-left: 15px;
   color: #14b3a7;
+}
+/* Pop Up Model */
+.custom-checkbox input[type="checkbox"]:checked + label:before {
+  background: #174f73;
+}
+.introjs-tooltip nav {
+  position: absolute;
+  left: 20px;
+  bottom: 24px;
+}
+.introjs-tooltip nav button {
+  background-color: transparent;
+  border: 1px solid #14b3a7;
+}
+.introjs-tooltip nav .reactour__dot--is-active {
+  background-color: #174f73;
+  border-color: #174f73;
+}
+.introjs-tooltip .dQinJb {
+  display: flex;
+  text-align: right;
+  justify-content: flex-end;
+}
+.introjs-tooltip .dQinJb button {
+  margin-right: 10px;
+  font-weight: 600;
+  font-size: 13px;
+  margin-left: 0px;
+}
+.introjs-tooltip .dQinJb button:last-child {
+  margin-right: 0px;
+}
+.introjs-tooltip .dQinJb .bfsibc {
+  color: #174f73;
+}
+.introjs-tooltip .dQinJb .gNpmfP {
+  color: #174f73;
+}
+
+/* Step1 */
+.hgeoQC {
+  left: 15px !important;
+  position: fixed !important;
+}
+.step3 {
+  left: -10px !important;
+  position: absolute !important;
 }

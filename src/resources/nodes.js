@@ -29,10 +29,18 @@ const dataAcess = [
   {
     id: "1",
     name: "Read File",
+    params: {
+      name: "Read",
+      fileFormat: ".csv",
+    },
   },
   {
     id: "2",
     name: "Write File",
+    params: {
+      name: "Write",
+      fileFormat: ".csv",
+    },
   },
   {
     id: "3",
@@ -68,6 +76,13 @@ const modeling = [
   {
     id: "3",
     name: "Price Elasticity",
+    params: {
+      name: "Price Elasticity",
+      pValue: "P-value",
+      train: "Train",
+      test: "Test",
+      validate: "Validate",
+    },
   },
   {
     id: "4",
