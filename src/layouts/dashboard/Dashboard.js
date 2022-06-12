@@ -758,20 +758,34 @@ const Dashboard = () => {
     },
   ];
   useEffect(() => {
-    if (currentStep === 1) {
-      const ab = document.getElementsByClassName("beJLEE");
-      ab[0].style.position = "absolute";
+    try{
+      if (currentStep === 0) {
+        const mask = document
+          .getElementById("mask-main")
+          .getElementsByTagName("rect")[1];
+        mask.style.rx = "0";
+      }
+      if (currentStep === 1) {
+        const ab = document.getElementsByClassName("beJLEE");
+        ab[0].style.position = "absolute";
+        const mask = document
+          .getElementById("mask-main")
+          .getElementsByTagName("rect")[1];
+        mask.style.rx = "8";
+      }
+      if (currentStep === 2) {
+        const ab = document.getElementsByClassName("beJLEE");
+        ab[0].style.position = "absolute";
+        const element = document.getElementsByClassName("sc-eCYdqJ");
+        element[0].classList.add("step3");
+        const mask = document
+          .getElementById("mask-main")
+          .getElementsByTagName("rect")[1];
+        mask.style.rx = "25";
+      }
     }
-    if (currentStep === 2) {
-      const ab = document.getElementsByClassName("beJLEE");
-      ab[0].style.position = "absolute";
-      const element = document.getElementsByClassName("sc-eCYdqJ");
-      element[0].classList.add("step3");
-      const mask = document
-        .getElementById("mask-main")
-        .getElementsByTagName("rect")[1];
-      mask.style.rx = "25";
-      console.log(mask);
+    catch(e){
+      console.log("Issue")
     }
   }, [currentStep]);
   const disableBody = (target) => disableBodyScroll(target);
