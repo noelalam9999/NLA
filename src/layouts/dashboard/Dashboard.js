@@ -761,6 +761,10 @@ const Dashboard = () => {
     if (currentStep === 1) {
       const ab = document.getElementsByClassName("beJLEE");
       ab[0].style.position = "absolute";
+      const mask = document
+        .getElementById("mask-main")
+        .getElementsByTagName("rect")[1];
+      mask.style.rx = "0";
     }
     if (currentStep === 2) {
       const ab = document.getElementsByClassName("beJLEE");
@@ -771,7 +775,6 @@ const Dashboard = () => {
         .getElementById("mask-main")
         .getElementsByTagName("rect")[1];
       mask.style.rx = "25";
-      console.log(mask);
     }
   }, [currentStep]);
   const disableBody = (target) => disableBodyScroll(target);
