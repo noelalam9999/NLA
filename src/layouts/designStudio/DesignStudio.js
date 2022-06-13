@@ -39,6 +39,15 @@ const DesignStudio = () => {
   const project_id = useParams().id;
   const [project, setProject] = useState([]);
 
+  const [projectName, setProjectName] = useState("Enter Project Name");
+  // const [projectNameByID, setProjectNameByID] = useState(project?.project_name);
+
+  console.log("projectName: ", projectName);
+
+  const [editIcon, setEditIcon] = useState(false);
+  const [editProjectName, setEditProjectName] = useState(true);
+  // const [addProjectName, setAddProjectName] = useState(true);
+
   const [save, setState] = useState(false);
 
   //UseEffect
@@ -50,7 +59,15 @@ const DesignStudio = () => {
       // console.log("Project data: ", project?.project_name);
     }
     fetchProject();
+    setEditIcon(false);
+    setEditProjectName(false);
+    // setProjectNameByID(project?.project_name);
   }, []);
+
+  useEffect(() => {
+    setProject([]);
+  }, [project_id]);
+
   const [rfInstance, setRfInstance] = useState(null);
   const flowKey = "example-flow";
   const saveclass = useRef("save-button");
@@ -63,6 +80,19 @@ const DesignStudio = () => {
       console.log("working");
     }
   }, [rfInstance]);
+
+  //Edit project
+
+  const editHandler = () => {
+    setEditProjectName(true);
+    setEditIcon(true);
+  };
+
+  const projectNameHandler = () => {
+    setEditProjectName(false);
+    setEditIcon(false);
+  };
+
   // =====================================================================================================================
   return (
     <div>
@@ -82,13 +112,67 @@ const DesignStudio = () => {
                       <span></span>
                     </div>
                   </Link>
-                  <div className="nla-name">
-                    <span>Back to Home Page</span>
-                    <p>{project?.project_name || "Project name here"}</p>
-                  </div>
-                  <a href="#" className="nla-edit-name">
-                    <i className="fa-solid fa-pen"></i>
-                  </a>
+
+                  {project?.project_name ? (
+                    <>
+                      {" "}
+                      <div className="nla-name">
+                        <span>Back to Home Page</span>
+                        <p className="mt-2">
+                          {project?.project_name || "Enter Project Name"}
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <div className="nla-name">
+                        <span>Back to Home Page</span>
+
+                        {editProjectName == false ? (
+                          <>
+                            <p className="mt-2">
+                              {projectName || "Enter Project Name"}
+                            </p>
+                          </>
+                        ) : (
+                          <>
+                            <div
+                              class="nla-select-box-with-lbl mt-1"
+                              // style={{ width: "250px" }}
+                            >
+                              <input
+                                type="text"
+                                value={projectName}
+                                class="form-control"
+                                placeholder="Enter project name"
+                                aria-describedby="searchOperators"
+                                onChange={(e) => {
+                                  setProjectName(e.target.value);
+                                }}
+                              ></input>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      {editIcon == false ? (
+                        <>
+                          <a className="nla-edit-name" onClick={editHandler}>
+                            <i className="fa-solid fa-pen"></i>
+                          </a>
+                        </>
+                      ) : (
+                        <>
+                          <a
+                            className="nla-edit-name mt-4"
+                            onClick={projectNameHandler}
+                          >
+                            <i className="fa-solid fa-check"></i>
+                          </a>
+                        </>
+                      )}
+                    </>
+                  )}
                 </div>
               </div>
               <div className="col-lg-9">
@@ -141,7 +225,7 @@ const DesignStudio = () => {
                         </a>
                       </OverlayTrigger>
                     </div>
-                    <div>
+                    <div hidden={project_id ? true : false}>
                       <a
                         href="#"
                         className="btn btn-secondary"
