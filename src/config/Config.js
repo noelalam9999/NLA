@@ -48,6 +48,13 @@ const Config = () => {
               <ProtectedRoute component={DesignStudioPage}></ProtectedRoute>
             }
           ></Route>
+          <Route
+            exact
+            path="/design-studio"
+            element={
+              <ProtectedRoute component={DesignStudioPage}></ProtectedRoute>
+            }
+          ></Route>
           {/* <Route exact path="/insights" element={<InsightsPage />}></Route> */}
           {/* <Route exact path="/dashboard" element={<DashboardPage />}></Route> */}
           {/* <Route

@@ -39,6 +39,8 @@ const Dashboard = () => {
   const [vertical, setVertical] = useState("top");
   const [horizontal, setHorizontal] = useState("center");
 
+  const [projectListFilter, setProjectListFilter] = useState("pin");
+
   const [modalShow, setModalShow] = useState(false);
   const [projectID, setProjectID] = useState("");
   const [projectCreatedAlert, setProjectCreatedAlert] = useState(false);
@@ -122,7 +124,7 @@ const Dashboard = () => {
     try {
       let { data } = await Api(
         "GET",
-        `api/projects/order-by-pin/${user_id}/?page=${orderByPinPage}&limit=${limit}`
+        `api/projects/order-by-${projectListFilter}/${user_id}/?page=${orderByPinPage}&limit=${limit}`
       );
 
       if (data) {
@@ -244,8 +246,15 @@ const Dashboard = () => {
               setProjectCreatedAlert(false);
             }, 3000);
           })
-          .catch(function (response) {
-            console.log(response);
+          .catch(function (data) {
+            if (data?.response?.data === "Project exists") {
+              setShowAlert(true);
+              // setCreateProjectAlert("Project name already exists");
+              setAlertMsg("Project name already exists");
+              setTimeout(() => {
+                setShowAlert(false);
+              }, 3000);
+            }
           });
 
         if (data.status === 200) {
@@ -490,6 +499,7 @@ const Dashboard = () => {
   //Pagination for Search Products
   // ----------------------------------------------
 
+  //Main UseEffect
   useEffect(() => {
     const config = {
       headers: {
@@ -595,7 +605,7 @@ const Dashboard = () => {
     if (customTabPinnedProject === false) {
       customTabHandlerRecentProjects();
     }
-  }, [limit, orderByPinPage, load]);
+  }, [limit, orderByPinPage, load, projectListFilter]);
 
   // Add project field color changer useEffect
   useEffect(() => {
@@ -758,7 +768,7 @@ const Dashboard = () => {
     },
   ];
   useEffect(() => {
-    try{
+    try {
       if (currentStep === 0) {
         const mask = document
           .getElementById("mask-main")
@@ -783,13 +793,22 @@ const Dashboard = () => {
           .getElementsByTagName("rect")[1];
         mask.style.rx = "25";
       }
-    }
-    catch(e){
-      console.log("Issue")
+    } catch (e) {
+      console.log("Issue");
     }
   }, [currentStep]);
   const disableBody = (target) => disableBodyScroll(target);
   const enableBody = (target) => enableBodyScroll(target);
+
+  //Project filter in Project list view
+  const filterHandler = async (filter) => {
+    if (filter === "pin") {
+      setProjectListFilter("pin");
+    } else if (filter === "date") {
+      setProjectListFilter("date");
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -1399,10 +1418,23 @@ const Dashboard = () => {
             >
               <div className="nla_view_top_title_and_add_new_block">
                 <div className="row align-items-center">
-                  <div className="col-lg-5">
-                    <p className="mb-0">Recently Created & Pinned Models</p>
+                  <div className="col-lg-4">
+                    <p className="mb-3">Recently Created & Pinned Models</p>
                   </div>
-                  <div className="col-lg-7 text-end">
+
+                  <div className="col-lg-3">
+                    <select
+                      className="form-select"
+                      aria-label="Default select example"
+                      // defaultValue={"value"}
+                      onChange={(e) => filterHandler(e.target.value)}
+                    >
+                      <option value="pin">Filter by Pin</option>
+                      <option value="date">Filter by Date</option>
+                    </select>
+                  </div>
+
+                  <div className="col-lg-5 text-end">
                     <div className="nla_add_new_project_btn">
                       <div onClick={handleShow} style={{ cursor: "pointer" }}>
                         <p>
