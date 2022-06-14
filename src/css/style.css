@@ -3231,7 +3231,7 @@ header .theme-title h1 span {
   color: #14b3a7;
 }
 /* Pop Up Model */
-.custom-checkbox input[type="checkbox"]:checked + label:before {
+/* .custom-checkbox input[type="checkbox"]:checked + label:before {
   background: #174f73;
 }
 .introjs-tooltip nav {
@@ -3266,14 +3266,19 @@ header .theme-title h1 span {
 }
 .introjs-tooltip .dQinJb .gNpmfP {
   color: #174f73;
-}
+} */
 
 /* Step1 */
-.hgeoQC {
+/* #___reactour .hgeoQC {
   left: 15px !important;
   position: fixed !important;
 }
 .step3 {
   left: -10px !important;
   position: absolute !important;
+} */
+/* React Flow */
+.reactflow-wrapper {
+  margin-left: 84px;
+  width: calc(100% - 380px);
 }

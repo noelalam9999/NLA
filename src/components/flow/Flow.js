@@ -6,6 +6,7 @@ import React, {
   useMemo,
 } from "react";
 import "./flow.css";
+import useUndoable from "use-undoable";
 import { Modal, Button } from "react-bootstrap";
 import TextUpdaterNode from "../customNode/TextUpdaterNode";
 import ReactFlow, {
@@ -19,6 +20,7 @@ import ReactFlow, {
   getMarkerEnd,
   getEdgeCenter,
   Controls,
+  MiniMap,
 } from "react-flow-renderer";
 const nodeTypes = { textUpdater: TextUpdaterNode };
 const Flow = () => {
@@ -65,17 +67,15 @@ const Flow = () => {
   const onSave = useCallback(() => {
     if (rfInstance) {
       const flow = rfInstance.toObject();
+      console.log(flow);
       localStorage.setItem(flowKey, JSON.stringify(flow));
       saveclass.current = "save-button";
-      // console.log("Current Flow is \n",flow);
-      console.log("working");
     }
   }, [rfInstance]);
 
   const onRestore = useCallback(() => {
     const restoreFlow = async () => {
       const flow = JSON.parse(localStorage.getItem(flowKey));
-      console.log(flow);
       if (flow) {
         const { x = 0, y = 0, zoom = 1 } = flow.viewport;
         setNodes(flow.nodes || []);
@@ -98,16 +98,14 @@ const Flow = () => {
     setNodes((nds) => nds.concat(newNode));
   }, [setNodes]);
 
-  const onDragOver = useCallback((event) => {
+  const onDragOver = useCallback((event, node) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
 
   const onDrop = useCallback(
     (event) => {
-      //console.log("drop-called");
       event.preventDefault();
-
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const type = event.dataTransfer.getData("application/reactflow");
       const node_data = event.dataTransfer.getData("node_data");
@@ -131,6 +129,7 @@ const Flow = () => {
     },
     [rfInstance]
   );
+
   const customEdge = ({
     id,
     source,
@@ -189,8 +188,6 @@ const Flow = () => {
     }
   }, [performance.navigation.type]);
   useEffect(() => {
-    //console.log("is moved");
-
     saveclass.current = "save-button-unsaved";
   }, [nodes, edges]);
   const onShowOutput = () => {
@@ -200,12 +197,47 @@ const Flow = () => {
       handleShow();
     }
   };
+  const [elements, setElements, { undo, canUndo, redo, canRedo }] =
+    useUndoable(nodes);
+  useEffect(() => {
+    setElements(nodes);
+  }, [nodes]);
+  useEffect(() => {
+    console.log(nodes);
+    if (elements.length === 0 && !canUndo) {
+      setNodes([]);
+    }
+  }, [elements]);
+
+  const nodeDragEvent = (ev, node) => {
+    // setElements((els) =>
+    //   els.map((e) => {
+    //     if (e.id === node.id) {
+    //       let n = {
+    //         ...elements.filter((e) => e.id === node.id)[0],
+    //         position: node.position,
+    //       };
+    //       return n;
+    //     }
+    //     return e;
+    //   })
+    // );
+  };
+  const undoHandler = () => {
+    undo();
+  };
   return (
     <>
       <ReactFlowProvider>
         <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+          <button onClick={undoHandler} disabled={!canUndo}>
+            undo
+          </button>
+          <button onClick={() => redo()} disabled={!canRedo}>
+            redo
+          </button>
           <ReactFlow
-            nodes={nodes}
+            nodes={elements}
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
@@ -216,10 +248,28 @@ const Flow = () => {
             style={graphStyles}
             edgeTypes={edgeTypes}
             nodeTypes={nodeTypes}
+            elements={elements}
+            onNodeDragStop={nodeDragEvent}
           >
             <div className="save__controls">
-              <button onClick={onSave}>save</button>
+              {/* <button onClick={onSave}>save</button> */}
+              {/* <button onClick={onRestore}>restore</button> */}
             </div>
+            <MiniMap
+              nodeStrokeColor={(n) => {
+                if (n.data.label === "Read File ") {
+                  return "#0041d0";
+                }
+                if (n.data.label === "Write File ") return "green";
+                if (n.data.label === "Price Elasticity ") return "#ff0072";
+              }}
+              nodeColor={(n) => {
+                if (n.data.label === "Read File") return "green";
+                return "#fff";
+              }}
+              maskColor="rgb(0,0,0, 0.1)"
+              // nodeStrokeColor="#000"
+            />
             <Background variant="dots" gap={12} size={0.5} />
             <Controls className="flow-controls"></Controls>
           </ReactFlow>

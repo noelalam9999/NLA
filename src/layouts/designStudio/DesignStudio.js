@@ -42,8 +42,6 @@ const DesignStudio = () => {
   const [projectName, setProjectName] = useState("Enter Project Name");
   // const [projectNameByID, setProjectNameByID] = useState(project?.project_name);
 
-  console.log("projectName: ", projectName);
-
   const [editIcon, setEditIcon] = useState(false);
   const [editProjectName, setEditProjectName] = useState(true);
   // const [addProjectName, setAddProjectName] = useState(true);
@@ -68,18 +66,6 @@ const DesignStudio = () => {
     setProject([]);
   }, [project_id]);
 
-  const [rfInstance, setRfInstance] = useState(null);
-  const flowKey = "example-flow";
-  const saveclass = useRef("save-button");
-  const onSave = useCallback(() => {
-    if (rfInstance) {
-      const flow = rfInstance.toObject();
-      localStorage.setItem(flowKey, JSON.stringify(flow));
-      saveclass.current = "save-button";
-      // console.log("Current Flow is \n",flow);
-      console.log("working");
-    }
-  }, [rfInstance]);
 
   //Edit project
 
@@ -277,7 +263,7 @@ const DesignStudio = () => {
                       <button
                         // href=""
                         className="btn btn-primary"
-                        onClick={onSave}
+                        // onClick={onSave}
                       >
                         Save <i className="fa-solid fa-floppy-disk"></i>
                       </button>

@@ -12,7 +12,7 @@ code {
     monospace;
 } */
 
-.custom-checkbox input[type="checkbox"]:checked + label:before {
+/* .custom-checkbox input[type="checkbox"]:checked + label:before {
   background: #174f73;
 }
 .introjs-tooltip nav {
@@ -47,13 +47,14 @@ code {
 }
 .introjs-tooltip .dQinJb .gNpmfP {
   color: #174f73;
-}
+} */
 
 /* Step1 */
-.hgeoQC {
+/* .hgeoQC {
   left: 15px !important;
   position: fixed !important;
-}
+} */
+/* 
 .step3 {
   left: -10px !important;
   position: absolute !important;
@@ -62,4 +63,4 @@ code {
 #___reactour .hgeoQC {
   left: 15px !important;
   position: fixed !important;
-}
+} */

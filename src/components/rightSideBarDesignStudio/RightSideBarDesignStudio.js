@@ -15,7 +15,6 @@ const RightSideBarDesignStudio = () => {
   const [modelingParameter, setModelingParameter] = useState("");
   const [dataAccessParameter, setDataAccessParameter] = useState("");
 
-  console.log("dataAccessParameter: ", dataAccessParameter);
 
   const [tabState, setTabState] = useState("false");
   const [paramState, setParamState] = useState({});
@@ -27,12 +26,10 @@ const RightSideBarDesignStudio = () => {
     }
   }
   const paramSwitchHandler = (props) => {
-    // console.log("props.params: ", props.params);
     if (props.params) {
       setMenu("head2");
       if (props.params.name === "Price Elasticity") {
         setDataAccessParameter("");
-        console.log("In Price: ");
         setModelingParameter("modelingHead");
         setParamState(props.params);
       } else if (

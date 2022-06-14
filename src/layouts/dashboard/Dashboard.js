@@ -700,6 +700,10 @@ const Dashboard = () => {
           </div>
         </>
       ),
+      style: {
+        position: "fixed",
+        left: "15px",
+      },
     },
     {
       selector: "#filter_box_wrapper",
@@ -767,6 +771,13 @@ const Dashboard = () => {
       position: "-10px",
     },
   ];
+  useEffect(() => {
+    // let gg = document.getElementsByClassName("introjs-tooltip");
+    // gg.style.position = "absolute";
+    // gg.setAttribute("id", "gg");
+    let gg = document.getElementsByClassName("eLnbMN");
+    console.log(gg);
+  }, []);
   useEffect(() => {
     try {
       if (currentStep === 0) {
