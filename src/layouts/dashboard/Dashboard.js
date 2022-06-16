@@ -1502,7 +1502,10 @@ const Dashboard = () => {
                             <div className="nla_date">
                               <div>
                                 <p style={{ paddingLeft: "21px" }}>
-                                  {elem?.date_created?.substring(0, 10)}
+                                  {new Date(
+                                    elem?.date_created
+                                  ).toLocaleDateString() + ""}
+                                  {/* {elem?.date_created?.toLocaleString() + ""} */}
                                 </p>
                               </div>
                             </div>
