@@ -1433,12 +1433,12 @@ const Dashboard = () => {
               <div className="nla_view_top_title_and_add_new_block">
                 <div className="row align-items-center">
                   <div className="col-lg-7">
-                    <p className="mb-3">Recently Created & Pinned Projects</p>
+                    <p className="">Recently Created & Pinned Projects</p>
                   </div>
 
-                  <div className="col-lg-2">
+                  <div className="col-lg-5 d-flex justify-content-between">
                     <select
-                      className="form-select"
+                      className="form-select sortByPin"
                       aria-label="Default select example"
                       // defaultValue={"value"}
                       onChange={(e) => filterHandler(e.target.value)}
@@ -1446,9 +1446,6 @@ const Dashboard = () => {
                       <option value="pin">Sort by Pin</option>
                       <option value="date">Sort by Date</option>
                     </select>
-                  </div>
-
-                  <div className="col-lg-3 text-end mb-3">
                     <div className="nla_add_new_project_btn">
                       <div onClick={handleShow} style={{ cursor: "pointer" }}>
                         <p>

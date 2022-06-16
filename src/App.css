@@ -134,3 +134,13 @@ input[list] {
   text-align: center;
   width: 150px;
 }
+/* Search By Date Range */
+.rs-picker-toggle .rs-picker-toggle-placeholder {
+  font-weight: 400 !important;
+  color: #acb0b1 !important;
+}
+/* Sort By Pin select */
+.sortByPin {
+  width: 40% !important;
+  margin-bottom: 0 !important;
+}
