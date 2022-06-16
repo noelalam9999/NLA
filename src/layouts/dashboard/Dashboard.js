@@ -100,6 +100,7 @@ const Dashboard = () => {
   const authData = JSON.parse(localStorage.getItem("auth"));
   const userID = authData?.user_id;
   const user_id = authData?.user_id;
+  const first_name = authData?.first_name;
 
   //Date
   const [dateType, setDateType] = useState("text");
@@ -846,7 +847,7 @@ const Dashboard = () => {
       <div className="main-content-wrapper">
         <div className="dashboard_banner">
           <div className="banner_content">
-            <h1>Welcome John,</h1>
+            <h1>Welcome {first_name},</h1>
             <h2>To the Gazelle Home Screen</h2>
             <p>Make faster, more confident decisions.</p>
           </div>
