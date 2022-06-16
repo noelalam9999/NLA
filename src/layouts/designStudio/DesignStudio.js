@@ -8,10 +8,11 @@ import output from "../../assets/images/icon-output.svg";
 import saveAs from "../../assets/images/icon-save-as.svg";
 import plus from "../../assets/images/feather-file-plus.svg";
 import RightSideBarDesignStudio from "../../components/rightSideBarDesignStudio/RightSideBarDesignStudio";
-import { Tooltip, OverlayTrigger } from "react-bootstrap";
+import { OverlayTrigger, Tooltip, Badge, Modal } from "react-bootstrap";
 import Flow from "../../components/flow/Flow";
 import { Link, useParams } from "react-router-dom";
 import Api from "../../services/Api";
+import CreateProject from "./CreateProject";
 
 import {
   BsFillArrowLeftCircleFill,
@@ -38,8 +39,11 @@ import ReactFlow, {
 const DesignStudio = () => {
   const project_id = useParams().id;
   const [project, setProject] = useState([]);
+  const [load, setLoad] = useState(false);
 
-  const [projectName, setProjectName] = useState("Enter Project Name");
+  const [modalShow, setModalShow] = useState(false);
+
+  const [projectName, setProjectName] = useState("Untitled name");
   // const [projectNameByID, setProjectNameByID] = useState(project?.project_name);
 
   const [editIcon, setEditIcon] = useState(false);
@@ -48,24 +52,36 @@ const DesignStudio = () => {
 
   const [save, setState] = useState(false);
 
+  //useCallBack
+  const addTodo = useCallback(
+    (project_name) => {
+      setProjectName(project_name);
+      // setProjectName("Untitled project");
+      // setTodos((t) => [...t, "New Todo"]);
+    },
+    [projectName]
+  );
+
   //UseEffect
 
   useEffect(() => {
+    // setLoad(false);
     async function fetchProject() {
       const { data } = await Api("GET", `api/project/${project_id}`);
       setProject(data[0]);
       // console.log("Project data: ", project?.project_name);
     }
     fetchProject();
+
     setEditIcon(false);
     setEditProjectName(false);
     // setProjectNameByID(project?.project_name);
+    setLoad(false);
   }, []);
 
   useEffect(() => {
     setProject([]);
   }, [project_id]);
-
 
   //Edit project
 
@@ -78,6 +94,33 @@ const DesignStudio = () => {
     setEditProjectName(false);
     setEditIcon(false);
   };
+
+  // ==========================================
+
+  const handleEditProjectModal = () => {
+    // setProjectID(project_id);
+    setModalShow(true);
+  };
+
+  function MyVerticallyCenteredModal(props) {
+    return (
+      <Modal
+        {...props}
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        id="createNewProject"
+        // animation-fill-mode="forward"
+        // animation={true}
+        // hasBackdrop={false}
+      >
+        <CreateProject
+          project_name={projectName}
+          addTodo={addTodo}
+          {...props}
+        />
+      </Modal>
+    );
+  }
 
   // =====================================================================================================================
   return (
@@ -117,9 +160,7 @@ const DesignStudio = () => {
 
                         {editProjectName == false ? (
                           <>
-                            <p className="mt-2">
-                              {projectName || "Enter Project Name"}
-                            </p>
+                            <p className="mt-2">{projectName}</p>
                           </>
                         ) : (
                           <>
@@ -217,6 +258,7 @@ const DesignStudio = () => {
                         className="btn btn-secondary"
                         data-bs-toggle="modal"
                         data-bs-target="#createNewProject"
+                        onClick={() => handleEditProjectModal()}
                       >
                         Create Project <img src={plus} alt="" />{" "}
                       </a>
@@ -317,6 +359,11 @@ const DesignStudio = () => {
           </div>
         </div>
       </div>
+      <MyVerticallyCenteredModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        onCreate={() => setLoad(true)}
+      />
       <Footer />
     </div>
   );

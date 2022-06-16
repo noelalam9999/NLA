@@ -932,7 +932,7 @@ const Dashboard = () => {
                 <DateRangePicker
                   className=""
                   appearance="default"
-                  placeholder="Search by date range"
+                  placeholder="Search by Date Range"
                   style={{ width: 260 }}
                   value={value}
                   onChange={handleChange}
@@ -1429,23 +1429,23 @@ const Dashboard = () => {
             >
               <div className="nla_view_top_title_and_add_new_block">
                 <div className="row align-items-center">
-                  <div className="col-lg-4">
-                    <p className="mb-3">Recently Created & Pinned Models</p>
+                  <div className="col-lg-7">
+                    <p className="mb-3">Recently Created & Pinned Projects</p>
                   </div>
 
-                  <div className="col-lg-3">
+                  <div className="col-lg-2">
                     <select
                       className="form-select"
                       aria-label="Default select example"
                       // defaultValue={"value"}
                       onChange={(e) => filterHandler(e.target.value)}
                     >
-                      <option value="pin">Filter by Pin</option>
-                      <option value="date">Filter by Date</option>
+                      <option value="pin">Sort by Pin</option>
+                      <option value="date">Sort by Date</option>
                     </select>
                   </div>
 
-                  <div className="col-lg-5 text-end">
+                  <div className="col-lg-3 text-end mb-3">
                     <div className="nla_add_new_project_btn">
                       <div onClick={handleShow} style={{ cursor: "pointer" }}>
                         <p>
