@@ -37,6 +37,7 @@ const dataAcess = [
   {
     id: "2",
     name: "Write File",
+    style: { border: "1px solid #777", padding: 10 },
     params: {
       name: "Write",
       fileFormat: ".csv",

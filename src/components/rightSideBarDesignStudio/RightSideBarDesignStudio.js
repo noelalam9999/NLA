@@ -15,7 +15,6 @@ const RightSideBarDesignStudio = () => {
   const [modelingParameter, setModelingParameter] = useState("");
   const [dataAccessParameter, setDataAccessParameter] = useState("");
 
-
   const [tabState, setTabState] = useState("false");
   const [paramState, setParamState] = useState({});
   function onMenuClick() {
@@ -131,9 +130,10 @@ const RightSideBarDesignStudio = () => {
                     {topics.map((elem, id) => (
                       <div
                         key={id}
-                        onDragStart={(event) =>
-                          onDragStart(event, "input", `${elem.name}`)
-                        }
+                        onDragStart={(event) => {
+                          console.log("Working", event);
+                          onDragStart(event, "input", `${elem.name}`);
+                        }}
                         draggable
                       >
                         <button className="btn btn-secondary">
