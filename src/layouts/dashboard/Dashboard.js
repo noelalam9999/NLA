@@ -39,6 +39,8 @@ const Dashboard = () => {
   const [vertical, setVertical] = useState("top");
   const [horizontal, setHorizontal] = useState("center");
 
+  const [userData, setUserData] = useState([]);
+
   const [projectListFilter, setProjectListFilter] = useState("pin");
 
   const [modalShow, setModalShow] = useState(false);
@@ -675,8 +677,45 @@ const Dashboard = () => {
     }
   };
 
+  //Tour handler
+  const tourHandler = async () => {
+    const { data } = await Api("GET", `api/user/popup/${user_id}`);
+
+    if (data) {
+      console.log("data: ", data);
+      // if (data === "closed") {
+      //   setIsTourOpen(false);
+      // } else if (data === "open") {
+      //   setIsTourOpen(true);
+      // } else {
+      // }
+    }
+  };
+
+  useEffect(() => {
+    // console.log("in show_popup", isTourOpen);
+    const tourHandler = async () => {
+      const { data } = await Api("GET", `api/user/login/${user_id}`);
+
+      if (data) {
+        // setUserData(data);
+        if (userData[0]?.show_popup == 0) {
+          setIsTourOpen(true);
+          console.log("in show_popup", isTourOpen);
+        } else if (userData[0]?.show_popup == 1) {
+          setIsTourOpen(false);
+          console.log("in show_popup", isTourOpen);
+        }
+      }
+    };
+
+    tourHandler();
+  }, []);
+
+  // console.log("userData: ", userData);
+
   //Pop up model open for once
-  const [isTourOpen, setIsTourOpen] = useState(true);
+  const [isTourOpen, setIsTourOpen] = useState();
   const [currentStep, setStep] = useState();
   const steps = [
     {
@@ -697,6 +736,7 @@ const Dashboard = () => {
                 id="tootltip-show-box"
                 name="tootltip-show-box"
                 value="Show"
+                onClick={tourHandler}
               />
               <label for="tootltip-show-box"> Don't show again</label>
             </div>
