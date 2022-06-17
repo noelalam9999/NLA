@@ -1,7 +1,7 @@
 {
   "name": "nla",
   "version": "0.1.0",
-  "homepage": "https://nlaanalytics.de.r.appspot.com/",
+  "homepage": "https://nlaanalytics.de.r.appspot.com",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.0",
