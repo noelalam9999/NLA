@@ -102,9 +102,15 @@ const Flow = () => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
-
+  // const [toolTip, setToolTip] = useState(false);
+  // const mouseEnterEvent = () => {
+  //   setToolTip(true);
+  // };
+  // const mouseLeaveEvent = () => {
+  //   setToolTip(false);
+  // };
   const onDrop = useCallback(
-    (event) => {
+    (event, node) => {
       event.preventDefault();
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const type = event.dataTransfer.getData("application/reactflow");
@@ -203,7 +209,7 @@ const Flow = () => {
     setElements(nodes);
   }, [nodes]);
   useEffect(() => {
-    console.log(nodes);
+    // console.log(nodes);
     if (elements.length === 0 && !canUndo) {
       setNodes([]);
     }
@@ -250,6 +256,8 @@ const Flow = () => {
             nodeTypes={nodeTypes}
             elements={elements}
             onNodeDragStop={nodeDragEvent}
+            // onNodeMouseEnter={mouseEnterEvent}
+            // onNodeMouseLeave={mouseLeaveEvent}
           >
             <div className="save__controls">
               {/* <button onClick={onSave}>save</button> */}
