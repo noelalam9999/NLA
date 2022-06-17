@@ -698,13 +698,10 @@ const Dashboard = () => {
       const { data } = await Api("GET", `api/user/login/${user_id}`);
 
       if (data) {
-        // setUserData(data);
-        if (userData[0]?.show_popup == 0) {
+        if (data[0]?.show_popup == 0) {
           setIsTourOpen(true);
-          console.log("in show_popup", isTourOpen);
-        } else if (userData[0]?.show_popup == 1) {
+        } else if (data[0]?.show_popup == 1) {
           setIsTourOpen(false);
-          console.log("in show_popup", isTourOpen);
         }
       }
     };
