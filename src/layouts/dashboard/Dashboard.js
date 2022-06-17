@@ -1502,9 +1502,14 @@ const Dashboard = () => {
                             <div className="nla_date">
                               <div>
                                 <p style={{ paddingLeft: "21px" }}>
-                                  {new Date(
-                                    elem?.date_created
-                                  ).toLocaleDateString() + ""}
+                                  {
+                                    moment(elem?.date_created).format(
+                                      "MM-DD-YYYY"
+                                    )
+                                    // new Date(
+                                    //   elem?.date_created
+                                    // ).toLocaleDateString() + ""
+                                  }
                                   {/* {elem?.date_created?.toLocaleString() + ""} */}
                                 </p>
                               </div>

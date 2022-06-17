@@ -21,7 +21,8 @@ function TextUpdaterNode({ data }) {
       delay={{ show: 250, hide: 250 }}
       overlay={
         <Tooltip id="overlay-example">
-          Click On Node and press backspace to delete node
+          Click on Node to delete (For Windows press Backspace and for Mac press
+          Delete)
         </Tooltip>
       }
     >
