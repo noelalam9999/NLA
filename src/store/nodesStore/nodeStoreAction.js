@@ -35,6 +35,8 @@ const nodeState = (modelData) => {
 
       // alert("i am in action", userState);
 
+      console.log("modelData: ", modelData);
+
       const config = {
         headers: {
           "Content-Type": "application/json",
