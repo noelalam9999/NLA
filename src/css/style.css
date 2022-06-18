@@ -3278,7 +3278,13 @@ header .theme-title h1 span {
   position: absolute !important;
 } */
 /* React Flow */
-.reactflow-wrapper {
+.flow {
   margin-left: 84px;
   width: calc(100% - 380px);
+}
+.flowActive {
+  width: calc(100% - 52px);
+}
+.reactflow-wrapper {
+  width: 100%;
 }

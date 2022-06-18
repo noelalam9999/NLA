@@ -125,7 +125,7 @@ const DesignStudio = () => {
       </Modal>
     );
   }
-
+  const [sideBar, setSideBar] = useState(false);
   return (
     <div>
       <Header />
@@ -319,8 +319,11 @@ const DesignStudio = () => {
             </div>
           </div>
         </div>
-        <RightSideBarDesignStudio />
-        <Flow />
+        <RightSideBarDesignStudio sideBar={sideBar} setSideBar={setSideBar} />
+
+        <div className={sideBar === false ? "flow" : "flowActive"}>
+          <Flow />
+        </div>
         <div className="design-studio-additional-block position-relative">
           {/* <div className="heading">
             <h6>Design Studio</h6>
