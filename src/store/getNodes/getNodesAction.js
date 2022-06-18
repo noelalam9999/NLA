@@ -26,15 +26,15 @@ const getNodesFailure = (error) => {
   };
 };
 
-const getNodesState = (modelData) => {
+const getNodesState = (project_id) => {
   let loading = true;
   return async (dispatch) => {
     try {
       dispatch(getNodesRequest(loading));
 
-      // alert("i am in action", userState);
+      // alert("i am in action", project_id);
 
-      console.log("modelData: ", modelData);
+      // console.log("project_id in get Nodes Action: ", project_id);
 
       const config = {
         headers: {
@@ -42,13 +42,10 @@ const getNodesState = (modelData) => {
         },
       };
 
-      let { data } = await Api(
-        "POST",
-        "api/add/model/edges",
-        modelData,
-        config
-      );
-      console.log("This is res from Action: ", data);
+      let { data } = await Api("GET", `api/get/model/${project_id}`, config);
+      console.log("GetNodeAction from Action: ", data);
+
+      localStorage.setItem("nodesFromDatabase", JSON.stringify(data));
       // const api = `${process.env.REACT_APP_Base_URL}/accounts/login`;
       // var res = await axios.post(api, userState);
       // const { data } = res;

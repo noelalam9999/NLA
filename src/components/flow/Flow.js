@@ -25,28 +25,55 @@ import ReactFlow, {
   InteractiveMinimap,
   MiniMapProps,
 } from "react-flow-renderer";
+import { Link, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import allActions from "../../store";
+
+// --------------------------------------------------
 
 const nodeTypes = { textUpdater: TextUpdaterNode };
 const Flow = () => {
+  const dispatch = useDispatch();
+  const project_id = useParams().id;
+
+  // console.log("project_id from Flow: ", project_id);
+
+  //UseEffect:
+
+  useEffect(() => {
+    if (project_id) {
+      // console.log("modelData: ", data);
+      dispatch(allActions.getNodesAction.getNodesState(project_id));
+      // dispatch(nodeState(project_id));
+    }
+  }, [dispatch]);
+
+  // -------------------------------
   const flowKey = "example-flow";
+  // const flowKey = "nodesFromDatabase";
+
   const getNodeId = () => `randomnode_${+new Date()}`;
+
+  const prevNodes = JSON.parse(localStorage.getItem("nodesFromDatabase"));
+
+  console.log("prevNodes: ", prevNodes);
+
   const initialNodes = [
     // {
-    //   id: "1",
-    //   type: "input",
-    //   data: { label: "Read File" },
-    //   position: { x: 580, y: 200 },
+    //   id: prevNodes[0]?.nodes.node_id,
+    //   data: { label: prevNodes[0]?.nodes.name },
+    //   position: {
+    //     x: prevNodes[0]?.nodes.position_x,
+    //     y: prevNodes[0]?.nodes.position_y,
+    //   },
     // },
-    // {
-    //   id: "2",
-    //   type: "default",
-    //   data: { label: "$ Pricing" },
-    //   position: { x: 450, y: 50 },
-    // },
+    // { id: "2", data: { label: "Node 2" }, position: { x: 100, y: 200 } },
+    // { id: "3", data: { label: "Node 3" }, position: { x: 100, y: 300 } },
   ];
   const saveclass = useRef("save-button");
   const initialEdges = [
-    { id: "e1-2", source: "1", target: "2", type: "customedge" },
+    // { id: "e1-2", source: "1", target: "2", type: "customedge" },
+    // { id: "e1-3", source: "2", target: "3", type: "customedge" },
   ];
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
