@@ -67,7 +67,6 @@ const Flow = () => {
   const onSave = useCallback(() => {
     if (rfInstance) {
       const flow = rfInstance.toObject();
-      console.log(flow);
       localStorage.setItem(flowKey, JSON.stringify(flow));
       saveclass.current = "save-button";
     }
@@ -203,17 +202,17 @@ const Flow = () => {
       handleShow();
     }
   };
-  const [elements, setElements, { undo, canUndo, redo, canRedo }] =
-    useUndoable(nodes);
-  useEffect(() => {
-    setElements(nodes);
-  }, [nodes]);
-  useEffect(() => {
-    // console.log(nodes);
-    if (elements.length === 0 && !canUndo) {
-      setNodes([]);
-    }
-  }, [elements]);
+  // const [elements, setElements, { undo, canUndo, redo, canRedo }] =
+  //   useUndoable(nodes);
+  // useEffect(() => {
+  //   setElements(nodes);
+  // }, [nodes]);
+  // useEffect(() => {
+  //   // console.log(nodes);
+  //   if (elements.length === 0 && !canUndo) {
+  //     setNodes([]);
+  //   }
+  // }, [elements]);
 
   const nodeDragEvent = (ev, node) => {
     // setElements((els) =>
@@ -229,21 +228,23 @@ const Flow = () => {
     //   })
     // );
   };
-  const undoHandler = () => {
-    undo();
-  };
+  // const undoHandler = () => {
+  //   undo();
+  // };
+  console.log(nodes);
   return (
     <>
       <ReactFlowProvider>
         <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-          <button onClick={undoHandler} disabled={!canUndo}>
+          {/* <button onClick={undoHandler} disabled={!canUndo}>
             undo
           </button>
           <button onClick={() => redo()} disabled={!canRedo}>
             redo
-          </button>
+          </button> */}
           <ReactFlow
-            nodes={elements}
+            // nodes={elements}
+            nodes={nodes}
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
@@ -254,13 +255,13 @@ const Flow = () => {
             style={graphStyles}
             edgeTypes={edgeTypes}
             nodeTypes={nodeTypes}
-            elements={elements}
-            onNodeDragStop={nodeDragEvent}
+            // elements={elements}
+            // onNodeDragStop={nodeDragEvent}
             // onNodeMouseEnter={mouseEnterEvent}
             // onNodeMouseLeave={mouseLeaveEvent}
           >
             <div className="save__controls">
-              {/* <button onClick={onSave}>save</button> */}
+              <button onClick={onSave}>save</button>
               {/* <button onClick={onRestore}>restore</button> */}
             </div>
             <MiniMap

@@ -13,29 +13,30 @@ import Flow from "../../components/flow/Flow";
 import { Link, useParams } from "react-router-dom";
 import Api from "../../services/Api";
 import CreateProject from "./CreateProject";
+// import ReactFlow, { useStore } from "react-flow-renderer";
+import ReactFlow, { useStoreApi, useStore } from "react-flow-renderer";
 
-import {
-  BsFillArrowLeftCircleFill,
-  BsFillPenFill,
-  BsFillPlayFill,
-  BsPatchExclamation,
-} from "react-icons/bs";
-import ReactFlow, {
-  ReactFlowProvider,
-  useNodesState,
-  useEdgesState,
-  arrowHeadType,
-  ConnectionLineType,
-  MarkerType,
-  getSmoothStepPath,
-  addEdge,
-  useReactFlow,
-  Background,
-  getMarkerEnd,
-  getEdgeCenter,
-  Controls,
-} from "react-flow-renderer";
-
+// import {
+//   BsFillArrowLeftCircleFill,
+//   BsFillPenFill,
+//   BsFillPlayFill,
+//   BsPatchExclamation,
+// } from "react-icons/bs";
+// import ReactFlow, {
+//   ReactFlowProvider,
+//   useNodesState,
+//   useEdgesState,
+//   arrowHeadType,
+//   ConnectionLineType,
+//   MarkerType,
+//   getSmoothStepPath,
+//   addEdge,
+//   useReactFlow,
+//   Background,
+//   getMarkerEnd,
+//   getEdgeCenter,
+//   Controls,
+// } from "react-flow-renderer";
 const DesignStudio = () => {
   const project_id = useParams().id;
   const [project, setProject] = useState([]);
@@ -78,7 +79,10 @@ const DesignStudio = () => {
     // setProjectNameByID(project?.project_name);
     setLoad(false);
   }, []);
-
+  // const store = useStoreApi();
+  useEffect(() => {
+    // console.log("Checking", store);
+  }, []);
   useEffect(() => {
     setProject([]);
   }, [project_id]);
@@ -122,7 +126,6 @@ const DesignStudio = () => {
     );
   }
 
-  // =====================================================================================================================
   return (
     <div>
       <Header />
