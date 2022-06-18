@@ -22,16 +22,14 @@ import ReactFlow, {
   getEdgeCenter,
   Controls,
   MiniMap,
-  InteractiveMinimap,
-  MiniMapProps,
+  applyNodeChanges,
+  // InteractiveMinimap,
+  // MiniMapProps,
 } from "react-flow-renderer";
-import { Link, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import allActions from "../../store";
-
-// --------------------------------------------------
-
+import useUndo from "use-undo";
+// import MiniMap from "../../components/MiniMap/index";
 const nodeTypes = { textUpdater: TextUpdaterNode };
+
 const Flow = () => {
   const dispatch = useDispatch();
   const project_id = useParams().id;
@@ -73,7 +71,6 @@ const Flow = () => {
   const saveclass = useRef("save-button");
   const initialEdges = [
     // { id: "e1-2", source: "1", target: "2", type: "customedge" },
-    // { id: "e1-3", source: "2", target: "3", type: "customedge" },
   ];
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -243,6 +240,7 @@ const Flow = () => {
   //     setNodes([]);
   //   }
   // }, [elements]);
+
   const onEdgeUpdate = () => {
     console.log("working");
     onSave();
@@ -267,6 +265,7 @@ const Flow = () => {
   useEffect(() => {
     onSave();
   }, [nodes, edges]);
+
   return (
     <>
       <ReactFlowProvider>
@@ -290,9 +289,9 @@ const Flow = () => {
             style={graphStyles}
             edgeTypes={edgeTypes}
             nodeTypes={nodeTypes}
-            // elements={elements}
+            // elements={count}
             // onEdgeUpdateEnd={onEdgeUpdate}
-            onNodeDragStop={nodeDragEvent}
+            // onNodeDragStop={onNodesChange1}
             // onNodeMouseEnter={mouseEnterEvent}
             // onNodeMouseLeave={mouseLeaveEvent}
           >
