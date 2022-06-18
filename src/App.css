@@ -134,6 +134,14 @@ input[list] {
   text-align: center;
   width: 150px;
 }
+.xyz:hover {
+  /* box-shadow: 0 1px 4px 1px rgb(0 0 0 / 8%); */
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.xyz:focus-visible {
+  /* border */
+  border: 2px solid;
+}
 /* Search By Date Range */
 .rs-picker-toggle .rs-picker-toggle-placeholder {
   font-weight: 400 !important;
