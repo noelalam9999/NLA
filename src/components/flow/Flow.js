@@ -22,6 +22,8 @@ import ReactFlow, {
   getEdgeCenter,
   Controls,
   MiniMap,
+  InteractiveMinimap,
+  MiniMapProps,
 } from "react-flow-renderer";
 
 const nodeTypes = { textUpdater: TextUpdaterNode };
@@ -285,6 +287,9 @@ const Flow = () => {
               }}
               maskColor="rgb(0,0,0, 0.1)"
               // nodeStrokeColor="#000"
+              draggable={true}
+              zoomable={true}
+              clickable={true}
             />
             <Background variant="dots" gap={12} size={0.5} />
             <Controls className="flow-controls"></Controls>
