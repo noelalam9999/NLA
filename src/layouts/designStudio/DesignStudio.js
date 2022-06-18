@@ -129,7 +129,15 @@ const DesignStudio = () => {
       </Modal>
     );
   }
-  const [sideBar, setSideBar] = useState(false);
+
+  const nodeSaveHandler = () => {
+    // console.log("project_id: ", project_id);
+    if (project_id) {
+      dispatch(allActions.nodeStoreAction.nodeState(project_id));
+      // dispatch(nodeState(project_id));
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -324,11 +332,8 @@ const DesignStudio = () => {
             </div>
           </div>
         </div>
-        <RightSideBarDesignStudio sideBar={sideBar} setSideBar={setSideBar} />
-
-        <div className={sideBar === false ? "flow" : "flowActive"}>
-          <Flow />
-        </div>
+        <RightSideBarDesignStudio />
+        <Flow />
         <div className="design-studio-additional-block position-relative">
           {/* <div className="heading">
             <h6>Design Studio</h6>
