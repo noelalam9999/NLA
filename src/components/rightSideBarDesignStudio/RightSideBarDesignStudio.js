@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../css/style.css";
 import { Accordion } from "react-bootstrap";
 import info from "../../assets/images/feather-info.svg";
 import { topics, dataAcess, modeling, cleansing } from "../../resources/nodes";
-const RightSideBarDesignStudio = () => {
+const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
   const onDragStart = (event, node_type, node_label) => {
     event.dataTransfer.setData("application/reactflow", node_type);
     event.dataTransfer.setData("node_data", node_label);
     event.dataTransfer.effectAllowed = "move";
   };
   const [menu, setMenu] = useState("head1");
-
   //Parameters
   const [modelingParameter, setModelingParameter] = useState("");
   const [dataAccessParameter, setDataAccessParameter] = useState("");
@@ -42,9 +41,19 @@ const RightSideBarDesignStudio = () => {
       }
     }
   };
+  const sideBarHandler = () => {
+    sideBar === false ? setSideBar(true) : setSideBar(false);
+  };
   return (
-    <div className="right_sidebar" data-position="right">
-      <span className="nla-toggle-line"></span>
+    <div
+      className={
+        sideBar === false
+          ? `right_sidebar`
+          : `right_sidebar nla_rightside-bar-small`
+      }
+      data-position="right"
+    >
+      <span className="nla-toggle-line" onClick={sideBarHandler}></span>
       <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
         {menu == "head1" && (
           <>

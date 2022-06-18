@@ -186,7 +186,6 @@ const Flow = () => {
   };
 
   const graphStyles = { width: "100%", height: "530px" };
-
   useEffect(() => {
     if (performance.navigation.type === 1) {
       onRestore();
@@ -215,7 +214,10 @@ const Flow = () => {
   //     setNodes([]);
   //   }
   // }, [elements]);
-
+  const onEdgeUpdate = () => {
+    console.log("working");
+    onSave();
+  };
   const nodeDragEvent = (ev, node) => {
     // setElements((els) =>
     //   els.map((e) => {
@@ -233,15 +235,9 @@ const Flow = () => {
   // const undoHandler = () => {
   //   undo();
   // };
-  console.log(nodes);
-
-  //UseEffect
-  // useEffect(() => {
-  //   const loading = useSelector((loading) => loading.signInReducer.loading);
-  // }, [nodes]);
-
-  // --------------------------------------------------------------------
-
+  useEffect(() => {
+    onSave();
+  }, [nodes, edges]);
   return (
     <>
       <ReactFlowProvider>
@@ -266,7 +262,8 @@ const Flow = () => {
             edgeTypes={edgeTypes}
             nodeTypes={nodeTypes}
             // elements={elements}
-            // onNodeDragStop={nodeDragEvent}
+            // onEdgeUpdateEnd={onEdgeUpdate}
+            onNodeDragStop={nodeDragEvent}
             // onNodeMouseEnter={mouseEnterEvent}
             // onNodeMouseLeave={mouseLeaveEvent}
           >
