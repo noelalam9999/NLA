@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useDispatch } from "react-redux";
 import "../../css/style.css";
 import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
@@ -15,6 +16,8 @@ import Api from "../../services/Api";
 import CreateProject from "./CreateProject";
 // import ReactFlow, { useStore } from "react-flow-renderer";
 import ReactFlow, { useStoreApi, useStore } from "react-flow-renderer";
+// import { nodeState } from "../../store/nodesStore/nodeStoreAction";
+import allActions from "../../store/index";
 
 // import {
 //   BsFillArrowLeftCircleFill,
@@ -38,6 +41,7 @@ import ReactFlow, { useStoreApi, useStore } from "react-flow-renderer";
 //   Controls,
 // } from "react-flow-renderer";
 const DesignStudio = () => {
+  const dispatch = useDispatch();
   const project_id = useParams().id;
   const [project, setProject] = useState([]);
   const [load, setLoad] = useState(false);
@@ -125,6 +129,14 @@ const DesignStudio = () => {
       </Modal>
     );
   }
+
+  const nodeSaveHandler = () => {
+    console.log("project_id: ", project_id);
+    if (project_id) {
+      dispatch(allActions.nodeStoreAction.nodeState(project_id));
+      // dispatch(nodeState(project_id));
+    }
+  };
 
   return (
     <div>
@@ -283,7 +295,7 @@ const DesignStudio = () => {
                       </OverlayTrigger>
                     </div>
                     <div>
-                      <a href="#" className="btn btn-secondary">
+                      <a className="btn btn-secondary">
                         Save As
                         <img src={saveAs} alt="" />
                       </a>
@@ -309,6 +321,7 @@ const DesignStudio = () => {
                         // href=""
                         className="btn btn-primary"
                         // onClick={onSave}
+                        onClick={nodeSaveHandler}
                       >
                         Save <i className="fa-solid fa-floppy-disk"></i>
                       </button>

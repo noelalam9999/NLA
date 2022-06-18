@@ -5,6 +5,7 @@ import React, {
   useRef,
   useMemo,
 } from "react";
+import { useSelector } from "react-redux";
 import "./flow.css";
 import useUndoable from "use-undoable";
 import { Modal, Button } from "react-bootstrap";
@@ -22,6 +23,7 @@ import ReactFlow, {
   Controls,
   MiniMap,
 } from "react-flow-renderer";
+
 const nodeTypes = { textUpdater: TextUpdaterNode };
 const Flow = () => {
   const flowKey = "example-flow";
@@ -232,6 +234,14 @@ const Flow = () => {
   //   undo();
   // };
   console.log(nodes);
+
+  //UseEffect
+  // useEffect(() => {
+  //   const loading = useSelector((loading) => loading.signInReducer.loading);
+  // }, [nodes]);
+
+  // --------------------------------------------------------------------
+
   return (
     <>
       <ReactFlowProvider>

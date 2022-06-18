@@ -4,6 +4,7 @@ import {
   NODE_RESULTS_SUCCESS,
   NODE_RESULTS_FAILURE,
 } from "./nodeStoreType";
+import Api from "../../services/Api";
 
 const nodeStoreRequest = (data) => {
   return {
@@ -31,12 +32,23 @@ const nodeState = (userState, history) => {
   return async (dispatch) => {
     try {
       dispatch(nodeStoreRequest(loading));
-      const api = `${process.env.REACT_APP_Base_URL}/accounts/login`;
-      var res = await axios.post(api, userState);
-      const { data } = res;
+
+      // alert("i am in action", userState);
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      let { data } = await Api("GET", `api/get/model/${userState}`, config);
+      console.log("This is res from Action: ", data);
+      // const api = `${process.env.REACT_APP_Base_URL}/accounts/login`;
+      // var res = await axios.post(api, userState);
+      // const { data } = res;
       loading = false;
       dispatch(nodeStoreSuccess(data, loading));
-      console.log(res);
+      // console.log(res);
     } catch (error) {
       const msg = error.response;
       loading = false;
