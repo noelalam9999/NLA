@@ -27,7 +27,7 @@ const nodeStoreFailure = (error) => {
   };
 };
 
-const nodeState = (userState, history) => {
+const nodeState = (modelData) => {
   let loading = true;
   return async (dispatch) => {
     try {
@@ -41,7 +41,12 @@ const nodeState = (userState, history) => {
         },
       };
 
-      let { data } = await Api("GET", `api/get/model/${userState}`, config);
+      let { data } = await Api(
+        "POST",
+        "api/add/model/edges",
+        modelData,
+        config
+      );
       console.log("This is res from Action: ", data);
       // const api = `${process.env.REACT_APP_Base_URL}/accounts/login`;
       // var res = await axios.post(api, userState);

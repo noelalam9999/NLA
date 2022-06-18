@@ -130,13 +130,27 @@ const DesignStudio = () => {
     );
   }
 
+  const modelData = JSON.parse(localStorage.getItem("example-flow"));
+
+  const edges = modelData?.edges;
+  const nodes = modelData?.nodes;
+
+  const data = {
+    project_id: project_id,
+    edges: edges,
+    nodes: nodes,
+  };
+
   const nodeSaveHandler = () => {
     // console.log("project_id: ", project_id);
     if (project_id) {
-      dispatch(allActions.nodeStoreAction.nodeState(project_id));
+      // console.log("modelData: ", data);
+      dispatch(allActions.nodeStoreAction.nodeState(data));
       // dispatch(nodeState(project_id));
     }
   };
+
+  const [sideBar, setSideBar] = useState(false);
 
   return (
     <div>
@@ -332,8 +346,10 @@ const DesignStudio = () => {
             </div>
           </div>
         </div>
-        <RightSideBarDesignStudio />
-        <Flow />
+        <RightSideBarDesignStudio sideBar={sideBar} setSideBar={setSideBar} />
+        <div className={sideBar === false ? "flow" : "flowActive"}>
+          <Flow />
+        </div>
         <div className="design-studio-additional-block position-relative">
           {/* <div className="heading">
             <h6>Design Studio</h6>

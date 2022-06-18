@@ -331,7 +331,6 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
                     </div>
                   </>
                 ) : null}
-
                 <label htmlFor="send Mail">
                   {paramState.name === "Read" ? "UploadFile" : "Write File"}
                 </label>
@@ -345,7 +344,6 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
             </div>
           </>
         )}
-
         {menu == "head2" && modelingParameter == "modelingHead" && (
           <>
             <div
@@ -371,7 +369,6 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
                     </div>
                   </>
                 ) : null}
-
                 <label htmlFor="send Mail">
                   {paramState.name === "Read" ? "UploadFile" : "Write File"}
                 </label>
