@@ -31,20 +31,20 @@ import useUndo from "use-undo";
 const nodeTypes = { textUpdater: TextUpdaterNode };
 
 const Flow = () => {
-  const dispatch = useDispatch();
-  const project_id = useParams().id;
+  // const dispatch = useDispatch();
+  // const project_id = useParams().id;
 
   // console.log("project_id from Flow: ", project_id);
 
   //UseEffect:
 
-  useEffect(() => {
-    if (project_id) {
-      // console.log("modelData: ", data);
-      dispatch(allActions.getNodesAction.getNodesState(project_id));
-      // dispatch(nodeState(project_id));
-    }
-  }, [dispatch]);
+  // useEffect(() => {
+  //   if (project_id) {
+  //     // console.log("modelData: ", data);
+  //     dispatch(allActions.getNodesAction.getNodesState(project_id));
+  //     // dispatch(nodeState(project_id));
+  //   }
+  // }, [dispatch]);
 
   // -------------------------------
   const flowKey = "example-flow";
