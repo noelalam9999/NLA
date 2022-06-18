@@ -37,6 +37,10 @@
   margin-bottom: -1px !important;
 }
 .react-flow__edge-path {
+  stroke-width: 1.1 !important;
+  stroke: #6a6a6a;
+}
+.react-flow__edge-path:active-visible {
   stroke: #000000 !important;
   stroke-width: 1.1 !important;
 }

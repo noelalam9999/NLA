@@ -268,7 +268,7 @@ const Flow = () => {
             // onNodeMouseLeave={mouseLeaveEvent}
           >
             <div className="save__controls">
-              <button onClick={onSave}>save</button>
+              {/* <button onClick={onSave}>save</button> */}
               {/* <button onClick={onRestore}>restore</button> */}
             </div>
             <MiniMap

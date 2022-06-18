@@ -1,9 +1,12 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import "../../css/style.css";
 const Sidebar = () => {
   const [sidebarState, setSidebarState] = useState(true);
+  const [activeDash, setActiveDash] = useState(false);
+  const [activeDesign, setActiveDesign] = useState(false);
+  let location = useLocation();
   const sidebarHandler = () => {
     if (sidebarState === false) {
       setSidebarState(true);
@@ -11,13 +14,25 @@ const Sidebar = () => {
       setSidebarState(false);
     }
   };
-
+  const locationChecker = () => {
+    if (location.pathname === "/dashboard") {
+      setActiveDash(true);
+      setActiveDesign(false);
+    } else if (location.pathname === "/design-studio") {
+      setActiveDash(false);
+      setActiveDesign(true);
+    }
+  };
+  useEffect(() => {
+    locationChecker();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
   return (
     <>
       <div className="left_sidebar" data-position="right" id="leftSideBar">
         <span className="nla-toggle-line" onClick={sidebarHandler}></span>
         <ul className="nav">
-          <li className="active">
+          <li className={activeDash === true ? "active" : ""}>
             <Link to="/dashboard">
               <div className="icon">
                 <svg
@@ -49,6 +64,8 @@ const Sidebar = () => {
                       data-name="Path 73422"
                       d="M8.271,0H8.33a.725.725,0,0,1,.451.2L16.8,7.55a.713.713,0,0,1,.25.554q0,5.3,0,10.6a.684.684,0,0,1-.627.682H10.736a.682.682,0,0,1-.638-.659c-.006-1.65,0-3.3,0-4.95H6.958c0,1.651,0,3.3,0,4.952a.683.683,0,0,1-.636.657H.632A.684.684,0,0,1,0,18.7Q0,13.42,0,8.139a.723.723,0,0,1,.232-.571L7.8.223A.728.728,0,0,1,8.271,0M1.35,8.358q-.005,4.841,0,9.681c1.421,0,2.841,0,4.261,0,0-1.646,0-3.292,0-4.937a.678.678,0,0,1,.68-.671q2.215,0,4.431,0a.686.686,0,0,1,.72.709q0,2.45,0,4.9c1.421,0,2.841,0,4.262,0q0-4.831,0-9.661Q12.017,4.982,8.318,1.6,4.83,4.975,1.35,8.358"
                       transform="translate(0)"
+                      fill="rgb(136, 136, 136)"
+                      stroke="rgb(136, 136, 136)"
                     ></path>
                   </g>
                 </svg>
@@ -58,7 +75,7 @@ const Sidebar = () => {
               </span>
             </Link>
           </li>
-          <li>
+          <li className={activeDesign === true ? "active" : ""}>
             <OverlayTrigger
               placement="right"
               delay={{ show: 250, hide: 250 }}

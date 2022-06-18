@@ -138,9 +138,13 @@ input[list] {
   /* box-shadow: 0 1px 4px 1px rgb(0 0 0 / 8%); */
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
-.xyz:focus-visible {
+.xyz:focus {
   /* border */
-  border: 2px solid;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px !important;
+}
+.xyz:active {
+  /* border */
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px !important;
 }
 /* Search By Date Range */
 .rs-picker-toggle .rs-picker-toggle-placeholder {

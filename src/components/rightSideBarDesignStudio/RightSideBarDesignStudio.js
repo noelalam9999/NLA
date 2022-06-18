@@ -13,7 +13,6 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
   //Parameters
   const [modelingParameter, setModelingParameter] = useState("");
   const [dataAccessParameter, setDataAccessParameter] = useState("");
-
   const [tabState, setTabState] = useState("false");
   const [paramState, setParamState] = useState({});
   function onMenuClick() {
@@ -34,6 +33,7 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
         props.params.name === "Write" ||
         props.params.name === "Read"
       ) {
+        setModelingParameter("");
         setDataAccessParameter("dataHead");
         setParamState(props.params);
       } else {
@@ -55,7 +55,7 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
     >
       <span className="nla-toggle-line" onClick={sideBarHandler}></span>
       <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
-        {menu == "head1" && (
+        {menu === "head1" && (
           <>
             <li className="nav-item" role="presentation">
               <button
@@ -145,7 +145,12 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
                         }}
                         draggable
                       >
-                        <button className="btn btn-secondary">
+                        <button
+                          className="btn btn-secondary"
+                          onClick={() => {
+                            paramSwitchHandler(elem);
+                          }}
+                        >
                           <i className="fa-solid fa-book-open"></i>
                           {elem.name}
                         </button>
@@ -427,7 +432,7 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
                   </div>
                 </div>
               </>
-            ) : modelingParameter == "modelingHead" ? (
+            ) : modelingParameter === "modelingHead" ? (
               <>
                 <div
                   className="tab-pane show active"

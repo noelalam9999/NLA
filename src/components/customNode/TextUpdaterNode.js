@@ -2,9 +2,7 @@ import { Handle, Position } from "react-flow-renderer";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 
 function TextUpdaterNode({ data }) {
-  console.log(data);
   const styleSet = (props) => {
-    console.log(props);
     if (props.label === "Price Elasticity ") {
       return { border: "1px solid red", fontStyle: "italic" };
     } else if (props.label === "Read File ") {
@@ -18,7 +16,7 @@ function TextUpdaterNode({ data }) {
   return (
     <OverlayTrigger
       placement="top"
-      delay={{ show: 250, hide: 250 }}
+      delay={{ show: 500, hide: 250 }}
       overlay={
         <Tooltip id="overlay-example">
           Click on Node to delete (For Windows press Backspace and for Mac press
