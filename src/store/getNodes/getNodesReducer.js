@@ -9,6 +9,7 @@ const userState = {
   user: [],
   error: "",
 };
+
 const getNodesReducer = (state = userState, action) => {
   switch (action.type) {
     case GET_NODES_REQUEST:

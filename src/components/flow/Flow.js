@@ -34,14 +34,13 @@ import allActions from "../../store/index";
 import Api from "../../services/Api";
 
 // -----------------------------------------------------------
-// import MiniMap from "../../components/MiniMap/index";
 const nodeTypes = { textUpdater: TextUpdaterNode };
 
 const Flow = () => {
   const dispatch = useDispatch();
   const project_id = useParams().id;
-
-  // console.log("project_id from Flow: ", project_id);
+  const dataCheck = useSelector((data) => data.getNodesReducer);
+  console.log("project_id from Flow: ", dataCheck);
 
   // UseEffect:
 
@@ -138,7 +137,6 @@ const Flow = () => {
       saveclass.current = "save-button";
     }
   }, [rfInstance]);
-
   const onRestore = useCallback(() => {
     const restoreFlow = async () => {
       const flow = JSON.parse(localStorage.getItem(flowKey));
@@ -152,7 +150,6 @@ const Flow = () => {
     };
     restoreFlow();
   }, [setNodes, setViewport]);
-
   const onAdd = useCallback(() => {
     const newNode = {
       id: getNodeId(),
@@ -364,7 +361,7 @@ const Flow = () => {
           </ReactFlow>
         </div>
       </ReactFlowProvider>
-      <Modal show={show} onHide={handleClose}>
+      {/* <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Current Flow</Modal.Title>
         </Modal.Header>
@@ -374,7 +371,7 @@ const Flow = () => {
             OK
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

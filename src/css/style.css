@@ -1404,6 +1404,7 @@ header .theme-title h1 span {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  flex-wrap: nowrap;
 }
 
 .modal-content .modal-footer button {
@@ -3286,7 +3287,9 @@ header .theme-title h1 span {
 }
 .flowActive {
   width: calc(100% - 52px);
+  margin-left: 84px;
 }
+
 .reactflow-wrapper {
   width: 100%;
 }

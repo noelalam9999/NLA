@@ -200,9 +200,9 @@
   color: white;
   cursor: pointer;
 }
-.modal-content {
+/* .modal-content {
   overflow: scroll;
-}
+} */
 .save-button-unsaved {
   width: max-content;
   top: 10.5%;

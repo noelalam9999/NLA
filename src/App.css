@@ -156,3 +156,47 @@ input[list] {
   width: 40% !important;
   margin-bottom: 0 !important;
 }
+/* .Run-Progress-Bar .progress-bar {
+  width: 38% !important;
+} */
+
+/* Run Model */
+.runModal .modal-content {
+  max-width: 482px;
+  margin: auto;
+}
+.modal-body .progress-block {
+  max-width: 412px;
+  margin: 0 auto;
+}
+.progress-block label {
+  text-align: left;
+  font-size: 14px;
+  letter-spacing: 0px;
+  color: #2a2725;
+  opacity: 1;
+  margin-bottom: 5px;
+}
+.runHeader {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: #0d0e23;
+  font-weight: 500;
+}
+/* Run Progress */
+.Run-Progress-Bar {
+  border-radius: 20px !important;
+  height: 26px !important;
+}
+.Run-Progress-Bar .progress-bar {
+  background-color: #174f73 !important;
+}
+.runInBg {
+  width: 50% !important;
+}
+.runPause {
+  width: 22% !important;
+}
+.runCancel {
+  width: 22% !important;
+}

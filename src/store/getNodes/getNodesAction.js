@@ -50,20 +50,14 @@ const getNodesState = (project_id) => {
         nodes: data?.output_file?.nodes,
         viewport: data?.output_file?.viewport,
       };
-
+      console.log(data);
       if (data === "Empty nodes") {
-        console.log("Empty nodes");
         localStorage.removeItem("nodesFromDatabase");
       } else {
-        console.log("nodesData ", nodesData);
         localStorage.setItem("nodesFromDatabase", JSON.stringify(nodesData));
       }
-
-      // const api = `${process.env.REACT_APP_Base_URL}/accounts/login`;
-      // var res = await axios.post(api, userState);
-      // const { data } = res;
       loading = false;
-      dispatch(getNodesSuccess(data, loading));
+      dispatch(getNodesSuccess(nodesData, loading));
       // console.log(res);
     } catch (error) {
       const msg = error.response;

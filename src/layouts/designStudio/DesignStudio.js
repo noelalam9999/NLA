@@ -18,8 +18,10 @@ import CreateProject from "./CreateProject";
 import ReactFlow, { useStoreApi, useStore } from "react-flow-renderer";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
+import ProgressBar from "react-bootstrap/ProgressBar";
 // import { nodeState } from "../../store/nodesStore/nodeStoreAction";
 import allActions from "../../store/index";
+import progressModalImg from "../../assets/images/progress-status-modal-image.png";
 // import Api from "../../services/Api";
 
 // import {
@@ -50,7 +52,11 @@ const DesignStudio = () => {
   const [load, setLoad] = useState(false);
 
   const [modalShow, setModalShow] = useState(false);
+  // Run Modal
+  const [show, setShow] = useState(false);
 
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   //SnackBar Alert
   const [vertical, setVertical] = useState("top");
   const [horizontal, setHorizontal] = useState("center");
@@ -114,10 +120,10 @@ const DesignStudio = () => {
           viewport: data?.output_file?.viewport,
         };
         if (data === "Empty nodes") {
-          console.log("Empty nodes");
+          // console.log("Empty nodes");
           localStorage.removeItem("nodesFromDatabase");
         } else {
-          console.log("nodesData ", nodesData);
+          // console.log("nodesData ", nodesData);
           localStorage.setItem("nodesFromDatabase", JSON.stringify(nodesData));
         }
       }
@@ -253,13 +259,13 @@ const DesignStudio = () => {
                         ) : (
                           <>
                             <div
-                              class="nla-select-box-with-lbl mt-1"
+                              className="nla-select-box-with-lbl mt-1"
                               // style={{ width: "250px" }}
                             >
                               <input
                                 type="text"
                                 value={projectName}
-                                class="form-control"
+                                className="form-control"
                                 placeholder="Enter project name"
                                 aria-describedby="searchOperators"
                                 onChange={(e) => {
@@ -293,7 +299,11 @@ const DesignStudio = () => {
               <div className="col-lg-9">
                 <div className="btn-wrapper">
                   <div className="nla-run-btn-and-info">
-                    <a href="#" className="btn btn-primary">
+                    <a
+                      href="#"
+                      className="btn btn-primary"
+                      onClick={handleShow}
+                    >
                       Run <i className="fa-solid fa-play"></i>
                     </a>
                     <OverlayTrigger
@@ -450,6 +460,64 @@ const DesignStudio = () => {
           </div>
         </div>
       </div>
+      <Modal show={show} onHide={handleClose} centered className="runModal">
+        <Modal.Header>
+          <Modal.Title>Progress Status</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="nla_modal_banenr">
+            <img
+              src={progressModalImg}
+              alt="placeholder"
+              className="img-fluid"
+            />
+          </div>
+          <div className="text-center">
+            <h5 className="runHeader">Modeling and Insights are in progress</h5>
+            <p
+              className="mx-auto"
+              style={{ maxWidth: "273px", marginBottom: "1rem" }}
+            >
+              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+              nonumy eirmod
+            </p>
+          </div>
+          <div className="text-end progress-block">
+            <label for="" className="text-right">
+              ~ ETA 2 mins
+            </label>
+
+            <ProgressBar
+              now={38}
+              label={"Loading 38%"}
+              className="Run-Progress-Bar"
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            type="button"
+            className="btn btn-outline-primary runInBg"
+            data-bs-toggle="modal"
+            data-bs-target="#projectRendering"
+            id="process_status_modal"
+          >
+            Run in background
+          </button>
+          <button type="button" className="btn btn-outline-primary runPause">
+            Pause
+          </button>
+          <button
+            type="button"
+            className="btn btn-outline-danger runCancel"
+            data-bs-dismiss="modal"
+            onClick={handleClose}
+          >
+            Cancel
+          </button>
+        </Modal.Footer>
+      </Modal>
+
       <MyVerticallyCenteredModal
         show={modalShow}
         onHide={() => setModalShow(false)}
