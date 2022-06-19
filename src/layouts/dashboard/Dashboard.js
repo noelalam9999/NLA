@@ -1473,7 +1473,7 @@ const Dashboard = () => {
                     <p className="">Recently Created & Pinned Projects</p>
                   </div>
 
-                  <div className="col-lg-5 d-flex justify-content-between">
+                  <div className="col-lg-5 wrapDiv">
                     <select
                       className="form-select sortByPin"
                       aria-label="Default select example"

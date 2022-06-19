@@ -37,12 +37,25 @@
   margin-bottom: -1px !important;
 }
 .react-flow__edge-path {
-  stroke-width: 1.1 !important;
+  stroke-width: 2 !important;
   stroke: #6a6a6a;
 }
-.react-flow__edge-path:active-visible {
-  stroke: #000000 !important;
-  stroke-width: 1.1 !important;
+/* Node And Edges colors on Click*/
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #174f73 !important;
+}
+.react-flow__node.selected .readFile {
+  background-color: blue;
+  color: #fff;
+}
+.react-flow__node.selected .price {
+  background-color: red;
+  color: #fff;
+}
+.react-flow__node.selected .writeFile {
+  background-color: green;
+  color: #fff;
 }
 .back-arrow {
   margin-top: 1%;
