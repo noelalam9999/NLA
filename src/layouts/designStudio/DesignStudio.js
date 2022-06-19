@@ -18,6 +18,7 @@ import CreateProject from "./CreateProject";
 import ReactFlow, { useStoreApi, useStore } from "react-flow-renderer";
 // import { nodeState } from "../../store/nodesStore/nodeStoreAction";
 import allActions from "../../store/index";
+// import Api from "../../services/Api";
 
 // import {
 //   BsFillArrowLeftCircleFill,
@@ -70,6 +71,7 @@ const DesignStudio = () => {
   //UseEffect
 
   useEffect(() => {
+    // window.location.reload();
     // setLoad(false);
     async function fetchProject() {
       const { data } = await Api("GET", `api/project/${project_id}`);
@@ -85,8 +87,38 @@ const DesignStudio = () => {
   }, []);
   // const store = useStoreApi();
   useEffect(() => {
-    // console.log("Checking", store);
-  }, []);
+    if (project_id) {
+      // console.log("modelData: ", data);
+      // dispatch(allActions.getNodesAction.getNodesState(project_id));
+      // dispatch(nodeState(project_id));
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      async function fetchProjects() {
+        let { data } = await Api("GET", `api/get/model/${project_id}`, config);
+        // console.log("GetNodeAction from Action: ", data);
+        const nodesData = {
+          edges: data?.output_file?.edges,
+          nodes: data?.output_file?.nodes,
+          viewport: data?.output_file?.viewport,
+        };
+        if (data === "Empty nodes") {
+          console.log("Empty nodes");
+          localStorage.removeItem("nodesFromDatabase");
+        } else {
+          console.log("nodesData ", nodesData);
+          localStorage.setItem("nodesFromDatabase", JSON.stringify(nodesData));
+        }
+      }
+
+      fetchProjects();
+    }
+  }, [project_id]);
+
   useEffect(() => {
     setProject([]);
   }, [project_id]);
@@ -130,15 +162,33 @@ const DesignStudio = () => {
     );
   }
 
-  const modelData = JSON.parse(localStorage.getItem("example-flow"));
+  const [sideBar, setSideBar] = useState(false);
+
+  //User
+  const authData = JSON.parse(localStorage.getItem("auth"));
+  const user_id = authData?.user_id;
+
+  const modelData = JSON.parse(localStorage.getItem("nodes_data"));
 
   const edges = modelData?.edges;
   const nodes = modelData?.nodes;
+  const viewport = modelData?.viewport;
+
+  // console.log("viewport: ", viewport);
+
+  // if (edges && nodes) {
+  //   alert("data");
+  // } else {
+  //   alert("No modal data");
+  //   return;
+  // }
 
   const data = {
+    user_id: user_id,
     project_id: project_id,
     edges: edges,
     nodes: nodes,
+    viewport: viewport,
   };
 
   const nodeSaveHandler = () => {
@@ -149,8 +199,6 @@ const DesignStudio = () => {
       // dispatch(nodeState(project_id));
     }
   };
-
-  const [sideBar, setSideBar] = useState(false);
 
   return (
     <div>

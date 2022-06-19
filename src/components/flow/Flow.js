@@ -27,34 +27,72 @@ import ReactFlow, {
   // MiniMapProps,
 } from "react-flow-renderer";
 import useUndo from "use-undo";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import allActions from "../../store/index";
+
+import Api from "../../services/Api";
+
+// -----------------------------------------------------------
 // import MiniMap from "../../components/MiniMap/index";
 const nodeTypes = { textUpdater: TextUpdaterNode };
 
 const Flow = () => {
-  // const dispatch = useDispatch();
-  // const project_id = useParams().id;
+  const dispatch = useDispatch();
+  const project_id = useParams().id;
 
   // console.log("project_id from Flow: ", project_id);
 
-  //UseEffect:
+  // UseEffect:
 
   // useEffect(() => {
   //   if (project_id) {
   //     // console.log("modelData: ", data);
-  //     dispatch(allActions.getNodesAction.getNodesState(project_id));
+  //     // dispatch(allActions.getNodesAction.getNodesState(project_id));
   //     // dispatch(nodeState(project_id));
+
+  //     const config = {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     };
+
+  //     async function fetchProjects() {
+  //       let { data } = await Api("GET", `api/get/model/${project_id}`, config);
+  //       // console.log("GetNodeAction from Action: ", data);
+  //       const nodesData = {
+  //         edges: data?.output_file?.edges,
+  //         nodes: data?.output_file?.nodes,
+  //         viewport: data?.output_file?.viewport,
+  //       };
+  //       if (data === "Empty nodes") {
+  //         console.log("Empty nodes");
+  //         localStorage.removeItem("nodesFromDatabase");
+  //       } else {
+  //         console.log("nodesData ", nodesData);
+  //         localStorage.setItem("nodesFromDatabase", JSON.stringify(nodesData));
+  //       }
+  //     }
+
+  //     fetchProjects();
   //   }
-  // }, [dispatch]);
+  // }, [project_id]);
+
+  // useEffect(() => {
+  //   window.location.reload();
+  // }, []);
 
   // -------------------------------
-  const flowKey = "example-flow";
-  // const flowKey = "nodesFromDatabase";
+  // const flowKey = "example-flow";
+  const flowKey = "nodesFromDatabase";
 
   const getNodeId = () => `randomnode_${+new Date()}`;
 
-  const prevNodes = JSON.parse(localStorage.getItem("nodesFromDatabase"));
+  // const prevNodesOfProject = JSON.parse(
+  //   localStorage.getItem("nodesFromDatabase")
+  // );
 
-  console.log("prevNodes: ", prevNodes);
+  // console.log("prevNodes: ", prevNodes);
 
   const initialNodes = [
     // {
@@ -96,6 +134,7 @@ const Flow = () => {
     if (rfInstance) {
       const flow = rfInstance.toObject();
       localStorage.setItem(flowKey, JSON.stringify(flow));
+      localStorage.setItem("nodes_data", JSON.stringify(flow));
       saveclass.current = "save-button";
     }
   }, [rfInstance]);
@@ -103,6 +142,7 @@ const Flow = () => {
   const onRestore = useCallback(() => {
     const restoreFlow = async () => {
       const flow = JSON.parse(localStorage.getItem(flowKey));
+      // console.log("flowKey: ", flow.nodes);
       if (flow) {
         const { x = 0, y = 0, zoom = 1 } = flow.viewport;
         setNodes(flow.nodes || []);

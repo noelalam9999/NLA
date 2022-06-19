@@ -860,6 +860,45 @@ const Dashboard = () => {
     }
   };
 
+  // UseEffect for fetching nodes
+
+  // useEffect(() => {
+  //   if (project_id) {
+  //     // console.log("modelData: ", data);
+  //     // dispatch(allActions.getNodesAction.getNodesState(project_id));
+  //     // dispatch(nodeState(project_id));
+
+  //     const config = {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     };
+
+  //     async function fetchProjects() {
+  //       let { data } = await Api("GET", `api/get/model/${project_id}`, config);
+  //       // console.log("GetNodeAction from Action: ", data);
+  //       const nodesData = {
+  //         edges: data?.output_file?.edges,
+  //         nodes: data?.output_file?.nodes,
+  //         viewport: data?.output_file?.viewport,
+  //       };
+  //       if (data === "Empty nodes") {
+  //         console.log("Empty nodes");
+  //         localStorage.removeItem("nodesFromDatabase");
+  //       } else {
+  //         console.log("nodesData ", nodesData);
+  //         localStorage.setItem("nodesFromDatabase", JSON.stringify(nodesData));
+  //       }
+  //     }
+
+  //     fetchProjects();
+  //   }
+  // }, [project_id]);
+
+  // const fetchNodes = () => {
+
+  // }
+
   return (
     <div>
       <Header />
@@ -1429,6 +1468,7 @@ const Dashboard = () => {
                                 <div className="nla_additional_links">
                                   <Link
                                     to={`/design-studio/${elem?.project_id}`}
+                                    // onClick={fetchNodes}
                                   >
                                     Design Studio{" "}
                                     <i className="fa-solid fa-pencil"></i>

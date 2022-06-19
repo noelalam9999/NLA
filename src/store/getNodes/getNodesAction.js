@@ -43,9 +43,22 @@ const getNodesState = (project_id) => {
       };
 
       let { data } = await Api("GET", `api/get/model/${project_id}`, config);
-      console.log("GetNodeAction from Action: ", data);
+      // console.log("GetNodeAction from Action: ", data);
 
-      localStorage.setItem("nodesFromDatabase", JSON.stringify(data));
+      const nodesData = {
+        edges: data?.output_file?.edges,
+        nodes: data?.output_file?.nodes,
+        viewport: data?.output_file?.viewport,
+      };
+
+      if (data === "Empty nodes") {
+        console.log("Empty nodes");
+        localStorage.removeItem("nodesFromDatabase");
+      } else {
+        console.log("nodesData ", nodesData);
+        localStorage.setItem("nodesFromDatabase", JSON.stringify(nodesData));
+      }
+
       // const api = `${process.env.REACT_APP_Base_URL}/accounts/login`;
       // var res = await axios.post(api, userState);
       // const { data } = res;
