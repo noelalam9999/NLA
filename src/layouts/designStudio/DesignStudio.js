@@ -16,6 +16,8 @@ import Api from "../../services/Api";
 import CreateProject from "./CreateProject";
 // import ReactFlow, { useStore } from "react-flow-renderer";
 import ReactFlow, { useStoreApi, useStore } from "react-flow-renderer";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 // import { nodeState } from "../../store/nodesStore/nodeStoreAction";
 import allActions from "../../store/index";
 // import Api from "../../services/Api";
@@ -48,6 +50,11 @@ const DesignStudio = () => {
   const [load, setLoad] = useState(false);
 
   const [modalShow, setModalShow] = useState(false);
+
+  //SnackBar Alert
+  const [vertical, setVertical] = useState("top");
+  const [horizontal, setHorizontal] = useState("center");
+  const [saveModel, setModalSaved] = useState(false);
 
   const [projectName, setProjectName] = useState("Untitled name");
   // const [projectNameByID, setProjectNameByID] = useState(project?.project_name);
@@ -197,6 +204,10 @@ const DesignStudio = () => {
       // console.log("modelData: ", data);
       dispatch(allActions.nodeStoreAction.nodeState(data));
       // dispatch(nodeState(project_id));
+      setModalSaved(true);
+      setTimeout(() => {
+        setModalSaved(false);
+      }, 3000);
     }
   };
 
@@ -445,6 +456,16 @@ const DesignStudio = () => {
         onCreate={() => setLoad(true)}
       />
       <Footer />
+      <Snackbar
+        open={saveModel}
+        autoHideDuration={3000}
+        key={vertical + horizontal}
+        anchorOrigin={{ vertical, horizontal }}
+      >
+        <Alert severity="success" sx={{ width: "100%" }}>
+          Model Saved successfully!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
