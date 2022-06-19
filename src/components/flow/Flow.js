@@ -282,9 +282,11 @@ const Flow = () => {
               nodeStrokeColor={(n) => {
                 if (n.data.label === "Read File ") {
                   return "#0041d0";
+                } else if (n.data.label === "Write File ") return "green";
+                else if (n.data.label === "Price ") return "#ff0072";
+                else {
+                  return "#000";
                 }
-                if (n.data.label === "Write File ") return "green";
-                if (n.data.label === "Price Elasticity ") return "#ff0072";
               }}
               nodeColor={(n) => {
                 if (n.data.label === "Read File") return "green";

@@ -25,7 +25,7 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
   const paramSwitchHandler = (props) => {
     if (props.params) {
       setMenu("head2");
-      if (props.params.name === "Price Elasticity") {
+      if (props.params.name === "Price") {
         setDataAccessParameter("");
         setModelingParameter("modelingHead");
         setParamState(props.params);
