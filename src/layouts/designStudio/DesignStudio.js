@@ -54,9 +54,12 @@ const DesignStudio = () => {
   const [modalShow, setModalShow] = useState(false);
   // Run Modal
   const [show, setShow] = useState(false);
+  const [log, setLog] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const handleLogClose = () => setLog(false);
+  const handleLogShow = () => setLog(true);
   //SnackBar Alert
   const [vertical, setVertical] = useState("top");
   const [horizontal, setHorizontal] = useState("center");
@@ -439,7 +442,7 @@ const DesignStudio = () => {
                 <label htmlFor="flexSwitchCheckChecked"></label>
               </div>
             </div>
-            <div className="nla-view">
+            <div className="nla-view" onClick={handleLogShow}>
               <p data-bs-toggle="modal" data-bs-target="#advanceLogModal">
                 <i className="fa-solid fa-eye"></i> View
               </p>
@@ -460,6 +463,188 @@ const DesignStudio = () => {
           </div>
         </div>
       </div>
+      <Modal show={log} onHide={handleLogClose} centered className="logModal">
+        <Modal.Header>
+          <Modal.Title>Advance Log</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div class="nla-advance-log-list-block">
+            <ul>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+              <li>
+                Global Search category actions registered{" "}
+                <div class="nla-date-and-time">
+                  <p>Mar 20, 2022</p>
+                  <p>11:23:13 PM</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            data-bs-dismiss="modal"
+            onClick={handleLogClose}
+          >
+            Close
+          </button>
+        </Modal.Footer>
+      </Modal>
       <Modal show={show} onHide={handleClose} centered className="runModal">
         <Modal.Header>
           <Modal.Title>Progress Status</Modal.Title>

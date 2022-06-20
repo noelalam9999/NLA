@@ -159,7 +159,14 @@ input[list] {
 /* .Run-Progress-Bar .progress-bar {
   width: 38% !important;
 } */
-
+/* Log Model */
+.logModal .modal-dialog {
+  max-width: 846px;
+  margin: auto;
+}
+.nla-date-and-time p {
+  margin-top: 0 !important;
+}
 /* Run Model */
 .runModal .modal-content {
   max-width: 482px;
