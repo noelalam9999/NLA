@@ -309,6 +309,15 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
                 </Accordion.Body>
               </Accordion.Item>
             </Accordion>
+            <div className="py-3 px-3">
+              <h6 className="mb-1">
+                <strong style={{ color: "#174f73" }}>Keyboard Shortcuts</strong>
+              </h6>
+              <strong>Node and Line Delete</strong>
+
+              <p className="mt-2">MAC: CMD + Delete</p>
+              <p className="">Window: Backspace button</p>
+            </div>
           </div>
         )}
         {/* {menu == "head2" && dataAccessParameter == "dataHead" && (

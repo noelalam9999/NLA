@@ -46,15 +46,15 @@
   stroke: #174f73 !important;
 }
 .react-flow__node.selected .readFile {
-  background-color: blue;
+  background-color: #174f73;
   color: #fff;
 }
 .react-flow__node.selected .price {
-  background-color: red;
+  background-color: #174f73;
   color: #fff;
 }
 .react-flow__node.selected .writeFile {
-  background-color: green;
+  background-color: #174f73;
   color: #fff;
 }
 .back-arrow {

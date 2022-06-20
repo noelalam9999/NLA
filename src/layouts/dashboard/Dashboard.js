@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Alert from "@mui/material/Alert";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Tooltip, OverlayTrigger, Badge, Modal } from "react-bootstrap";
 import moment from "moment";
 import Tour from "reactour";
@@ -30,6 +30,8 @@ import Snackbar from "@mui/material/Snackbar";
 import copyIcon from "../../assets/newIcons/ionic-md-copy.svg";
 import downloadIcon from "../../assets/newIcons/feather-download.svg";
 import introImg from "../../assets/images/main-navigation-intro-image.png";
+import { useDispatch } from "react-redux";
+import allActions from "../../store/index";
 // import DateRangePicker from "react-daterange-picker";
 // import "react-daterange-picker/dist/css/react-calendar.css";
 // import { extendMoment } from "moment-range";
@@ -78,7 +80,7 @@ const Dashboard = () => {
   const [showCancelProject, setShowCancelProject] = useState(false);
 
   // const [PUBLIC_URL, SETPUBLIC_URL] = useState("http://localhost:5000/");
- 
+
   //Search
   const [project_name, setSearchByProjectName] = useState("");
   const [project_date, setProjectDate] = useState("");
@@ -87,6 +89,7 @@ const Dashboard = () => {
   const [filteredPinData, setFilteredPinData] = useState("");
   const [filteredPinDataByDate, setFilteredPinDataByDate] = useState("");
   const [filteredUnPinData, setFilteredUnPinData] = useState("");
+  console.log("filteredUnPinData: ", filteredUnPinData);
   const [filteredData, setFilteredData] = useState("");
   const [filteredDataError, setFilteredDataError] = useState("");
 
@@ -504,6 +507,9 @@ const Dashboard = () => {
 
   //Main UseEffect
   useEffect(() => {
+    localStorage.removeItem("nodesFromDatabase");
+    localStorage.removeItem("nodes_data");
+    // localStorage.setItem("reloadMe", JSON.stringify(1));
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -517,6 +523,8 @@ const Dashboard = () => {
           `api/projects/${userID}/?page=${page}&limit=${limit}`
           // config
         );
+
+        console.log("projects data: ", data);
 
         if (data) {
           if (data?.message === "greater" || data?.message === "lesser") {
@@ -895,9 +903,18 @@ const Dashboard = () => {
   //   }
   // }, [project_id]);
 
-  // const fetchNodes = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // }
+  const fetchNodes = (project__id) => {
+    console.log("I am in fetch Nodes", project__id);
+    if (project__id) {
+      dispatch(allActions.getNodesAction.getNodesState(project__id));
+      setTimeout(() => {
+        navigate(`/design-studio/${project__id}`);
+      }, 1200);
+    }
+  };
 
   return (
     <div>
@@ -1200,10 +1217,15 @@ const Dashboard = () => {
                                   Design Studio{" "}
                                   <i className="fa-solid fa-pencil"></i>
                                 </Link> */}
-                                <Link to={`/design-studio/${elem?.project_id}`}>
+                                {/* <Link to={`/design-studio/${elem?.project_id}`}>
                                   Design Studio{" "}
                                   <i className="fa-solid fa-pencil"></i>
-                                </Link>
+                                </Link> */}
+
+                                <a onClick={() => fetchNodes(elem?.project_id)}>
+                                  Design Studio{" "}
+                                  <i className="fa-solid fa-pencil"></i>
+                                </a>
 
                                 <Link to={`/insights/${elem?.project_id}`}>
                                   Insights <i className="fa-solid fa-eye"></i>
@@ -1343,6 +1365,12 @@ const Dashboard = () => {
                                   Design Studio{" "}
                                   <i className="fa-solid fa-pencil"></i>
                                 </Link>
+
+                                {/* <div onClick={fetchNodes(elem?.project_id)}>
+                                  Design Studio{" "}
+                                  <i className="fa-solid fa-pencil"></i>
+                                </div> */}
+
                                 <Link to={`/insights/${elem?.project_id}`}>
                                   Insights <i className="fa-solid fa-eye"></i>
                                 </Link>
@@ -1466,13 +1494,18 @@ const Dashboard = () => {
                                   </OverlayTrigger>
                                 </div>
                                 <div className="nla_additional_links">
-                                  <Link
+                                  {/* <Link
                                     to={`/design-studio/${elem?.project_id}`}
-                                    // onClick={fetchNodes}
                                   >
                                     Design Studio{" "}
                                     <i className="fa-solid fa-pencil"></i>
+                                  </Link> */}
+
+                                  <Link onClick={fetchNodes(elem?.project_id)}>
+                                    Design Studio{" "}
+                                    <i className="fa-solid fa-pencil"></i>
                                   </Link>
+
                                   <Link to={`/insights/${elem?.project_id}`}>
                                     Insights <i className="fa-solid fa-eye"></i>
                                   </Link>

@@ -50,7 +50,7 @@ const getNodesState = (project_id) => {
         nodes: data?.output_file?.nodes,
         viewport: data?.output_file?.viewport,
       };
-      console.log(data);
+      // console.log(data);
       if (data === "Empty nodes") {
         localStorage.removeItem("nodesFromDatabase");
       } else {

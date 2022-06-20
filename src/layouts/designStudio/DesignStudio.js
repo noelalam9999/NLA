@@ -84,10 +84,15 @@ const DesignStudio = () => {
     [projectName]
   );
 
-  //UseEffect
-
+  // let reload;
+  // Main UseEffect
   useEffect(() => {
-    // window.location.reload();
+    // reload = JSON.parse(localStorage.getItem("reloadMe"));
+    // if (reload !== null) {
+    //   console.log("I am reload: ", reload);
+    //   window.location.reload();
+    //   localStorage.removeItem("reloadMe");
+    // } else {
     // setLoad(false);
     async function fetchProject() {
       const { data } = await Api("GET", `api/project/${project_id}`);
@@ -100,6 +105,7 @@ const DesignStudio = () => {
     setEditProjectName(false);
     // setProjectNameByID(project?.project_name);
     setLoad(false);
+    // window.location.reload();
   }, []);
   // const store = useStoreApi();
   useEffect(() => {
@@ -107,31 +113,28 @@ const DesignStudio = () => {
       // console.log("modelData: ", data);
       // dispatch(allActions.getNodesAction.getNodesState(project_id));
       // dispatch(nodeState(project_id));
-
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
-      async function fetchProjects() {
-        let { data } = await Api("GET", `api/get/model/${project_id}`, config);
-        // console.log("GetNodeAction from Action: ", data);
-        const nodesData = {
-          edges: data?.output_file?.edges,
-          nodes: data?.output_file?.nodes,
-          viewport: data?.output_file?.viewport,
-        };
-        if (data === "Empty nodes") {
-          // console.log("Empty nodes");
-          localStorage.removeItem("nodesFromDatabase");
-        } else {
-          // console.log("nodesData ", nodesData);
-          localStorage.setItem("nodesFromDatabase", JSON.stringify(nodesData));
-        }
-      }
-
-      fetchProjects();
+      // const config = {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // };
+      // async function fetchProjects() {
+      //   let { data } = await Api("GET", `api/get/model/${project_id}`, config);
+      //   // console.log("GetNodeAction from Action: ", data);
+      //   const nodesData = {
+      //     edges: data?.output_file?.edges,
+      //     nodes: data?.output_file?.nodes,
+      //     viewport: data?.output_file?.viewport,
+      //   };
+      //   if (data === "Empty nodes") {
+      //     // console.log("Empty nodes");
+      //     localStorage.removeItem("nodesFromDatabase");
+      //   } else {
+      //     // console.log("nodesData ", nodesData);
+      //     localStorage.setItem("nodesFromDatabase", JSON.stringify(nodesData));
+      //   }
+      // }
+      // fetchProjects();
     }
   }, [project_id]);
 
@@ -184,12 +187,6 @@ const DesignStudio = () => {
   const authData = JSON.parse(localStorage.getItem("auth"));
   const user_id = authData?.user_id;
 
-  const modelData = JSON.parse(localStorage.getItem("nodes_data"));
-
-  const edges = modelData?.edges;
-  const nodes = modelData?.nodes;
-  const viewport = modelData?.viewport;
-
   // console.log("viewport: ", viewport);
 
   // if (edges && nodes) {
@@ -199,18 +196,23 @@ const DesignStudio = () => {
   //   return;
   // }
 
-  const data = {
-    user_id: user_id,
-    project_id: project_id,
-    edges: edges,
-    nodes: nodes,
-    viewport: viewport,
-  };
-
   const nodeSaveHandler = () => {
+    const modelData = JSON.parse(localStorage.getItem("nodesFromDatabase"));
+
+    const edges = modelData?.edges;
+    const nodes = modelData?.nodes;
+    const viewport = modelData?.viewport;
+
+    const data = {
+      user_id: user_id,
+      project_id: project_id,
+      edges: edges,
+      nodes: nodes,
+      viewport: viewport,
+    };
     // console.log("project_id: ", project_id);
     if (project_id) {
-      // console.log("modelData: ", data);
+      console.log("modelData: ", data);
       dispatch(allActions.nodeStoreAction.nodeState(data));
       // dispatch(nodeState(project_id));
       setModalSaved(true);
@@ -431,8 +433,8 @@ const DesignStudio = () => {
           </div> */}
 
           <div className="nla-log-block">
-            <h6>Logs</h6>
-            <div className="nla-log-option">
+            <h6 className="mb-2">Logs</h6>
+            {/* <div className="nla-log-option">
               <div className="form-check form-switch">
                 <input
                   className="form-check-input"
@@ -441,13 +443,13 @@ const DesignStudio = () => {
                 />
                 <label htmlFor="flexSwitchCheckChecked"></label>
               </div>
-            </div>
+            </div> */}
             <div className="nla-view" onClick={handleLogShow}>
               <p data-bs-toggle="modal" data-bs-target="#advanceLogModal">
                 <i className="fa-solid fa-eye"></i> View
               </p>
             </div>
-            <div className="nla-rpw">
+            {/* <div className="nla-rpw">
               <ul>
                 <li>
                   <i className="fa-solid fa-check"></i> Read File
@@ -459,7 +461,7 @@ const DesignStudio = () => {
                   <i className="fa-solid fa-arrow-rotate-right"></i> Pricing
                 </li>
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

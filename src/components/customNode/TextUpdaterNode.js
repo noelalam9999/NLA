@@ -5,13 +5,13 @@ import { Tooltip, OverlayTrigger } from "react-bootstrap";
 function TextUpdaterNode({ data }) {
   const styleSet = (props) => {
     if (props.label === "Price ") {
-      return { border: "1px solid red", fontStyle: "italic" };
+      return { border: "1px solid #174f73", fontStyle: "italic" };
     } else if (props.label === "Read File ") {
-      return { border: "1px solid blue", fontWeight: "bold" };
+      return { border: "1px solid #174f73", fontWeight: "bold" };
     } else if (props.label === "Write File ") {
-      return { border: "1px solid green", fontWeight: "normal" };
+      return { border: "1px solid #174f73", fontWeight: "normal" };
     } else {
-      return { border: "1px solid black" };
+      return { border: "1px solid #174f73" };
     }
   };
   const styleSetClass = (data) => {

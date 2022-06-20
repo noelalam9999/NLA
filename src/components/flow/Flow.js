@@ -40,7 +40,7 @@ const Flow = () => {
   const dispatch = useDispatch();
   const project_id = useParams().id;
   const dataCheck = useSelector((data) => data.getNodesReducer);
-  console.log("project_id from Flow: ", dataCheck);
+  // console.log("project_id from Flow: ", dataCheck);
 
   // UseEffect:
 
@@ -82,8 +82,8 @@ const Flow = () => {
   // }, []);
 
   // -------------------------------
-  // const flowKey = "example-flow";
-  const flowKey = "nodesFromDatabase";
+  const flowKey = "example-flow";
+  // const flowKey = "nodesFromDatabase";
 
   const getNodeId = () => `randomnode_${+new Date()}`;
 
@@ -112,6 +112,11 @@ const Flow = () => {
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  const [nodesData, setNodesData] = useState({});
+
+  console.log("nodesData from State: ", nodesData);
+
   const [rfInstance, setRfInstance] = useState(null);
   const [show, setShow] = useState(false);
   const myoutput = useRef(null);
@@ -132,14 +137,20 @@ const Flow = () => {
   const onSave = useCallback(() => {
     if (rfInstance) {
       const flow = rfInstance.toObject();
-      localStorage.setItem(flowKey, JSON.stringify(flow));
-      localStorage.setItem("nodes_data", JSON.stringify(flow));
+      localStorage.setItem("nodesFromDatabase", JSON.stringify(flow));
+      // console.log("flow: ", flow);
+      // localStorage.setItem("nodes_data", JSON.stringify(flow));
       saveclass.current = "save-button";
     }
   }, [rfInstance]);
   const onRestore = useCallback(() => {
     const restoreFlow = async () => {
-      const flow = JSON.parse(localStorage.getItem(flowKey));
+      const flow = JSON.parse(localStorage.getItem("nodesFromDatabase"));
+
+      setNodesData(flow);
+      console.log("This is flow from onRestore: ", nodesData);
+      console.log("This is from localstorage: ", flow);
+      // const flow = JSON.parse(localStorage.getItem(flowKey));
       // console.log("flowKey: ", flow.nodes);
       if (flow) {
         const { x = 0, y = 0, zoom = 1 } = flow.viewport;
