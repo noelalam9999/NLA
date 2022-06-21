@@ -89,8 +89,9 @@ const Dashboard = () => {
   const [filteredPinData, setFilteredPinData] = useState("");
   const [filteredPinDataByDate, setFilteredPinDataByDate] = useState("");
   const [filteredUnPinData, setFilteredUnPinData] = useState("");
-  console.log("filteredUnPinData: ", filteredUnPinData);
+  // console.log("filteredUnPinData: ", filteredUnPinData);
   const [filteredData, setFilteredData] = useState("");
+  const [filteredDataForTab1, setFilteredDataForTab1] = useState("");
   const [filteredDataError, setFilteredDataError] = useState("");
 
   const [projectName, setProjectName] = useState("");
@@ -118,10 +119,12 @@ const Dashboard = () => {
 
   //Searching
   const customTabHandlerPinnedProjects = () => {
+    unsetSearchData();
     setCustomTabPinnedProject(true);
     setCustomTabRecentProject(false);
   };
   const customTabHandlerRecentProjects = async () => {
+    unsetSearchData();
     setCustomTabPinnedProject(false);
     setCustomTabRecentProject(true);
 
@@ -335,60 +338,133 @@ const Dashboard = () => {
       user_id,
     };
 
-    if (project_name && project_date) {
-      const res = await Api("POST", "api/project/search", apiData, config);
+    if (customTabPinnedProject === true) {
+      console.log("I am in tab 1");
+      if (project_name && project_date) {
+        const res = await Api("POST", "api/project/search", apiData, config);
 
-      setFilteredData(res.data);
-      if (res.status === 200) {
-        setFilterVisible(true);
-      }
-    } else if (project_name) {
-      const res = await Api(
-        "POST",
-        `api/project/name/?page=${searchResultPage}&limit=${limit}`,
-        { project_name, user_id },
-        config
-      );
+        if (res.status === 200 && customTabPinnedProject === false) {
+          setFilteredData(res.data);
+          setFilterVisible(true);
+        }
+      } else if (project_name) {
+        const res = await Api(
+          "POST",
+          `api/project/name/?page=${searchResultPage}&limit=${limit}`,
+          { project_name, user_id },
+          config
+        );
 
-      console.log("res: ", res.data);
+        console.log("res: ", res.data);
 
-      if (res?.data?.message === "greater" || res?.data?.message === "lesser") {
-        searchedPageHandler(res?.data?.page);
+        if (
+          res?.data?.message === "greater" ||
+          res?.data?.message === "lesser"
+        ) {
+          searchedPageHandler(res?.data?.page);
+        } else {
+          if (res.status === 200 && customTabPinnedProject === true) {
+            setFilteredData(res.data.rows);
+            setSearchResultpagination(res.data.pagination);
+            setFilterVisible(true);
+          }
+        }
+
+        // setFilteredData(res.data.rows);
+        // setSearchResultpagination(res.data.pagination);
+      } else if (start_date && end_date) {
+        console.log("start_date", start_date);
+        console.log(end_date);
+        const res = await Api(
+          "POST",
+          "api/project/date",
+          { start_date, end_date, user_id },
+          config
+        );
+
+        if (res.status === 200 && customTabPinnedProject === true) {
+          setFilteredData(res.data);
+          setFilterVisible(true);
+          console.log(res);
+        }
+      } else if (searchByAuthor) {
+        console.log("searchByAuthor", searchByAuthor);
+        if (customTabPinnedProject === true) {
+          setFilteredData(1);
+          setFilterVisible(true);
+        }
+      } else if (project_name === "" && project_date === "") {
+        setSearchEmptyChecker(true);
+        setTimeout(() => {
+          setSearchEmptyChecker(false);
+        }, 3000);
       } else {
-        setFilteredData(res.data.rows);
-        setSearchResultpagination(res.data.pagination);
+        console.log("Invalid");
       }
+    } else if (customTabRecentProject === true) {
+      console.log("Hey i am in list viewwwwwwwww");
 
-      // setFilteredData(res.data.rows);
-      // setSearchResultpagination(res.data.pagination);
-      if (res.status === 200) {
-        setFilterVisible(true);
+      if (project_name && project_date) {
+        const res = await Api("POST", "api/project/search", apiData, config);
+
+        if (res.status === 200 && customTabRecentProject === true) {
+          setFilteredData(res.data);
+          setFilterVisible(true);
+        }
+      } else if (project_name) {
+        const res = await Api(
+          "POST",
+          `api/project/name/?page=${searchResultPage}&limit=${limit}`,
+          { project_name, user_id },
+          config
+        );
+
+        console.log("res: ", res.data);
+
+        if (
+          res?.data?.message === "greater" ||
+          res?.data?.message === "lesser"
+        ) {
+          searchedPageHandler(res?.data?.page);
+        } else {
+          if (res.status === 200 && customTabRecentProject === true) {
+            setFilteredData(res.data.rows);
+            setSearchResultpagination(res.data.pagination);
+            setFilterVisible(true);
+          }
+        }
+
+        // setFilteredData(res.data.rows);
+        // setSearchResultpagination(res.data.pagination);
+      } else if (start_date && end_date) {
+        console.log("start_date", start_date);
+        console.log(end_date);
+        const res = await Api(
+          "POST",
+          "api/project/date",
+          { start_date, end_date, user_id },
+          config
+        );
+
+        if (res.status === 200 && customTabRecentProject === true) {
+          setFilteredData(res.data);
+          setFilterVisible(true);
+          console.log(res);
+        }
+      } else if (searchByAuthor) {
+        console.log("searchByAuthor", searchByAuthor);
+        if (customTabRecentProject === true) {
+          setFilteredData(1);
+          setFilterVisible(true);
+        }
+      } else if (project_name === "" && project_date === "") {
+        setSearchEmptyChecker(true);
+        setTimeout(() => {
+          setSearchEmptyChecker(false);
+        }, 3000);
+      } else {
+        console.log("Invalid");
       }
-    } else if (start_date && end_date) {
-      console.log("start_date", start_date);
-      console.log(end_date);
-      const res = await Api(
-        "POST",
-        "api/project/date",
-        { start_date, end_date, user_id },
-        config
-      );
-      setFilteredData(res.data);
-      if (res.status === 200) {
-        setFilterVisible(true);
-        console.log(res);
-      }
-    } else if (searchByAuthor) {
-      console.log("searchByAuthor", searchByAuthor);
-      setFilteredData(1);
-      setFilterVisible(true);
-    } else if (project_name === "" && project_date === "") {
-      setSearchEmptyChecker(true);
-      setTimeout(() => {
-        setSearchEmptyChecker(false);
-      }, 3000);
-    } else {
-      console.log("Invalid");
     }
   };
 
@@ -907,7 +983,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   const fetchNodes = (project__id) => {
-    console.log("I am in fetch Nodes", project__id);
+    // console.log("I am in fetch Nodes", project__id);
     if (project__id) {
       dispatch(allActions.getNodesAction.getNodesState(project__id));
       setTimeout(() => {
@@ -1041,7 +1117,7 @@ const Dashboard = () => {
                   type="submit"
                   value="Search"
                   className="btn btn-primary mb-0"
-                  onClick={() => searchDataHandler(project_name)}
+                  onClick={() => searchDataHandler()}
                 />
               </div>
             </div>
@@ -1361,10 +1437,15 @@ const Dashboard = () => {
                                 </OverlayTrigger>
                               </div>
                               <div className="nla_additional_links">
-                                <Link to={`/design-studio/${elem?.project_id}`}>
+                                {/* <Link to={`/design-studio/${elem?.project_id}`}>
                                   Design Studio{" "}
                                   <i className="fa-solid fa-pencil"></i>
-                                </Link>
+                                </Link> */}
+
+                                <a onClick={() => fetchNodes(elem?.project_id)}>
+                                  Design Studio{" "}
+                                  <i className="fa-solid fa-pencil"></i>
+                                </a>
 
                                 {/* <div onClick={fetchNodes(elem?.project_id)}>
                                   Design Studio{" "}
@@ -1501,10 +1582,17 @@ const Dashboard = () => {
                                     <i className="fa-solid fa-pencil"></i>
                                   </Link> */}
 
-                                  <Link onClick={fetchNodes(elem?.project_id)}>
+                                  <a
+                                    onClick={() => fetchNodes(elem?.project_id)}
+                                  >
                                     Design Studio{" "}
                                     <i className="fa-solid fa-pencil"></i>
-                                  </Link>
+                                  </a>
+
+                                  {/* <Link onClick={fetchNodes(elem?.project_id)}>
+                                    Design Studio{" "}
+                                    <i className="fa-solid fa-pencil"></i>
+                                  </Link> */}
 
                                   <Link to={`/insights/${elem?.project_id}`}>
                                     Insights <i className="fa-solid fa-eye"></i>
@@ -1530,151 +1618,167 @@ const Dashboard = () => {
             </div>
             {/* <!-- Grid view content end -->
                 <!-- List view content start --> */}
-            <div
-              className={
-                customTabRecentProject === true
-                  ? `tab-pane fade show active`
-                  : `tab-pane fade`
-              }
-              id="nav-profile"
-              role="tabpanel"
-              aria-labelledby="nav-profile-tab"
-            >
-              <div className="nla_view_top_title_and_add_new_block">
-                <div className="row align-items-center">
-                  <div className="col-lg-7">
-                    <p className="">Recently Created & Pinned Projects</p>
-                  </div>
-
-                  <div className="col-lg-5 wrapDiv">
-                    <select
-                      className="form-select sortByPin"
-                      aria-label="Default select example"
-                      // defaultValue={"value"}
-                      onChange={(e) => filterHandler(e.target.value)}
-                    >
-                      <option value="pin">Sort by Pin</option>
-                      <option value="date">Sort by Date</option>
-                    </select>
-                    <div className="nla_add_new_project_btn">
-                      <div onClick={handleShow} style={{ cursor: "pointer" }}>
-                        <p>
-                          <span>
-                            <img src={plusCircle} alt="Create New Project" />
-                          </span>
-                          Create New Project
-                        </p>
+            {customTabRecentProject === true && filterVisible === false ? (
+              <>
+                <div
+                  className={
+                    customTabRecentProject === true
+                      ? `tab-pane fade show active`
+                      : `tab-pane fade`
+                  }
+                  id="nav-profile"
+                  role="tabpanel"
+                  aria-labelledby="nav-profile-tab"
+                >
+                  <div className="nla_view_top_title_and_add_new_block">
+                    <div className="row align-items-center">
+                      <div className="col-lg-7">
+                        <p className="">Recently Created & Pinned Projects</p>
                       </div>
-                      <OverlayTrigger
-                        placement="top"
-                        delay={{ show: 250, hide: 250 }}
-                        overlay={
-                          <Tooltip id="overlay-example">
-                            Create new project
-                          </Tooltip>
-                        }
-                      >
-                        <a href="#">
-                          <img src={feather} alt="" className="alertAligns" />
-                        </a>
-                      </OverlayTrigger>
+
+                      <div className="col-lg-5 wrapDiv">
+                        <select
+                          className="form-select sortByPin"
+                          aria-label="Default select example"
+                          // defaultValue={"value"}
+                          onChange={(e) => filterHandler(e.target.value)}
+                        >
+                          <option value="pin">Sort by Pin</option>
+                          <option value="date">Sort by Date</option>
+                        </select>
+                        <div className="nla_add_new_project_btn">
+                          <div
+                            onClick={handleShow}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <p>
+                              <span>
+                                <img
+                                  src={plusCircle}
+                                  alt="Create New Project"
+                                />
+                              </span>
+                              Create New Project
+                            </p>
+                          </div>
+                          <OverlayTrigger
+                            placement="top"
+                            delay={{ show: 250, hide: 250 }}
+                            overlay={
+                              <Tooltip id="overlay-example">
+                                Create new project
+                              </Tooltip>
+                            }
+                          >
+                            <a href="#">
+                              <img
+                                src={feather}
+                                alt=""
+                                className="alertAligns"
+                              />
+                            </a>
+                          </OverlayTrigger>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              <div className="nla_list_view_wrapper">
-                <div className="nla_list_view_header">
-                  <div className="nla_modal">Projects</div>
-                  <div className="nla_date">Created Date</div>
-                  <div className="nla_action">Actions</div>
-                </div>
-                <div className="nla_list_view_body_content">
-                  <ul>
-                    {projectsOrderByPin !== ""
-                      ? projectsOrderByPin?.map((elem, id) => (
-                          <li
-                            // className="active"
-                            key={id}
-                          >
-                            <div className="nla_modal">
-                              <i
-                                className="fa-solid fa-thumbtack"
-                                style={
-                                  elem.pin_project === 0
-                                    ? { color: "rgba(0, 0, 0, 0.23)" }
-                                    : { color: "#0c0d25" }
-                                }
-                                onClick={() => PinUnPinHandler(elem.project_id)}
-                              ></i>
-                              {elem.project_name}
-                            </div>
-                            <div className="nla_date">
-                              <div>
-                                <p style={{ paddingLeft: "21px" }}>
-                                  {
-                                    moment(elem?.date_created).format(
-                                      "MM-DD-YYYY"
-                                    )
-                                    // new Date(
-                                    //   elem?.date_created
-                                    // ).toLocaleDateString() + ""
-                                  }
-                                  {/* {elem?.date_created?.toLocaleString() + ""} */}
-                                </p>
-                              </div>
-                            </div>
-                            <div className="nla_action">
-                              <div>
-                                Insights{" "}
-                                <Link to={`/insights/${elem?.project_id}`}>
-                                  <img src={featherEye} alt="eye" />
-                                </Link>
-                              </div>
-                              <div>
-                                Design Studio{" "}
-                                <Link to={`/design-studio/${elem?.project_id}`}>
-                                  <img src={openPencil} alt="Pencil" />{" "}
-                                </Link>
-                              </div>
-                              <div>
-                                Share{" "}
-                                <a href="#">
-                                  {" "}
-                                  <img src={share} alt="Share" />{" "}
-                                </a>
-                              </div>
-                              <div>
-                                Edit{" "}
-                                <a
-                                  onClick={() =>
-                                    handleEditProjectModal(elem?.project_id)
-                                  }
-                                >
-                                  {" "}
-                                  <img src={openPencil} alt="Pencil" />{" "}
-                                </a>
-                              </div>
-                              <div>
-                                Duplicate{" "}
-                                <a href="#">
-                                  {/* <i className="fa-solid fa-copy"></i> */}
-                                  <img src={copyIcon} alt="copy Icon" />
-                                </a>
-                              </div>
-                              <div>
-                                Download{" "}
-                                <a href="#">
-                                  {/* <i className="fa-solid fa-download"></i> */}
-                                  <img src={downloadIcon} alt="" />
-                                </a>
-                              </div>
-                            </div>
-                          </li>
-                        ))
-                      : ""}
+                  <div className="nla_list_view_wrapper">
+                    <div className="nla_list_view_header">
+                      <div className="nla_modal">Projects</div>
+                      <div className="nla_date">Created Date</div>
+                      <div className="nla_action">Actions</div>
+                    </div>
+                    <div className="nla_list_view_body_content">
+                      <ul>
+                        {projectsOrderByPin !== ""
+                          ? projectsOrderByPin?.map((elem, id) => (
+                              <li
+                                // className="active"
+                                key={id}
+                              >
+                                <div className="nla_modal">
+                                  <i
+                                    className="fa-solid fa-thumbtack"
+                                    style={
+                                      elem.pin_project === 0
+                                        ? { color: "rgba(0, 0, 0, 0.23)" }
+                                        : { color: "#0c0d25" }
+                                    }
+                                    onClick={() =>
+                                      PinUnPinHandler(elem.project_id)
+                                    }
+                                  ></i>
+                                  {elem.project_name}
+                                </div>
+                                <div className="nla_date">
+                                  <div>
+                                    <p style={{ paddingLeft: "21px" }}>
+                                      {
+                                        moment(elem?.date_created).format(
+                                          "MM-DD-YYYY"
+                                        )
+                                        // new Date(
+                                        //   elem?.date_created
+                                        // ).toLocaleDateString() + ""
+                                      }
+                                      {/* {elem?.date_created?.toLocaleString() + ""} */}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="nla_action">
+                                  <div>
+                                    Insights{" "}
+                                    <Link to={`/insights/${elem?.project_id}`}>
+                                      <img src={featherEye} alt="eye" />
+                                    </Link>
+                                  </div>
+                                  <div>
+                                    Design Studio{" "}
+                                    <Link
+                                      to={`/design-studio/${elem?.project_id}`}
+                                    >
+                                      <img src={openPencil} alt="Pencil" />{" "}
+                                    </Link>
+                                  </div>
+                                  <div>
+                                    Share{" "}
+                                    <a href="#">
+                                      {" "}
+                                      <img src={share} alt="Share" />{" "}
+                                    </a>
+                                  </div>
+                                  <div>
+                                    Edit{" "}
+                                    <a
+                                      onClick={() =>
+                                        handleEditProjectModal(elem?.project_id)
+                                      }
+                                    >
+                                      {" "}
+                                      <img src={openPencil} alt="Pencil" />{" "}
+                                    </a>
+                                  </div>
+                                  <div>
+                                    Duplicate{" "}
+                                    <a href="#">
+                                      {/* <i className="fa-solid fa-copy"></i> */}
+                                      <img src={copyIcon} alt="copy Icon" />
+                                    </a>
+                                  </div>
+                                  <div>
+                                    Download{" "}
+                                    <a href="#">
+                                      {/* <i className="fa-solid fa-download"></i> */}
+                                      <img src={downloadIcon} alt="" />
+                                    </a>
+                                  </div>
+                                </div>
+                              </li>
+                            ))
+                          : ""}
 
-                    {/* <li>
+                        {/* <li>
                       <div className="nla_modal">
                         <i className="fa-solid fa-thumbtack"></i> Covid Demand
                         Forecasting
@@ -1714,10 +1818,193 @@ const Dashboard = () => {
                         </div>
                       </div>
                     </li> */}
-                  </ul>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </>
+            ) : customTabRecentProject === true && filteredData !== "" ? (
+              <>
+                <div
+                  className={
+                    customTabRecentProject === true
+                      ? `tab-pane fade show active`
+                      : "tab-pane fade "
+                  }
+                  id="nav-home"
+                  role="tabpanel"
+                  aria-labelledby="nav-home-tab"
+                >
+                  {
+                    <>
+                      {filteredData !== "" ? (
+                        <>
+                          <div
+                            className="nla_view_top_title_and_add_new_block"
+                            id="searchedResults"
+                          >
+                            <div className="row align-items-center">
+                              <div className="col-lg-5">
+                                <p className="mb-0">
+                                  Searched Results
+                                  <a href="#">
+                                    <img
+                                      src={feather}
+                                      alt=""
+                                      className="alertAligns"
+                                    />
+                                  </a>
+                                </p>
+                              </div>
+                              <div className="col-lg-7 text-end">
+                                <div className={`clearbtn`}>
+                                  <button onClick={unsetSearchData}>
+                                    Clear Search
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            className={`nla_grid_view_wrapper ${columnState}`}
+                          >
+                            {filteredData?.length > 0 ? (
+                              filteredData?.map((elem, id) => (
+                                <div
+                                  className="nla_item_box_col first-nla-itembox"
+                                  data-position="right"
+                                  key={id}
+                                >
+                                  <div className="nla_item_box">
+                                    <div className="nla_pin-icon">
+                                      <i
+                                        className="fa-solid fa-thumbtack"
+                                        style={
+                                          elem.pin_project === 0
+                                            ? { color: "rgba(0, 0, 0, 0.23)" }
+                                            : { color: "#0c0d25" }
+                                        }
+                                        onClick={() =>
+                                          PinUnPinHandler(elem.project_id)
+                                        }
+                                      ></i>
+                                    </div>
+                                    <h3>{elem.project_name}</h3>
+                                    <div className="nla_shared_link_block">
+                                      <OverlayTrigger
+                                        placement="top"
+                                        delay={{ show: 250, hide: 250 }}
+                                        overlay={
+                                          <Tooltip id={`tooltip-top`}>
+                                            Share
+                                          </Tooltip>
+                                        }
+                                      >
+                                        <a>
+                                          <i className="fa-solid fa-share-nodes"></i>
+                                        </a>
+                                      </OverlayTrigger>
+
+                                      <OverlayTrigger
+                                        placement="top"
+                                        delay={{ show: 250, hide: 250 }}
+                                        overlay={
+                                          <Tooltip id={`tooltip-top`}>
+                                            Duplicate
+                                          </Tooltip>
+                                        }
+                                      >
+                                        <a>
+                                          <i className="fa-regular fa-copy"></i>
+                                        </a>
+                                      </OverlayTrigger>
+
+                                      <OverlayTrigger
+                                        placement="top"
+                                        delay={{ show: 250, hide: 250 }}
+                                        overlay={
+                                          <Tooltip id={`tooltip-top`}>
+                                            Download
+                                          </Tooltip>
+                                        }
+                                      >
+                                        <a>
+                                          <i className="fa-solid fa-download"></i>
+                                        </a>
+                                      </OverlayTrigger>
+
+                                      <OverlayTrigger
+                                        placement="top"
+                                        delay={{ show: 250, hide: 250 }}
+                                        overlay={
+                                          <Tooltip id={`tooltip-top`}>
+                                            Edit
+                                          </Tooltip>
+                                        }
+                                      >
+                                        <a
+                                          onClick={() =>
+                                            handleEditProjectModal(
+                                              elem?.project_id
+                                            )
+                                          }
+                                        >
+                                          <i className="fa-solid fa-pen"></i>
+                                        </a>
+                                      </OverlayTrigger>
+                                    </div>
+                                    <div className="nla_additional_links">
+                                      {/* <Link
+                                    to={`/design-studio/${elem?.project_id}`}
+                                  >
+                                    Design Studio{" "}
+                                    <i className="fa-solid fa-pencil"></i>
+                                  </Link> */}
+
+                                      <a
+                                        onClick={() =>
+                                          fetchNodes(elem?.project_id)
+                                        }
+                                      >
+                                        Design Studio{" "}
+                                        <i className="fa-solid fa-pencil"></i>
+                                      </a>
+
+                                      {/* <Link onClick={fetchNodes(elem?.project_id)}>
+                                    Design Studio{" "}
+                                    <i className="fa-solid fa-pencil"></i>
+                                  </Link> */}
+
+                                      <Link
+                                        to={`/insights/${elem?.project_id}`}
+                                      >
+                                        Insights{" "}
+                                        <i className="fa-solid fa-eye"></i>
+                                      </Link>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))
+                            ) : (
+                              <p style={{ paddingLeft: "15px" }}>
+                                No search results found
+                              </p>
+                            )}
+                          </div>
+                        </>
+                      ) : (
+                        <p style={{ paddingLeft: "15px" }}>
+                          No search results found
+                        </p>
+                      )}
+                    </>
+                  }
+                </div>
+              </>
+            ) : (
+              ""
+            )}
+
             {/* <!-- List view content end --> */}
           </div>
         </div>
