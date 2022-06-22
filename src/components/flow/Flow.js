@@ -115,8 +115,6 @@ const Flow = () => {
 
   const [nodesData, setNodesData] = useState({});
 
-  console.log("nodesData from State: ", nodesData);
-
   const [rfInstance, setRfInstance] = useState(null);
   const [show, setShow] = useState(false);
   const myoutput = useRef(null);
@@ -148,8 +146,8 @@ const Flow = () => {
       const flow = JSON.parse(localStorage.getItem("nodesFromDatabase"));
 
       setNodesData(flow);
-      console.log("This is flow from onRestore: ", nodesData);
-      console.log("This is from localstorage: ", flow);
+      // console.log("This is flow from onRestore: ", nodesData);
+      // console.log("This is from localstorage: ", flow);
       // const flow = JSON.parse(localStorage.getItem(flowKey));
       // console.log("flowKey: ", flow.nodes);
       if (flow) {
@@ -190,7 +188,6 @@ const Flow = () => {
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const type = event.dataTransfer.getData("application/reactflow");
       const node_data = event.dataTransfer.getData("node_data");
-      //alert(node_data);
       // check if the dropped element is valid
       if (typeof type === "undefined" || !type) {
         return;
@@ -200,16 +197,115 @@ const Flow = () => {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
-      const newNode = {
-        id: getNodeId(),
-        type: "textUpdater",
-        position,
-        data: { label: `${node_data} ` },
-      };
-      setNodes((nds) => nds.concat(newNode));
+      const getNodeIdCust1 = () => `randomnode_${+new Date()}`;
+      const getNodeIdCust2 = () => `randomnode_${+new Date() + 20}`;
+      const getNodeIdCust3 = () => `randomnode_${+new Date() + 40}`;
+      const custId1 = getNodeIdCust1();
+      const custId2 = getNodeIdCust2();
+      const custId3 = getNodeIdCust3();
+      const customNode = [
+        {
+          width: 150,
+          height: 39,
+          id: custId1,
+          type: "textUpdater",
+          position: {
+            x: event.clientX - reactFlowBounds.left,
+            y: event.clientY - reactFlowBounds.top,
+          },
+          data: {
+            label: "Read File ",
+          },
+          selected: false,
+          positionAbsolute: {
+            x: event.clientX - reactFlowBounds.left,
+            y: event.clientY - reactFlowBounds.top,
+          },
+          dragging: false,
+        },
+        {
+          width: 150,
+          height: 39,
+          id: custId2,
+          type: "textUpdater",
+          position: {
+            x: event.clientX - reactFlowBounds.left,
+            y: event.clientY - reactFlowBounds.top + 100,
+          },
+          data: {
+            label: "Write File ",
+          },
+          selected: false,
+          positionAbsolute: {
+            x: event.clientX - reactFlowBounds.left,
+            y: event.clientY - reactFlowBounds.top + 100,
+          },
+          dragging: false,
+        },
+        {
+          width: 150,
+          height: 39,
+          id: custId3,
+          type: "textUpdater",
+          position: {
+            x: event.clientX - reactFlowBounds.left,
+            y: event.clientY - reactFlowBounds.top + 200,
+          },
+          data: {
+            label: "Price Elasticity ",
+          },
+          selected: true,
+          positionAbsolute: {
+            x: event.clientX - reactFlowBounds.left,
+            y: event.clientY - reactFlowBounds.top + 200,
+          },
+          dragging: false,
+        },
+      ];
+      const customEdge = [
+        {
+          source: custId2,
+          sourceHandle: null,
+          target: custId1,
+          targetHandle: "b",
+          arrowHeadType: "arrowclosed",
+          type: "customedge",
+          id: "reactflow__edge-" + custId2 + "-" + custId1,
+        },
+        {
+          source: custId3,
+          sourceHandle: null,
+          target: custId2,
+          targetHandle: "b",
+          arrowHeadType: "arrowclosed",
+          type: "customedge",
+          id: "reactflow__edge-" + custId3 + "-" + custId2,
+        },
+      ];
+
+      if (node_data === "Price Elasticity") {
+        // setNodes((prevState) => {
+        //   prevState.push(...customNode);
+        //   return [...prevState]; // good
+        // });
+        setNodes((nds) => nds.concat(customNode));
+        // setNodes(customNode);
+        // setEdges(customEdge);
+        setEdges((eds) => eds.concat(customEdge));
+      } else {
+        const newNode = {
+          id: getNodeId(),
+          type: "textUpdater",
+          position,
+          data: { label: `${node_data} ` },
+        };
+        setNodes((nds) => nds.concat(newNode));
+      }
     },
     [rfInstance]
   );
+  console.log(nodes);
+  console.log(edges);
 
   const customEdge = ({
     id,
@@ -313,7 +409,9 @@ const Flow = () => {
   useEffect(() => {
     onSave();
   }, [nodes, edges]);
-
+  const onNodeDragStart = (ev, elem) => {
+    console.log(elem);
+  };
   return (
     <>
       <ReactFlowProvider>
@@ -337,6 +435,7 @@ const Flow = () => {
             style={graphStyles}
             edgeTypes={edgeTypes}
             nodeTypes={nodeTypes}
+            // onDropStart={onNodeDragStart}
             // elements={count}
             // onEdgeUpdateEnd={onEdgeUpdate}
             // onNodeDragStop={onNodesChange1}

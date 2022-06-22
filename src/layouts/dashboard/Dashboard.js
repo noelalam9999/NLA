@@ -808,8 +808,12 @@ const Dashboard = () => {
             <img height="150" src={introImg} class="img-fluid" alt="" />
             <h3 class="tooltip-title-cb">Main Navigation</h3>
             <p>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt.
+              User can navigate to the below set of screens:
+              <br />
+              <b>Home:</b> Dashboard, which has all the projects that have been
+              created/shared. <br /> <b>Design Studio:</b> To build new/alter
+              existing models.
+              <br />
             </p>
             <div class="custom-checkbox">
               <input
@@ -841,8 +845,8 @@ const Dashboard = () => {
           />
           <h3 class="tooltip-title-cb">Model Search</h3>
           <p>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt.
+            User can quickly narrow down to the project using one or more of the
+            filter functions listed below.
           </p>
           <div class="custom-checkbox">
             <input
@@ -878,8 +882,9 @@ const Dashboard = () => {
           />
           <h3 class="tooltip-title-cb">Create New Model</h3>
           <p>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt.
+            To create a project use this button to fill up the project details
+            form. Once the form is filled up, the project tile will be created
+            in the dashboard.
           </p>
           <div class="custom-checkbox">
             <input
