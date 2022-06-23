@@ -52,7 +52,7 @@ const Dashboard = () => {
   const [pinAlertText, setPinAlertText] = useState("");
   const [searchEmptyChecker, setSearchEmptyChecker] = useState(false);
   // Project and Pagination
-  const [projects, setProjects] = useState([]);
+  const [projectsByDate, setProjects] = useState([]);
   const [projectsOrderByPin, setProjectsOrderByPin] = useState([]);
   const [pagination, setPagination] = useState([]);
 
@@ -600,19 +600,21 @@ const Dashboard = () => {
           // config
         );
 
-        console.log("projects data: ", data);
+        console.log("Projects by ID: ", data);
 
         if (data) {
           if (data?.message === "greater" || data?.message === "lesser") {
             // console.log("I am in greater");
             setPageHandler(data?.page);
           } else {
-            setProjects(data.rows);
+            // setProjects(data.rows);
+            setFilteredUnPinData(data.rows);
+            console.log("\n\nThese are the rows of SetProjects: ", data.rows);
             setPagination(data.pagination);
 
-            const filteredPin = data.rows?.filter((val) => {
-              return val.pin_project === 1;
-            });
+            // const filteredPin = data.rows?.filter((val) => {
+            //   return val.pin_project === 1;
+            // });
 
             //Getting Pinned Projects
             if (page <= pinnedProjectsTotalPages) {
@@ -628,13 +630,13 @@ const Dashboard = () => {
               setFilteredPinDataByDate(response.data.rows);
             }
 
-            const filteredUnPin = data.rows?.filter((val) => {
-              return val.pin_project === 0;
-            });
+            // const filteredUnPin = data.rows?.filter((val) => {
+            //   return val.pin_project === 0;
+            // });
 
             // setFilteredPinDataByDate(filteredPin);
-            setFilteredPinData(filteredPin);
-            setFilteredUnPinData(filteredUnPin);
+            // setFilteredPinData(filteredPin);
+            // setFilteredUnPinData(filteredUnPin);
           }
         }
       }
