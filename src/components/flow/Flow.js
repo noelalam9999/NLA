@@ -214,7 +214,7 @@ const Flow = () => {
             y: event.clientY - reactFlowBounds.top,
           },
           data: {
-            label: "Read File ",
+            label: "Read File",
           },
           selected: false,
           positionAbsolute: {
@@ -233,7 +233,7 @@ const Flow = () => {
             y: event.clientY - reactFlowBounds.top + 100,
           },
           data: {
-            label: "Write File ",
+            label: "Price",
           },
           selected: false,
           positionAbsolute: {
@@ -252,7 +252,7 @@ const Flow = () => {
             y: event.clientY - reactFlowBounds.top + 200,
           },
           data: {
-            label: "Price Elasticity ",
+            label: "Write File",
           },
           selected: true,
           positionAbsolute: {
