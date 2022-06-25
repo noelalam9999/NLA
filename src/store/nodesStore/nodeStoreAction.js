@@ -47,7 +47,7 @@ const nodeState = (modelData) => {
         modelData,
         config
       );
-      console.log("This is res from Action: ", data);
+      console.log("This is res from Action after saving node:: ", data);
       // const api = `${process.env.REACT_APP_Base_URL}/accounts/login`;
       // var res = await axios.post(api, userState);
       // const { data } = res;

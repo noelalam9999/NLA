@@ -16,7 +16,7 @@ import { getNativeSelectUtilityClasses } from "@mui/material";
 export default function CreateProject(props) {
   const project_id = props.project_id;
   const project_name_from_designStudio = props.project_name;
-  console.log("addTodo: ", props.addTodo);
+  // console.log("addTodo: ", props.addTodo);
   const [project, setProject] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [load, setLoad] = useState(false);
@@ -178,7 +178,7 @@ export default function CreateProject(props) {
           config,
           upload
         )
-          .then(function (response) {
+          .then(function (data) {
             setProjectName("");
             setType("");
             setClient("");
@@ -207,7 +207,10 @@ export default function CreateProject(props) {
             }
           });
 
+        console.log("Create project response: ", data);
+
         if (data.status === 200) {
+          console.log("Create project response: ", data);
           setShow(false);
         }
       } catch (error) {}

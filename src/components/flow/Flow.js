@@ -392,8 +392,9 @@ const Flow = () => {
     onSave();
   };
   useEffect(() => {
-    // onSave();
+    onSave();
   }, [nodes, edges]);
+
   useEffect(() => {
     // let readFileCounter, writeFileCounter;
     localStorage.setItem("readFileCounter", 1);
