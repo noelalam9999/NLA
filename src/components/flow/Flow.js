@@ -396,12 +396,9 @@ const Flow = () => {
   }, [nodes, edges]);
 
   useEffect(() => {
-    // let readFileCounter, writeFileCounter;
     localStorage.setItem("readFileCounter", 1);
     localStorage.setItem("writeFileCounter", 1);
     for (let i = 0; i < nodes.length; i++) {
-      // readFileCounter = 1;
-
       if (i !== 0) {
         if (nodes[i].data.label.includes("Read File")) {
           let readFileCounter = parseInt(
@@ -413,8 +410,6 @@ const Flow = () => {
       }
     }
     for (let j = 0; j < nodes.length; j++) {
-      // writeFileCounter = 1;
-
       if (j !== 0 && j !== 1 && j !== 2) {
         if (nodes[j].data.label.includes("Write File")) {
           let writeFileCounter = parseInt(
@@ -449,6 +444,7 @@ const Flow = () => {
             style={graphStyles}
             edgeTypes={edgeTypes}
             nodeTypes={nodeTypes}
+            onNodeClick={(e, node) => console.log("Working", node)}
           >
             <div className="save__controls">
               {/* <button onClick={onSave}>save</button> */}
