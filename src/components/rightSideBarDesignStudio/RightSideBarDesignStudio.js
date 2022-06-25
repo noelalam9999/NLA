@@ -315,7 +315,7 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
               </h6>
               <strong>Node and Line Delete</strong>
 
-              <p className="mt-2">MAC: CMD + Delete</p>
+              <p className="mt-2">MAC: Delete</p>
               <p className="">Window: Backspace button</p>
             </div>
           </div>

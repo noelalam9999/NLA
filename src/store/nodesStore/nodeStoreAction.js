@@ -33,8 +33,6 @@ const nodeState = (modelData) => {
     try {
       dispatch(nodeStoreRequest(loading));
 
-      // alert("i am in action", userState);
-
       console.log("modelData: ", modelData);
 
       const config = {

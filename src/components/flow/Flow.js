@@ -222,6 +222,7 @@ const Flow = () => {
             y: event.clientY - reactFlowBounds.top,
           },
           dragging: false,
+          name: "cluster",
         },
         {
           width: 150,
@@ -241,6 +242,7 @@ const Flow = () => {
             y: event.clientY - reactFlowBounds.top + 100,
           },
           dragging: false,
+          name: "cluster",
         },
         {
           width: 150,
@@ -260,6 +262,7 @@ const Flow = () => {
             y: event.clientY - reactFlowBounds.top + 200,
           },
           dragging: false,
+          name: "cluster",
         },
       ];
       const customEdge = [
@@ -284,13 +287,7 @@ const Flow = () => {
       ];
 
       if (node_data === "Price Elasticity") {
-        // setNodes((prevState) => {
-        //   prevState.push(...customNode);
-        //   return [...prevState]; // good
-        // });
         setNodes((nds) => nds.concat(customNode));
-        // setNodes(customNode);
-        // setEdges(customEdge);
         setEdges((eds) => eds.concat(customEdge));
       } else {
         const newNode = {
@@ -304,9 +301,14 @@ const Flow = () => {
     },
     [rfInstance]
   );
-  console.log(nodes);
-  console.log(edges);
-
+  // console.log(nodes);
+  // console.log(edges);
+  useEffect(() => {
+    const ab = document.getElementsByClassName("selectable");
+    for (var i = 0; i < ab.length; i++) {
+      ab[i].classList.remove("selected");
+    }
+  }, []);
   const customEdge = ({
     id,
     source,
@@ -389,39 +391,50 @@ const Flow = () => {
     console.log("working");
     onSave();
   };
-  const nodeDragEvent = (ev, node) => {
-    // setElements((els) =>
-    //   els.map((e) => {
-    //     if (e.id === node.id) {
-    //       let n = {
-    //         ...elements.filter((e) => e.id === node.id)[0],
-    //         position: node.position,
-    //       };
-    //       return n;
-    //     }
-    //     return e;
-    //   })
-    // );
-  };
-  // const undoHandler = () => {
-  //   undo();
-  // };
   useEffect(() => {
-    onSave();
+    // onSave();
   }, [nodes, edges]);
-  const onNodeDragStart = (ev, elem) => {
-    console.log(elem);
-  };
+  useEffect(() => {
+    // let readFileCounter, writeFileCounter;
+    localStorage.setItem("readFileCounter", 1);
+    localStorage.setItem("writeFileCounter", 1);
+    for (let i = 0; i < nodes.length; i++) {
+      // readFileCounter = 1;
+
+      if (i !== 0) {
+        if (nodes[i].data.label.includes("Read File")) {
+          let readFileCounter = parseInt(
+            localStorage.getItem("readFileCounter")
+          );
+          nodes[i].data.label = "Read File (" + readFileCounter + ")";
+          localStorage.setItem("readFileCounter", readFileCounter + 1);
+        }
+      }
+    }
+    for (let j = 0; j < nodes.length; j++) {
+      // writeFileCounter = 1;
+
+      if (j !== 0 && j !== 1 && j !== 2) {
+        if (nodes[j].data.label.includes("Write File")) {
+          let writeFileCounter = parseInt(
+            localStorage.getItem("writeFileCounter")
+          );
+          nodes[j].data.label = "Write File (" + writeFileCounter + ")";
+          localStorage.setItem("writeFileCounter", writeFileCounter + 1);
+        }
+      }
+    }
+  }, [nodes]);
+
   return (
     <>
       <ReactFlowProvider>
         <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-          {/* <button onClick={undoHandler} disabled={!canUndo}>
-            undo
-          </button>
-          <button onClick={() => redo()} disabled={!canRedo}>
-            redo
-          </button> */}
+          {nodes.length === 0 ? (
+            <>
+              <div className="empty">So Empty</div>
+            </>
+          ) : null}
           <ReactFlow
             // nodes={elements}
             nodes={nodes}
@@ -435,36 +448,32 @@ const Flow = () => {
             style={graphStyles}
             edgeTypes={edgeTypes}
             nodeTypes={nodeTypes}
-            // onDropStart={onNodeDragStart}
-            // elements={count}
-            // onEdgeUpdateEnd={onEdgeUpdate}
-            // onNodeDragStop={onNodesChange1}
-            // onNodeMouseEnter={mouseEnterEvent}
-            // onNodeMouseLeave={mouseLeaveEvent}
           >
             <div className="save__controls">
               {/* <button onClick={onSave}>save</button> */}
               {/* <button onClick={onRestore}>restore</button> */}
             </div>
+
             <MiniMap
               nodeStrokeColor={(n) => {
-                if (n.data.label === "Read File ") {
-                  return "#0041d0";
-                } else if (n.data.label === "Write File ") return "green";
-                else if (n.data.label === "Price ") return "#ff0072";
-                else {
-                  return "#000";
-                }
+                // if (n.data.label === "Read File ") {
+                //   return "#0041d0";
+                // } else if (n.data.label === "Write File ") return "green";
+                // else if (n.data.label === "Price ") return "#ff0072";
+                // else {
+                //   return "#000";
+                // }
+                return "rgb(23, 79, 115)";
               }}
               nodeColor={(n) => {
-                if (n.data.label === "Read File") return "green";
+                // if (n.data.label === "Read File") return "green";
                 return "#fff";
               }}
               maskColor="rgb(0,0,0, 0.1)"
               // nodeStrokeColor="#000"
-              draggable={true}
-              zoomable={true}
-              clickable={true}
+              // draggable={true}
+              // zoomable={true}
+              // clickable={true}
             />
             <Background variant="dots" gap={12} size={0.5} />
             <Controls className="flow-controls"></Controls>

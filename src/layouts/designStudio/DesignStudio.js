@@ -212,7 +212,7 @@ const DesignStudio = () => {
     };
     // console.log("project_id: ", project_id);
     if (project_id) {
-      console.log("modelData: ", data);
+      // console.log("modelData: ", data);
       dispatch(allActions.nodeStoreAction.nodeState(data));
       // dispatch(nodeState(project_id));
       setModalSaved(true);
@@ -413,6 +413,22 @@ const DesignStudio = () => {
                       >
                         Save <i className="fa-solid fa-floppy-disk"></i>
                       </button>
+                      <OverlayTrigger
+                        placement="left"
+                        delay={{ show: 250, hide: 250 }}
+                        overlay={
+                          <Tooltip id="overlay-example">
+                            Dolor eligendi natus praesentium voluptatum, nisi
+                            veritatis ut minus, distinctio saepe veniam suscipit
+                            corporis molestiae voluptatibus cupiditate vel.
+                            Laboriosam, repellat officia. Labore?
+                          </Tooltip>
+                        }
+                      >
+                        <a href="#">
+                          <img src={info} alt="" className="alertAligns" />
+                        </a>
+                      </OverlayTrigger>
                     </div>
                   </div>
                 </div>
@@ -718,7 +734,7 @@ const DesignStudio = () => {
         anchorOrigin={{ vertical, horizontal }}
       >
         <Alert severity="success" sx={{ width: "100%" }}>
-          Model Saved successfully!
+          Project Saved successfully!
         </Alert>
       </Snackbar>
     </div>

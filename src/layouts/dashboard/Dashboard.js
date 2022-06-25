@@ -600,8 +600,6 @@ const Dashboard = () => {
           // config
         );
 
-        console.log("Projects by ID: ", data);
-
         if (data) {
           if (data?.message === "greater" || data?.message === "lesser") {
             // console.log("I am in greater");
@@ -609,7 +607,7 @@ const Dashboard = () => {
           } else {
             // setProjects(data.rows);
             setFilteredUnPinData(data.rows);
-            console.log("\n\nThese are the rows of SetProjects: ", data.rows);
+            // console.log("\n\nThese are the rows of SetProjects: ", data.rows);
             setPagination(data.pagination);
 
             // const filteredPin = data.rows?.filter((val) => {
@@ -902,13 +900,12 @@ const Dashboard = () => {
       position: "-10px",
     },
   ];
-  useEffect(() => {
-    // let gg = document.getElementsByClassName("introjs-tooltip");
-    // gg.style.position = "absolute";
-    // gg.setAttribute("id", "gg");
-    let gg = document.getElementsByClassName("eLnbMN");
-    console.log(gg);
-  }, []);
+  // useEffect(() => {
+  //   // let gg = document.getElementsByClassName("introjs-tooltip");
+  //   // gg.style.position = "absolute";
+  //   // gg.setAttribute("id", "gg");
+  //   let gg = document.getElementsByClassName("eLnbMN");
+  // }, []);
   useEffect(() => {
     try {
       if (currentStep === 0) {

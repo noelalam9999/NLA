@@ -4,27 +4,29 @@ import { Tooltip, OverlayTrigger } from "react-bootstrap";
 
 function TextUpdaterNode({ data }) {
   const styleSet = (props) => {
-    if (props.label === "Price ") {
+    if (props.label === "Price " || props.label === "Price") {
       return { border: "1px solid #174f73", fontStyle: "italic" };
-    } else if (props.label === "Read File ") {
+    } else if (props.label.includes("Read File")) {
       return { border: "1px solid #174f73", fontWeight: "bold" };
-    } else if (props.label === "Write File ") {
+    } else if (props.label === "Write File " || props.label === "Write File") {
       return { border: "1px solid #174f73", fontWeight: "normal" };
     } else {
       return { border: "1px solid #174f73" };
     }
   };
   const styleSetClass = (data) => {
-    if (data.label === "Price ") {
+    // console.log(data);
+    if (data.label === "Price " || data.label === "Price") {
       return "text-updater-node xyz price";
-    } else if (data.label === "Read File ") {
+    } else if (data.label === "Read File " || data.label === "Read File") {
       return "text-updater-node xyz readFile";
-    } else if (data.label === "Write File ") {
+    } else if (data.label === "Write File " || data.label === "Write File") {
       return "text-updater-node xyz writeFile";
     } else {
-      return "text-updater-node xyz";
+      return "text-updater-node xyz unique";
     }
   };
+
   // useEffect(() => {
   //   try {
   //     // const edge = document.getElementsByClassName("react-flow__container");

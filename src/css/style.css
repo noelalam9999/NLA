@@ -3292,6 +3292,23 @@ header .theme-title h1 span {
 
 .reactflow-wrapper {
   width: 100%;
+  position: relative;
+}
+.empty {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 500;
+  color: #174f73;
 }
 .wrapDiv {
   display: flex;

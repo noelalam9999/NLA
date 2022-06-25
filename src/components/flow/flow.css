@@ -57,6 +57,10 @@
   background-color: #174f73;
   color: #fff;
 }
+.react-flow__node.selected .unique {
+  background-color: #174f73;
+  color: #fff;
+}
 .back-arrow {
   margin-top: 1%;
   margin-bottom: 0.3%;
