@@ -66,7 +66,10 @@ const DesignStudio = () => {
   const [saveModel, setModalSaved] = useState(false);
 
   const [projectName, setProjectName] = useState("Untitled name");
+  const [projectID, setProjectID] = useState();
   // const [projectNameByID, setProjectNameByID] = useState(project?.project_name);
+
+  console.log("projectID from CreateProject: ", projectID);
 
   const [editIcon, setEditIcon] = useState(false);
   const [editProjectName, setEditProjectName] = useState(true);
@@ -82,6 +85,13 @@ const DesignStudio = () => {
       // setTodos((t) => [...t, "New Todo"]);
     },
     [projectName]
+  );
+
+  const addProjectID = useCallback(
+    (project_id) => {
+      setProjectID(project_id);
+    },
+    [projectID]
   );
 
   // let reload;
@@ -174,7 +184,9 @@ const DesignStudio = () => {
       >
         <CreateProject
           project_name={projectName}
+          // project_id={projectID}
           addTodo={addTodo}
+          addProjectID={addProjectID}
           {...props}
         />
       </Modal>
@@ -198,6 +210,7 @@ const DesignStudio = () => {
 
   const nodeSaveHandler = () => {
     const modelData = JSON.parse(localStorage.getItem("nodesFromDatabase"));
+    localStorage.setItem("nodesData_from_database", JSON.stringify(modelData));
 
     const edges = modelData?.edges;
     const nodes = modelData?.nodes;
@@ -205,13 +218,13 @@ const DesignStudio = () => {
 
     const data = {
       user_id: user_id,
-      project_id: project_id,
+      project_id: project_id ? project_id : projectID,
       edges: edges,
       nodes: nodes,
       viewport: viewport,
     };
     // console.log("project_id: ", project_id);
-    if (project_id) {
+    if (project_id || projectID) {
       // console.log("modelData: ", data);
       dispatch(allActions.nodeStoreAction.nodeState(data));
       // dispatch(nodeState(project_id));

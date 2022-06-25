@@ -585,6 +585,7 @@ const Dashboard = () => {
   useEffect(() => {
     localStorage.removeItem("nodesFromDatabase");
     localStorage.removeItem("nodes_data");
+    localStorage.removeItem("nodesData_from_database");
     // localStorage.setItem("reloadMe", JSON.stringify(1));
     const config = {
       headers: {

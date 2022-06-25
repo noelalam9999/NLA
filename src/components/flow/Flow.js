@@ -143,7 +143,7 @@ const Flow = () => {
   }, [rfInstance]);
   const onRestore = useCallback(() => {
     const restoreFlow = async () => {
-      const flow = JSON.parse(localStorage.getItem("nodesFromDatabase"));
+      const flow = JSON.parse(localStorage.getItem("nodesData_from_database"));
 
       setNodesData(flow);
       // console.log("This is flow from onRestore: ", nodesData);

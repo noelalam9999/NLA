@@ -52,9 +52,12 @@ const getNodesState = (project_id) => {
       };
       // console.log(data);
       if (data === "Empty nodes") {
-        localStorage.removeItem("nodesFromDatabase");
+        localStorage.removeItem("nodesData_from_database");
       } else {
-        localStorage.setItem("nodesFromDatabase", JSON.stringify(nodesData));
+        localStorage.setItem(
+          "nodesData_from_database",
+          JSON.stringify(nodesData)
+        );
       }
       loading = false;
       dispatch(getNodesSuccess(nodesData, loading));

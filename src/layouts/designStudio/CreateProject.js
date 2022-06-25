@@ -17,6 +17,8 @@ export default function CreateProject(props) {
   const project_id = props.project_id;
   const project_name_from_designStudio = props.project_name;
   // console.log("addTodo: ", props.addTodo);
+  // console.log("addProjectID: ", props.addProjectID);
+
   const [project, setProject] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [load, setLoad] = useState(false);
@@ -179,6 +181,7 @@ export default function CreateProject(props) {
           upload
         )
           .then(function (data) {
+            // console.log("Create project response: ", data.data.projectID);
             setProjectName("");
             setType("");
             setClient("");
@@ -194,6 +197,7 @@ export default function CreateProject(props) {
               setProjectCreatedAlert(false);
               props.onHide();
               props.addTodo(projectName);
+              props.addProjectID(data.data.projectID);
             }, 3000);
           })
           .catch(function (data) {
