@@ -394,32 +394,43 @@ const Flow = () => {
   useEffect(() => {
     onSave();
   }, [nodes, edges]);
-
+  let newArray = ["Read File", "Write File", "Price"];
+  newArray.map((e) => localStorage.setItem(e + " Counter", 0));
   useEffect(() => {
-    localStorage.setItem("readFileCounter", 1);
-    localStorage.setItem("writeFileCounter", 1);
-    for (let i = 0; i < nodes.length; i++) {
-      if (i !== 0) {
-        if (nodes[i].data.label.includes("Read File")) {
-          let readFileCounter = parseInt(
-            localStorage.getItem("readFileCounter")
+    // localStorage.setItem("writeFileCounter", 1);
+    for (let k = 0; k < newArray.length; k++) {
+      for (let i = 0; i < nodes.length; i++) {
+        // if (k !== 0 && i !== 0) {
+        if (nodes[i].data.label.includes(newArray[k])) {
+          let counter = parseInt(
+            localStorage.getItem(newArray[k] + " Counter")
           );
-          nodes[i].data.label = "Read File (" + readFileCounter + ")";
-          localStorage.setItem("readFileCounter", readFileCounter + 1);
+          nodes[i].data.label = newArray[k] + " (" + counter + ")";
+          localStorage.setItem(newArray[k] + " Counter", counter + 1);
         }
+        // }
       }
     }
-    for (let j = 0; j < nodes.length; j++) {
-      if (j !== 0 && j !== 1 && j !== 2) {
-        if (nodes[j].data.label.includes("Write File")) {
-          let writeFileCounter = parseInt(
-            localStorage.getItem("writeFileCounter")
-          );
-          nodes[j].data.label = "Write File (" + writeFileCounter + ")";
-          localStorage.setItem("writeFileCounter", writeFileCounter + 1);
-        }
-      }
-    }
+    // console.log(nodes?.data?.label?.indexOf("Read File"));
+    // if(nodes.filter(node=>node.data.label.includes("Read File").length>0){
+    // }
+    // if (nodes.filter((e) => e.data.label === "Read File ").length > 0) {
+    //   console.log("Working");
+    // }
+    // const newArray = nodes.filter(nodes =>
+    //   return nodes.data.label.includes("Read File")
+    // );
+    // for (let j = 0; j < nodes.length; j++) {
+    //   if (j !== 0) {
+    //     if (nodes[j].data.label.includes("Write File")) {
+    //       let writeFileCounter = parseInt(
+    //         localStorage.getItem("writeFileCounter")
+    //       );
+    //       nodes[j].data.label = "Write File (" + writeFileCounter + ")";
+    //       localStorage.setItem("writeFileCounter", writeFileCounter + 1);
+    //     }
+    //   }
+    // }
   }, [nodes]);
 
   return (
@@ -444,7 +455,14 @@ const Flow = () => {
             style={graphStyles}
             edgeTypes={edgeTypes}
             nodeTypes={nodeTypes}
-            onNodeClick={(e, node) => console.log("Working", node)}
+            onNodeClick={(e, node) => {
+              // console.log("Working", node);
+              dispatch(
+                allActions.getNodeClickStateAction.getNodeStateResponse(
+                  node.data.label
+                )
+              );
+            }}
           >
             <div className="save__controls">
               {/* <button onClick={onSave}>save</button> */}

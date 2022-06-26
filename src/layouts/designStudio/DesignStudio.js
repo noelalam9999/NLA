@@ -69,7 +69,7 @@ const DesignStudio = () => {
   const [projectID, setProjectID] = useState();
   // const [projectNameByID, setProjectNameByID] = useState(project?.project_name);
 
-  console.log("projectID from CreateProject: ", projectID);
+  // console.log("projectID from CreateProject: ", projectID);
 
   const [editIcon, setEditIcon] = useState(false);
   const [editProjectName, setEditProjectName] = useState(true);

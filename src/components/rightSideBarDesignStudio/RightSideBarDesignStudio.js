@@ -3,12 +3,20 @@ import "../../css/style.css";
 import { Accordion } from "react-bootstrap";
 import info from "../../assets/images/feather-info.svg";
 import { topics, dataAcess, modeling, cleansing } from "../../resources/nodes";
+import { useDispatch, useSelector } from "react-redux";
+import allActions from "../../store/index";
+
 const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
+  const dispatch = useDispatch();
   const onDragStart = (event, node_type, node_label) => {
     event.dataTransfer.setData("application/reactflow", node_type);
     event.dataTransfer.setData("node_data", node_label);
     event.dataTransfer.effectAllowed = "move";
   };
+  const nodeState = useSelector(
+    (state) => state.getNodeClickStateReducer.settingState
+  );
+
   const [menu, setMenu] = useState("head1");
   //Parameters
   const [modelingParameter, setModelingParameter] = useState("");
@@ -44,6 +52,55 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
   const sideBarHandler = () => {
     sideBar === false ? setSideBar(true) : setSideBar(false);
   };
+  const [nState, setNState] = useState(false);
+  const [pState, setPState] = useState(false);
+  useEffect(() => {
+    if (typeof nodeState === "string") {
+      if (nodeState.includes("Read File")) {
+        setNState(true);
+        setPState(false);
+        setModelingParameter("");
+        setDataAccessParameter("dataHead");
+        setParamState({ fileFormat: ".csv", name: "Read" });
+      }
+      if (nodeState.includes("Write File")) {
+        setNState(true);
+        setPState(false);
+        setModelingParameter("");
+        setDataAccessParameter("dataHead");
+        setParamState({ fileFormat: ".csv", name: "Write" });
+      }
+      if (nodeState.includes("Price")) {
+        setModelingParameter("modelingHead");
+        setDataAccessParameter("");
+        setNState(false);
+        setPState(true);
+        setParamState({
+          name: "Price",
+          pValue: "P-value",
+          test: "Test",
+          train: "Train",
+          validate: "Validate",
+        });
+      }
+    }
+  }, [nodeState]);
+
+  const nodeStateHandler = () => {
+    setNState(false);
+    setPState(false);
+    dispatch(allActions.getNodeClickStateAction.getNodeStateResponse(nState));
+  };
+  useEffect(() => {
+    if (nState) {
+      setMenu("head2");
+    }
+  }, [nState]);
+  useEffect(() => {
+    if (pState) {
+      setMenu("head2");
+    }
+  }, [pState]);
   return (
     <div
       className={
@@ -91,7 +148,7 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
             </li>
           </>
         )}
-        {menu == "head2" && (
+        {menu === "head2" && (
           <>
             <li
               onClick={() => onMenuClick()}
@@ -107,6 +164,7 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
                 role="tab"
                 aria-controls="pills-home"
                 aria-selected="true"
+                onClick={nodeStateHandler}
               >
                 <i className="fa-solid fa-user-gear"></i> <span>Operators</span>
               </button>
@@ -159,34 +217,6 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
                         </a>
                       </div>
                     ))}
-                    {/* <div
-                      onDragStart={(event) =>
-                        onDragStart(event, "input", "Price Elasticity")
-                      }
-                      draggable
-                    >
-                      <button className="btn btn-secondary">
-                        <i className="fa-solid fa-book-open"></i>
-                        Price Elasticity
-                      </button>
-                      <a href="#">
-                        <img src={info} alt="info" className="img-fluid" />
-                      </a>
-                    </div> */}
-                    {/* <div
-                      onDragStart={(event) =>
-                        onDragStart(event, "input", "Demand Forecast")
-                      }
-                      draggable
-                    >
-                      <button className="btn btn-secondary">
-                        <i className="fa-solid fa-pen-nib"></i>
-                        Demand Forcasting
-                      </button>
-                      <a href="#">
-                        <img src={info} alt="info" className="img-fluid" />
-                      </a>
-                    </div> */}
                   </div>
                 </Accordion.Body>
               </Accordion.Item>
@@ -253,20 +283,6 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
                         </a>
                       </div>
                     ))}
-                    {/* <div
-                      onDragStart={(event) =>
-                        onDragStart(event, "input", "Linear Regression")
-                      }
-                      draggable
-                    >
-                      <button className="btn btn-secondary">
-                        <i className="fa-solid fa-book-open"></i>
-                        Linear Regression
-                      </button>
-                      <a href="#">
-                        <img src={info} alt="info" className="img-fluid" />
-                      </a>
-                    </div> */}
                   </div>
                 </Accordion.Body>
               </Accordion.Item>
@@ -291,20 +307,6 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
                         </a>
                       </div>
                     ))}
-                    {/* <div
-                      onDragStart={(event) =>
-                        onDragStart(event, "input", "Cleansing")
-                      }
-                      draggable
-                    >
-                      <button className="btn btn-secondary">
-                        <i className="fa-solid fa-book-open"></i>
-                        Normalize
-                      </button>{" "}
-                      <a href="#">
-                        <img src={info} alt="info" className="img-fluid" />
-                      </a>
-                    </div> */}
                   </div>
                 </Accordion.Body>
               </Accordion.Item>
@@ -396,10 +398,9 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
             </div>
           </>
         )} */}
-
-        {menu == "head2" && (
+        {menu === "head2" && (
           <>
-            {dataAccessParameter == "dataHead" ? (
+            {dataAccessParameter === "dataHead" || nState === true ? (
               <>
                 <div
                   className="tab-pane show active"
@@ -441,7 +442,7 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
                   </div>
                 </div>
               </>
-            ) : modelingParameter === "modelingHead" ? (
+            ) : modelingParameter === "modelingHead" || pState === true ? (
               <>
                 <div
                   className="tab-pane show active"
