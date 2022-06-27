@@ -2136,7 +2136,7 @@ header .theme-title h1 span {
   width: 300px;
   height: calc(100vh - 66px);
   background-color: #ffffff;
-  z-index: 10;
+  z-index: 4;
   -webkit-transition: all ease-in-out 0.3s;
   transition: all ease-in-out 0.3s;
 }
@@ -2453,7 +2453,7 @@ header .theme-title h1 span {
   background-color: #f4f4f4;
   width: 100%;
   /* height: 100%; */
-  height: 143px;
+  height: 110px;
   max-width: calc(100vw - 300px);
   /* min-height: calc(60vh - 184px); */
   padding: 30px 0px 0 123px;

@@ -240,7 +240,7 @@
   height: 100%;
 }
 .react-flow {
-  height: calc(100vh - 219px) !important;
+  height: calc(100vh - 290px) !important;
 }
 .react-flow__controls {
   z-index: 21 !important;
