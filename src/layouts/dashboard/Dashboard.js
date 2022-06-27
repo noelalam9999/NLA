@@ -993,7 +993,7 @@ const Dashboard = () => {
       dispatch(allActions.getNodesAction.getNodesState(project__id));
       setTimeout(() => {
         navigate(`/design-studio/${project__id}`);
-      }, 1200);
+      }, 1300);
     }
   };
 
