@@ -5,6 +5,9 @@ import info from "../../assets/images/feather-info.svg";
 import { topics, dataAcess, modeling, cleansing } from "../../resources/nodes";
 import { useDispatch, useSelector } from "react-redux";
 import allActions from "../../store/index";
+import Api from "../../services/Api";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 
 const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
   const dispatch = useDispatch();
@@ -23,6 +26,17 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
   const [dataAccessParameter, setDataAccessParameter] = useState("");
   const [tabState, setTabState] = useState("false");
   const [paramState, setParamState] = useState({});
+
+  //File
+  const [uploadProjectFile, setUploadFile] = useState("");
+
+  const [fileUploaded, setFileUploaded] = useState(false);
+  const [fileUploadedMessage, setFileUploadedMessage] = useState("");
+
+  const [vertical, setVertical] = useState("top");
+  const [horizontal, setHorizontal] = useState("center");
+  // console.log("file: ", uploadProjectFile);
+
   function onMenuClick() {
     if (menu === "head1") {
       setMenu("head2");
@@ -101,6 +115,60 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
       setMenu("head2");
     }
   }, [pState]);
+
+  // -------------------------------------------------------
+
+  //File handler
+  const uploadFileHandler = async (e) => {
+    setUploadFile(e.target.files);
+    // console.log("i am clicked inside", uploadProjectFile[0]);
+
+    if (uploadProjectFile !== "") {
+      const formData = new FormData();
+      formData.append("projectFile", uploadProjectFile[0]);
+
+      let { data } = await Api("POST", "api/upload/project/file", formData);
+
+      if (data) {
+        alert(data.message);
+        console.log("\nThis is the data from API: ", data);
+        // setFileUploaded(true);
+        // setFileUploadedMessage(data.message);
+        // setTimeout(() => {
+        //   setFileUploaded(false);
+        // }, 3000);
+      }
+    } else {
+      alert("Please select a file");
+    }
+  };
+
+  //File handler
+  // const fileUploader = async () => {
+  //   const config = {
+  //     headers: { "content-type": "multipart/form-data" },
+  //   };
+
+  //   const formData = new FormData();
+  //   formData.append("projectFile", uploadProjectFile[0]);
+
+  //   let { data } = await Api(
+  //     "POST",
+  //     "api/upload/project/file",
+  //     formData,
+  //     config
+  //   );
+
+  //   console.log("Data: ", data);
+
+  //   if (data) {
+  //     console.log("\nThis is the data from API: ", data);
+  //   }
+  // };
+
+  // console.log("i am clicked outside", uploadProjectFile[0]);
+
+  // -------------------------------------------------------
   return (
     <div
       className={
@@ -426,16 +494,18 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
                       </>
                     ) : null}
 
-                    <label htmlFor="send Mail">
+                    <label htmlFor="file">
                       {paramState.name === "Read" ? "UploadFile" : "Write File"}
                     </label>
                     <div className="nla-select-box-with-lbl">
                       <input
                         type="file"
                         className="form-control"
-                        id="sendMail"
+                        id="file"
+                        // onClick={fileUploadHandler}
+                        onChange={uploadFileHandler}
                       />
-                      <label htmlFor="sendMail">
+                      <label htmlFor="file">
                         <i className="fa-solid fa-paperclip"></i>
                       </label>
                     </div>
@@ -504,6 +574,16 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
           </>
         )}
       </div>
+      <Snackbar
+        open={fileUploaded}
+        autoHideDuration={3000}
+        key={vertical + horizontal}
+        anchorOrigin={{ vertical, horizontal }}
+      >
+        <Alert severity="success" sx={{ width: "100%" }}>
+          {fileUploadedMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

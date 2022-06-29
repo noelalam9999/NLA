@@ -2450,7 +2450,7 @@ header .theme-title h1 span {
 }
 
 .design-studio-additional-block {
-  background-color: #f4f4f4;
+  background-color: transparent;
   width: 100%;
   /* height: 100%; */
   height: 110px;
