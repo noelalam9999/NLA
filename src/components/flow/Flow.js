@@ -400,12 +400,15 @@ const Flow = () => {
     // localStorage.setItem("writeFileCounter", 1);
     for (let k = 0; k < newArray.length; k++) {
       for (let i = 0; i < nodes.length; i++) {
-        // if (k !== 0 && i !== 0) {
+        // if (k !== 0) {
+        // console.log(nodes[i].data.label.includes("(0)"));
         if (nodes[i].data.label.includes(newArray[k])) {
           let counter = parseInt(
             localStorage.getItem(newArray[k] + " Counter")
           );
-          nodes[i].data.label = newArray[k] + " (" + counter + ")";
+          if (counter !== 0) {
+            nodes[i].data.label = newArray[k] + " (" + counter + ")";
+          }
           localStorage.setItem(newArray[k] + " Counter", counter + 1);
         }
         // }
