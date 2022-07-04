@@ -47,7 +47,7 @@ const RightSideBarDesignStudio = ({
   const [paramState, setParamState] = useState({});
 
   //File
-  const [uploadProjectFile, setUploadFile] = useState("");
+  const [uploadProjectFile, setUploadFile] = useState(null);
 
   const [fileUploaded, setFileUploaded] = useState(false);
   const [fileUploadedMessage, setFileUploadedMessage] = useState("");
@@ -142,49 +142,60 @@ const RightSideBarDesignStudio = ({
     // setUploadFile(e.target.files);
     console.log("i am clicked inside", uploadProjectFile[0]);
     // console.log("i am clicked inside:::::", uploadProjectFile[0]);
+    let newFileName;
+    if (project_id) {
+      console.log("TEst 1 ");
 
-    const newFileName =
-      uploadProjectFile[0].name.slice(0, -4) +
-      "_" +
-      user_id +
-      "_" +
-      project_id +
-      ".csv";
-    console.log("Sliced File name: ", newFileName);
+      newFileName =
+        uploadProjectFile[0].name.slice(0, -4) +
+        "_" +
+        user_id +
+        "_" +
+        project_id +
+        ".csv";
 
-    if (uploadProjectFile[0].type !== "text/csv") {
-      alert("Please upload .csv file");
-    } else {
-      if (uploadProjectFile !== "") {
-        const formData = new FormData();
-        formData.append("user_id", user_id);
-        formData.append("project_id", project_id);
-        formData.append("file_name", newFileName);
-        formData.append("projectFile", uploadProjectFile[0]);
-        let { data } = await Api("POST", "api/upload/project/file", formData);
-        if (data) {
-          onFileSaved();
-          setTimeout(() => {
-            setFileSavedFalse();
-          }, 3000);
-          // alert(data.message);
-          console.log("\nThis is the data from API: ", data);
-          // setFileUploaded(true);
-          // setFileUploadedMessage(data.message);
-          // setTimeout(() => {
-          //   setFileUploaded(false);
-          // }, 3000);
-        }
+      console.log("Sliced File name: ", newFileName);
+
+      if (uploadProjectFile[0].type !== "text/csv") {
+        alert("Please upload .csv file");
       } else {
-        alert("Please select a file");
+        if (uploadProjectFile !== null) {
+          const formData = new FormData();
+          formData.append("user_id", user_id);
+          formData.append("project_id", project_id);
+          formData.append("file_name", newFileName);
+          formData.append("projectFile", uploadProjectFile[0]);
+          let { data } = await Api("POST", "api/upload/project/file", formData);
+          if (data) {
+            onFileSaved();
+            setTimeout(() => {
+              setFileSavedFalse();
+            }, 3000);
+            // alert(data.message);
+            console.log("\nThis is the data from API: ", data);
+            // setFileUploaded(true);
+            // setFileUploadedMessage(data.message);
+            // setTimeout(() => {
+            //   setFileUploaded(false);
+            // }, 3000);
+          }
+        } else {
+          alert("Please select a file");
+          setUploadFile(null);
+        }
       }
+    } else {
+      alert("Please create project first");
+      setUploadFile(null);
     }
-
-    setUploadFile("");
+    setUploadFile(null);
   };
 
   useEffect(() => {
+    // console.log("I am in upload file handler");
+    // if (project_id) {
     uploadFileHandler();
+    // }
   }, [uploadProjectFile]);
 
   //File handler
