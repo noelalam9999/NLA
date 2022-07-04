@@ -8,9 +8,28 @@ import allActions from "../../store/index";
 import Api from "../../services/Api";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
+import { useParams } from "react-router-dom";
 
-const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
+const RightSideBarDesignStudio = ({
+  sideBar,
+  setSideBar,
+  onFileSaved,
+  setFileSavedFalse,
+}) => {
   const dispatch = useDispatch();
+  // const project_id = projectID;
+
+  // console.log("project_id from params: ", project_id);
+
+  //Project ID and User ID for Saving file
+  const authData = JSON.parse(localStorage.getItem("auth"));
+
+  const project_id = useParams().id;
+  const user_id = authData?.user_id;
+  // console.log("user_id from local: ", user_id);
+
+  // -----------
+
   const onDragStart = (event, node_type, node_label) => {
     event.dataTransfer.setData("application/reactflow", node_type);
     event.dataTransfer.setData("node_data", node_label);
@@ -119,29 +138,54 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
   // -------------------------------------------------------
 
   //File handler
-  const uploadFileHandler = async (e) => {
-    setUploadFile(e.target.files);
-    // console.log("i am clicked inside", uploadProjectFile[0]);
+  const uploadFileHandler = async () => {
+    // setUploadFile(e.target.files);
+    console.log("i am clicked inside", uploadProjectFile[0]);
+    // console.log("i am clicked inside:::::", uploadProjectFile[0]);
 
-    if (uploadProjectFile !== "") {
-      const formData = new FormData();
-      formData.append("projectFile", uploadProjectFile[0]);
+    const newFileName =
+      uploadProjectFile[0].name.slice(0, -4) +
+      "_" +
+      user_id +
+      "_" +
+      project_id +
+      ".csv";
+    console.log("Sliced File name: ", newFileName);
 
-      let { data } = await Api("POST", "api/upload/project/file", formData);
-
-      if (data) {
-        alert(data.message);
-        console.log("\nThis is the data from API: ", data);
-        // setFileUploaded(true);
-        // setFileUploadedMessage(data.message);
-        // setTimeout(() => {
-        //   setFileUploaded(false);
-        // }, 3000);
-      }
+    if (uploadProjectFile[0].type !== "text/csv") {
+      alert("Please upload .csv file");
     } else {
-      alert("Please select a file");
+      if (uploadProjectFile !== "") {
+        const formData = new FormData();
+        formData.append("user_id", user_id);
+        formData.append("project_id", project_id);
+        formData.append("file_name", newFileName);
+        formData.append("projectFile", uploadProjectFile[0]);
+        let { data } = await Api("POST", "api/upload/project/file", formData);
+        if (data) {
+          onFileSaved();
+          setTimeout(() => {
+            setFileSavedFalse();
+          }, 3000);
+          // alert(data.message);
+          console.log("\nThis is the data from API: ", data);
+          // setFileUploaded(true);
+          // setFileUploadedMessage(data.message);
+          // setTimeout(() => {
+          //   setFileUploaded(false);
+          // }, 3000);
+        }
+      } else {
+        alert("Please select a file");
+      }
     }
+
+    setUploadFile("");
   };
+
+  useEffect(() => {
+    uploadFileHandler();
+  }, [uploadProjectFile]);
 
   //File handler
   // const fileUploader = async () => {
@@ -500,10 +544,13 @@ const RightSideBarDesignStudio = ({ sideBar, setSideBar }) => {
                     <div className="nla-select-box-with-lbl">
                       <input
                         type="file"
-                        className="form-control"
                         id="file"
+                        className="form-control"
+                        accept=".csv"
                         // onClick={fileUploadHandler}
-                        onChange={uploadFileHandler}
+                        onChange={(e) => setUploadFile(e.target.files)}
+
+                        // onChange={uploadFileHandler}
                       />
                       <label htmlFor="file">
                         <i className="fa-solid fa-paperclip"></i>

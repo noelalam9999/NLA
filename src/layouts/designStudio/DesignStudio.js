@@ -65,6 +65,9 @@ const DesignStudio = () => {
   const [horizontal, setHorizontal] = useState("center");
   const [saveModel, setModalSaved] = useState(false);
 
+  //Saving file state
+  const [saveFile, setFileSaved] = useState(false);
+
   const [projectName, setProjectName] = useState("Untitled name");
   const [projectID, setProjectID] = useState();
   // const [projectNameByID, setProjectNameByID] = useState(project?.project_name);
@@ -93,6 +96,10 @@ const DesignStudio = () => {
     },
     [projectID]
   );
+
+  // const fileSaveHandler = useCallback(() => {
+  //   setFileSaved(true);
+  // }, [saveFile]);
 
   // let reload;
   // Main UseEffect
@@ -449,7 +456,12 @@ const DesignStudio = () => {
             </div>
           </div>
         </div>
-        <RightSideBarDesignStudio sideBar={sideBar} setSideBar={setSideBar} />
+        <RightSideBarDesignStudio
+          sideBar={sideBar}
+          setSideBar={setSideBar}
+          onFileSaved={() => setFileSaved(true)}
+          setFileSavedFalse={() => setFileSaved(false)}
+        />
         <div className={sideBar === false ? "flow" : "flowActive"}>
           <Flow />
         </div>
@@ -748,6 +760,17 @@ const DesignStudio = () => {
       >
         <Alert severity="success" sx={{ width: "100%" }}>
           Project Saved successfully!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={saveFile}
+        autoHideDuration={3000}
+        key={vertical + horizontal}
+        anchorOrigin={{ vertical, horizontal }}
+      >
+        <Alert severity="success" sx={{ width: "100%" }}>
+          File uploaded Successfully
         </Alert>
       </Snackbar>
     </div>
