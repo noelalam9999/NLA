@@ -230,16 +230,16 @@ const Flow = () => {
           id: custId2,
           type: "textUpdater",
           position: {
-            x: event.clientX - reactFlowBounds.left,
-            y: event.clientY - reactFlowBounds.top + 100,
+            x: event.clientX - reactFlowBounds.left + 200,
+            y: event.clientY - reactFlowBounds.top,
           },
           data: {
             label: "Price",
           },
           selected: false,
           positionAbsolute: {
-            x: event.clientX - reactFlowBounds.left,
-            y: event.clientY - reactFlowBounds.top + 100,
+            x: event.clientX - reactFlowBounds.left + 200,
+            y: event.clientY - reactFlowBounds.top,
           },
           dragging: false,
           name: "cluster",
@@ -250,16 +250,16 @@ const Flow = () => {
           id: custId3,
           type: "textUpdater",
           position: {
-            x: event.clientX - reactFlowBounds.left,
-            y: event.clientY - reactFlowBounds.top + 200,
+            x: event.clientX - reactFlowBounds.left + 400,
+            y: event.clientY - reactFlowBounds.top,
           },
           data: {
             label: "Write File",
           },
           selected: true,
           positionAbsolute: {
-            x: event.clientX - reactFlowBounds.left,
-            y: event.clientY - reactFlowBounds.top + 200,
+            x: event.clientX - reactFlowBounds.left + 400,
+            y: event.clientY - reactFlowBounds.top,
           },
           dragging: false,
           name: "cluster",
