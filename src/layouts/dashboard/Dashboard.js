@@ -317,8 +317,8 @@ const Dashboard = () => {
   // <--------------------date Range Picker-------------------------->
   const [selectedDate, setDate] = useState(new Date().toLocaleString() + "");
   const [value, setValue] = React.useState();
-  const [start_date, setStartDate] = useState();
-  const [end_date, setEndDate] = useState();
+  const [start_date, setStartDate] = useState("");
+  const [end_date, setEndDate] = useState("");
   const handleChange = (value) => {
     setValue(value);
     setStartDate(value ? value[0].toISOString() : "");
@@ -335,19 +335,51 @@ const Dashboard = () => {
     const apiData = {
       project_name,
       project_date,
+      start_date,
+      end_date,
       user_id,
+      author_name: searchByAuthor,
     };
 
     if (customTabPinnedProject === true) {
-      console.log("I am in tab 1");
-      if (project_name && project_date) {
-        const res = await Api("POST", "api/project/search", apiData, config);
+      if (
+        project_name !== "" &&
+        start_date !== "" &&
+        end_date !== "" &&
+        searchByAuthor === ""
+      ) {
+        console.log("I am in 111");
 
-        if (res.status === 200 && customTabPinnedProject === false) {
-          setFilteredData(res.data);
-          setFilterVisible(true);
+        const res = await Api(
+          "POST",
+          `api/project/search/?page=${searchResultPage}&limit=${limit}`,
+          apiData,
+          config
+        );
+
+        if (
+          res?.data?.message === "greater" ||
+          res?.data?.message === "lesser"
+        ) {
+          searchedPageHandler(res?.data?.page);
+        } else {
+          if (res.status === 200 && customTabPinnedProject === true) {
+            setFilteredData(res.data.rows);
+            setSearchResultpagination(res.data.pagination);
+            setFilterVisible(true);
+          }
         }
-      } else if (project_name) {
+        // if (res.status === 200 && customTabPinnedProject === false) {
+        //   setFilteredData(res.data);
+        //   setFilterVisible(true);
+        // }
+      } else if (
+        project_name !== "" &&
+        start_date === "" &&
+        end_date === "" &&
+        searchByAuthor === ""
+      ) {
+        console.log("project_name");
         const res = await Api(
           "POST",
           `api/project/name/?page=${searchResultPage}&limit=${limit}`,
@@ -355,7 +387,7 @@ const Dashboard = () => {
           config
         );
 
-        console.log("res: ", res.data);
+        // console.log("res: ", res.data);
 
         if (
           res?.data?.message === "greater" ||
@@ -372,37 +404,91 @@ const Dashboard = () => {
 
         // setFilteredData(res.data.rows);
         // setSearchResultpagination(res.data.pagination);
-      } else if (start_date && end_date) {
-        console.log("start_date", start_date);
-        console.log(end_date);
+      } else if (start_date && end_date && !project_name && !searchByAuthor) {
+        console.log("I am in 3");
+
         const res = await Api(
           "POST",
-          "api/project/date",
+          `api/project/date/?page=${searchResultPage}&limit=${limit}`,
           { start_date, end_date, user_id },
           config
         );
 
-        if (res.status === 200 && customTabPinnedProject === true) {
-          setFilteredData(res.data);
-          setFilterVisible(true);
-          console.log(res);
+        if (
+          res?.data?.message === "greater" ||
+          res?.data?.message === "lesser"
+        ) {
+          searchedPageHandler(res?.data?.page);
+        } else {
+          if (res.status === 200 && customTabPinnedProject === true) {
+            setFilteredData(res.data.rows);
+            setSearchResultpagination(res.data.pagination);
+            setFilterVisible(true);
+          }
         }
-      } else if (searchByAuthor) {
-        console.log("searchByAuthor", searchByAuthor);
+      } else if (searchByAuthor && !start_date && !end_date && !project_name) {
+        // alert("I am in searchByAuthor");
+
+        // console.log("searchByAuthor", searchByAuthor);
         if (customTabPinnedProject === true) {
           setFilteredData(1);
           setFilterVisible(true);
         }
+      } else if (searchByAuthor && project_name && start_date && end_date) {
+        console.log("I am in ALL");
+        const res = await Api(
+          "POST",
+          `api/project/search/by/author/project/date/?page=${searchResultPage}&limit=${limit}`,
+          apiData,
+          config
+        );
+
+        if (
+          res?.data?.message === "greater" ||
+          res?.data?.message === "lesser"
+        ) {
+          searchedPageHandler(res?.data?.page);
+        } else {
+          if (res.status === 200 && customTabPinnedProject === true) {
+            setFilteredData(res.data.rows);
+            setSearchResultpagination(res.data.pagination);
+            setFilterVisible(true);
+          }
+        }
+      } else if (searchByAuthor && !project_name && start_date && end_date) {
+        console.log("I am in author date");
+        const res = await Api(
+          "POST",
+          `api/project/search/by/author/date/?page=${searchResultPage}&limit=${limit}`,
+          apiData,
+          config
+        );
+
+        if (
+          res?.data?.message === "greater" ||
+          res?.data?.message === "lesser"
+        ) {
+          searchedPageHandler(res?.data?.page);
+        } else {
+          if (res.status === 200 && customTabPinnedProject === true) {
+            setFilteredData(res.data.rows);
+            setSearchResultpagination(res.data.pagination);
+            setFilterVisible(true);
+          }
+        }
       } else if (project_name === "" && project_date === "") {
+        // alert("I am in Fill al fields");
+
         setSearchEmptyChecker(true);
         setTimeout(() => {
           setSearchEmptyChecker(false);
         }, 3000);
       } else {
+        // alert("Invalid");
         console.log("Invalid");
       }
     } else if (customTabRecentProject === true) {
-      console.log("Hey i am in list viewwwwwwwww");
+      // console.log("Hey i am in list viewwwwwwwww");
 
       if (project_name && project_date) {
         const res = await Api("POST", "api/project/search", apiData, config);
@@ -466,6 +552,11 @@ const Dashboard = () => {
         console.log("Invalid");
       }
     }
+
+    // setSearchByAuthor("");
+    // setSearchByProjectName("");
+    // setEndDate("");
+    // setStartDate("");
   };
 
   //Pin or Unpin Project
