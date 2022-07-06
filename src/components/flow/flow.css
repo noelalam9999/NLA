@@ -251,3 +251,17 @@
 .react-flow__edge-path {
   cursor: pointer;
 }
+/* Targets */
+.react-flow__handle-top {
+  background-color: red !important;
+}
+.react-flow__handle-left {
+  background-color: red !important;
+}
+/* Source */
+.react-flow__handle-right {
+  background-color: green !important;
+}
+.react-flow__handle-bottom {
+  background-color: green !important;
+}

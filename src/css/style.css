@@ -3284,10 +3284,14 @@ header .theme-title h1 span {
 .flow {
   margin-left: 84px;
   width: calc(100% - 380px);
+  position: relative;
+  z-index: 1;
 }
 .flowActive {
-  width: calc(100% - 52px);
+  width: calc(100% - 140px);
   margin-left: 84px;
+  position: relative;
+  z-index: 1;
 }
 
 .reactflow-wrapper {

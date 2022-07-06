@@ -233,7 +233,9 @@ const RightSideBarDesignStudio = ({
       }
       data-position="right"
     >
-      <span className="nla-toggle-line" onClick={sideBarHandler}></span>
+      <div style={{ zIndex: "1000000000000000000" }}>
+        <span className="nla-toggle-line" onClick={sideBarHandler}></span>
+      </div>
       <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
         {menu === "head1" && (
           <>
