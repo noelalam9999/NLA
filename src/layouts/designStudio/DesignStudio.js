@@ -241,7 +241,20 @@ const DesignStudio = () => {
       }, 3000);
     }
   };
-
+  const [val, setVal] = useState(0);
+  const animateProgressBar = () => {
+    const intervalId = setInterval(() => {
+      setVal((prev) => {
+        if (prev >= 100) {
+          clearInterval(intervalId);
+          return 100;
+        } else {
+          return prev + 5;
+        }
+      });
+    }, 1000);
+    return () => clearInterval(intervalId);
+  };
   return (
     <div>
       <Header />
@@ -327,7 +340,10 @@ const DesignStudio = () => {
                     <a
                       href="#"
                       className="btn btn-primary"
-                      onClick={handleShow}
+                      onClick={() => {
+                        handleShow();
+                        animateProgressBar();
+                      }}
                     >
                       Run <i className="fa-solid fa-play"></i>
                     </a>
@@ -716,8 +732,8 @@ const DesignStudio = () => {
             </label>
 
             <ProgressBar
-              now={38}
-              label={"Loading 38%"}
+              now={val}
+              label={`Loading ${val}%`}
               className="Run-Progress-Bar"
             />
           </div>
