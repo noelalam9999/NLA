@@ -3319,3 +3319,9 @@ header .theme-title h1 span {
   justify-content: flex-end;
   gap: 10px;
 }
+
+.nla_brand_logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

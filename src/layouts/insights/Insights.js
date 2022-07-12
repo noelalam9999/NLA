@@ -18,13 +18,31 @@ import { useClickAway } from "react-use";
 // import ChartjsBar from "../../components/ChartjsBar";
 import { Link, useParams } from "react-router-dom";
 import Api from "../../services/Api";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 
 const Insights = () => {
   const project_id = useParams().id;
 
   const [project, setProject] = useState([]);
+  const [notes, setNotes] = useState([]);
 
   // console.log("ID: ", id);
+  const [vertical, setVertical] = useState("top");
+  const [horizontal, setHorizontal] = useState("center");
+
+  const [saveNote, setNoteSaved] = useState(false);
+  const [noteAlert, setNoteAlert] = useState("Note Added");
+
+  //Notes state
+  const [note1, setNote1] = useState("");
+  const [note2, setNote2] = useState("");
+  const [note3, setNote3] = useState("");
+
+  // Load
+  const [load, setLoad] = useState(false);
+
+  // console.log("Note 1: ", note1);
 
   const [valuesDropDown, setValueDropDown] = useState(false);
   const [valuesDropDown1, setValueDropDown1] = useState(false);
@@ -33,7 +51,114 @@ const Insights = () => {
   const [addItemDropDown, setAddItemDropDown] = useState(false);
   const typeNoteExpHandler = () => {
     typeNotesExp === false ? setTypeNotesExp(true) : setTypeNotesExp(false);
+    console.log("Note 1: ", note1);
+    // console.log("Note 2: ", note2);
+    // console.log("Note 3: ", note3);
   };
+
+  //Note save Handler
+  const noteSaveHandler = async () => {
+    // console.log("Note 1: ", note1);
+    if (note1 === "" && note2 === "" && note3 === "") {
+      alert("Please enter a note");
+    } else {
+      console.log("Note 1: ", note1);
+
+      if (note1 === "" && note2 !== "" && note3 !== "") {
+        const projectNotes = {
+          note2: note2,
+          note3: note3,
+        };
+        addNoteAPIcall(projectNotes);
+      } else if (note1 !== "" && note2 === "" && note3 !== "") {
+        const projectNotes = {
+          note1: note1,
+          note3: note3,
+        };
+        addNoteAPIcall(projectNotes);
+      } else if (note1 !== "" && note2 !== "" && note3 === "") {
+        const projectNotes = {
+          note1: note1,
+          note2: note2,
+        };
+        addNoteAPIcall(projectNotes);
+      } else if (note1 === "" && note2 === "" && note3 !== "") {
+        const projectNotes = {
+          note3: note3,
+        };
+        addNoteAPIcall(projectNotes);
+      } else if (note1 === "" && note2 !== "" && note3 === "") {
+        const projectNotes = {
+          note2: note2,
+        };
+        addNoteAPIcall(projectNotes);
+      } else if (note1 !== "" && note2 === "" && note3 === "") {
+        const projectNotes = {
+          note1: note1,
+        };
+        console.log("Hyyy");
+        addNoteAPIcall(projectNotes);
+      } else {
+        const projectNotes = {
+          note1: note1,
+          note2: note2,
+          note3: note3,
+        };
+        addNoteAPIcall(projectNotes);
+      }
+    }
+  };
+
+  const addNoteAPIcall = async (project_notes) => {
+    setLoad(false);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const apiData = {
+      project_id,
+      project_notes,
+    };
+
+    const { data } = await Api(
+      "POST",
+      `api/insights/add/notes`,
+      apiData,
+      config
+    );
+
+    if (data) {
+      setNoteAlert(data?.message);
+      console.log("Data from ADD Notes API: ", data);
+      setNoteSaved(true);
+      setTimeout(() => {
+        setNoteSaved(false);
+      }, 3000);
+      setLoad(true);
+    }
+  };
+
+  // UseEffect for Fetching notes:
+
+  useEffect(() => {
+    async function fetchNotes() {
+      const { data } = await Api("GET", `api/insights/get/notes/${project_id}`);
+      const notesData = JSON.parse(data[0].notes);
+      setNotes(notesData);
+      // console.log("Project data: ", notesData);
+    }
+    fetchNotes();
+    setLoad(false);
+    setNote1("");
+    setNote2("");
+    setNote3("");
+  }, [load]);
+
+  // console.log("setNotes: ", notes);
+
+  // --------------------------------------
   const addItemDropDownHandler = () => {
     addItemDropDown === false
       ? setAddItemDropDown(true)
@@ -91,7 +216,7 @@ const Insights = () => {
     async function fetchProject() {
       const { data } = await Api("GET", `api/project/${project_id}`);
       setProject(data[0]);
-      // console.log("Project data: ", project?.project_name);
+      // console.log("Project data: ", data);
     }
     fetchProject();
   }, []);
@@ -901,7 +1026,6 @@ const Insights = () => {
                                 </a>
                               </div>
                             </div>
-
                             <div className="nla_graph-block">
                               <div className="myChartDiv">
                                 {/* <Chartjs /> */}
@@ -920,19 +1044,33 @@ const Insights = () => {
                                 id=""
                                 className="form-control"
                                 placeholder="Type Notes..."
+                                onChange={(e) => {
+                                  setNote1(e.target.value);
+                                }}
                               ></textarea>
                               <div
                                 className="nla_add-comment-toggle-btn"
                                 onClick={typeNoteExpHandler}
                               >
-                                <i className="fa-solid fa-floppy-disk"></i>
+                                <i
+                                  className="fa-solid fa-floppy-disk"
+                                  onClick={noteSaveHandler}
+                                ></i>
                                 <i className="fa-solid fa-plus"></i>
                               </div>
                             </div>
+                            <div>
+                              <h6>Previous Note:</h6>
+                              <p className="mt-2">{notes.note1}</p>
+                            </div>
                           </div>
                           <div className="col-lg-3">
-                            <div className="nla_brand_logo">
+                            <div class="nla_brand_logo">
                               <h3>Brand Logo</h3>
+                              <img
+                                src={project.company_logo}
+                                height={100}
+                              ></img>
                             </div>
                           </div>
                         </div>
@@ -1466,8 +1604,9 @@ const Insights = () => {
                           </div>
                         </div>
                         <div className="col-lg-4">
-                          <div className="nla_brand_logo">
+                          <div class="nla_brand_logo">
                             <h3>Brand Logo</h3>
+                            <img src={project.company_logo} height={100}></img>
                           </div>
                         </div>
                         <div className="col-lg-8">
@@ -1483,14 +1622,24 @@ const Insights = () => {
                               id=""
                               className="form-control"
                               placeholder="Type Notes..."
+                              onChange={(e) => {
+                                setNote2(e.target.value);
+                              }}
                             ></textarea>
                             <div
                               className="nla_add-comment-toggle-btn"
                               onClick={typeNoteExpHandler}
                             >
-                              <i className="fa-solid fa-floppy-disk"></i>
+                              <i
+                                className="fa-solid fa-floppy-disk"
+                                onClick={noteSaveHandler}
+                              ></i>
                               <i className="fa-solid fa-plus"></i>
                             </div>
+                          </div>
+                          <div>
+                            <h6>Previous Note:</h6>
+                            <p className="mt-2">{notes.note2}</p>
                           </div>
                         </div>
                       </div>
@@ -2367,19 +2516,30 @@ const Insights = () => {
                               id=""
                               className="form-control"
                               placeholder="Type Notes..."
+                              onChange={(e) => {
+                                setNote3(e.target.value);
+                              }}
                             ></textarea>
                             <div
                               className="nla_add-comment-toggle-btn"
                               onClick={typeNoteExpHandler}
                             >
-                              <i className="fa-solid fa-floppy-disk"></i>
+                              <i
+                                className="fa-solid fa-floppy-disk"
+                                onClick={noteSaveHandler}
+                              ></i>
                               <i className="fa-solid fa-plus"></i>
                             </div>
+                          </div>
+                          <div>
+                            <h6>Previous Note:</h6>
+                            <p className="mt-2">{notes.note3}</p>
                           </div>
                         </div>
                         <div class="col-lg-4">
                           <div class="nla_brand_logo">
                             <h3>Brand Logo</h3>
+                            <img src={project.company_logo} height={100}></img>
                           </div>
                         </div>
                       </div>
@@ -3023,14 +3183,25 @@ const Insights = () => {
                                 className="nla_add-comment-toggle-btn"
                                 onClick={typeNoteExpHandler}
                               >
-                                <i className="fa-solid fa-floppy-disk"></i>
+                                <i
+                                  className="fa-solid fa-floppy-disk"
+                                  onClick={noteSaveHandler}
+                                ></i>
                                 <i className="fa-solid fa-plus"></i>
                               </div>
                             </div>
+                            <div>
+                              <h6>Previous Note:</h6>
+                              <p className="mt-2">{notes.note1}</p>
+                            </div>
                           </div>
                           <div className="col-lg-3">
-                            <div className="nla_brand_logo">
+                            <div class="nla_brand_logo">
                               <h3>Brand Logo</h3>
+                              <img
+                                src={project.company_logo}
+                                height={100}
+                              ></img>
                             </div>
                           </div>
                         </div>
@@ -3573,8 +3744,9 @@ const Insights = () => {
                           </div>
                         </div>
                         <div className="col-lg-4">
-                          <div className="nla_brand_logo">
+                          <div class="nla_brand_logo">
                             <h3>Brand Logo</h3>
+                            <img src={project.company_logo} height={100}></img>
                           </div>
                         </div>
                         <div className="col-lg-8">
@@ -3595,9 +3767,16 @@ const Insights = () => {
                               className="nla_add-comment-toggle-btn"
                               onClick={typeNoteExpHandler}
                             >
-                              <i className="fa-solid fa-floppy-disk"></i>
+                              <i
+                                className="fa-solid fa-floppy-disk"
+                                onClick={noteSaveHandler}
+                              ></i>
                               <i className="fa-solid fa-plus"></i>
                             </div>
+                          </div>
+                          <div>
+                            <h6>Previous Note:</h6>
+                            <p className="mt-2">{notes.note2}</p>
                           </div>
                         </div>
                       </div>
@@ -4483,14 +4662,22 @@ const Insights = () => {
                               className="nla_add-comment-toggle-btn"
                               onClick={typeNoteExpHandler}
                             >
-                              <i className="fa-solid fa-floppy-disk"></i>
+                              <i
+                                className="fa-solid fa-floppy-disk"
+                                onClick={noteSaveHandler}
+                              ></i>
                               <i className="fa-solid fa-plus"></i>
                             </div>
+                          </div>
+                          <div>
+                            <h6>Previous Note:</h6>
+                            <p className="mt-2">{notes.note3}</p>
                           </div>
                         </div>
                         <div class="col-lg-4">
                           <div class="nla_brand_logo">
                             <h3>Brand Logo</h3>
+                            <img src={project.company_logo} height={100}></img>
                           </div>
                         </div>
                       </div>
@@ -4503,6 +4690,16 @@ const Insights = () => {
         </div>
       </div>
       <Footer />
+      <Snackbar
+        open={saveNote}
+        autoHideDuration={3000}
+        key={vertical + horizontal}
+        anchorOrigin={{ vertical, horizontal }}
+      >
+        <Alert severity="success" sx={{ width: "100%" }}>
+          {noteAlert}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
