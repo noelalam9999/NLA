@@ -34,10 +34,17 @@ const Insights = () => {
   const [saveNote, setNoteSaved] = useState(false);
   const [noteAlert, setNoteAlert] = useState("Note Added");
 
+  const notesFromLocal = JSON.parse(localStorage.getItem("notesFromDB"));
+  // console.log("notesFromDB: ", notesFromLocal);
+
   //Notes state
-  const [note1, setNote1] = useState("");
-  const [note2, setNote2] = useState("");
-  const [note3, setNote3] = useState("");
+  const [note1, setNote1] = useState(notesFromLocal?.note1);
+  const [note2, setNote2] = useState(notesFromLocal?.note2);
+  const [note3, setNote3] = useState(notesFromLocal?.note3);
+
+  // const [newNote1, setNewNote1] = useState();
+
+  // const newNote1 = notes?.note1;
 
   // Load
   const [load, setLoad] = useState(false);
@@ -51,7 +58,8 @@ const Insights = () => {
   const [addItemDropDown, setAddItemDropDown] = useState(false);
   const typeNoteExpHandler = () => {
     typeNotesExp === false ? setTypeNotesExp(true) : setTypeNotesExp(false);
-    console.log("Note 1: ", note1);
+    // setNewNote1(notes?.note1);
+    // console.log("newNote1: ", newNote1);
     // console.log("Note 2: ", note2);
     // console.log("Note 3: ", note3);
   };
@@ -62,10 +70,11 @@ const Insights = () => {
     if (note1 === "" && note2 === "" && note3 === "") {
       alert("Please enter a note");
     } else {
-      console.log("Note 1: ", note1);
+      console.log("Note 1 in else: ", note1);
 
       if (note1 === "" && note2 !== "" && note3 !== "") {
         const projectNotes = {
+          note1: notes.note1,
           note2: note2,
           note3: note3,
         };
@@ -73,6 +82,7 @@ const Insights = () => {
       } else if (note1 !== "" && note2 === "" && note3 !== "") {
         const projectNotes = {
           note1: note1,
+          note2: notes.note2,
           note3: note3,
         };
         addNoteAPIcall(projectNotes);
@@ -80,23 +90,30 @@ const Insights = () => {
         const projectNotes = {
           note1: note1,
           note2: note2,
+          note3: notes.note3,
         };
         addNoteAPIcall(projectNotes);
       } else if (note1 === "" && note2 === "" && note3 !== "") {
         const projectNotes = {
+          note1: notes.note1,
+          note2: notes.note2,
           note3: note3,
         };
         addNoteAPIcall(projectNotes);
       } else if (note1 === "" && note2 !== "" && note3 === "") {
         const projectNotes = {
+          note1: notes.note1,
           note2: note2,
+          note3: notes.note3,
         };
         addNoteAPIcall(projectNotes);
       } else if (note1 !== "" && note2 === "" && note3 === "") {
         const projectNotes = {
           note1: note1,
+          note2: notes.note2,
+          note3: notes.note3,
         };
-        console.log("Hyyy");
+        console.log("In note 1");
         addNoteAPIcall(projectNotes);
       } else {
         const projectNotes = {
@@ -107,6 +124,7 @@ const Insights = () => {
         addNoteAPIcall(projectNotes);
       }
     }
+    typeNoteExpHandler();
   };
 
   const addNoteAPIcall = async (project_notes) => {
@@ -135,29 +153,24 @@ const Insights = () => {
       setNoteSaved(true);
       setTimeout(() => {
         setNoteSaved(false);
-      }, 3000);
+      }, 2000);
       setLoad(true);
     }
   };
 
   // UseEffect for Fetching notes:
-
   useEffect(() => {
     async function fetchNotes() {
       const { data } = await Api("GET", `api/insights/get/notes/${project_id}`);
       const notesData = JSON.parse(data[0].notes);
       setNotes(notesData);
-      // console.log("Project data: ", notesData);
+      localStorage.setItem("notesFromDB", JSON.stringify(notesData));
     }
     fetchNotes();
     setLoad(false);
-    setNote1("");
-    setNote2("");
-    setNote3("");
   }, [load]);
 
-  // console.log("setNotes: ", notes);
-
+  // console.log("note1: ", note1);
   // --------------------------------------
   const addItemDropDownHandler = () => {
     addItemDropDown === false
@@ -1042,31 +1055,35 @@ const Insights = () => {
                               <textarea
                                 name="type_note"
                                 id=""
+                                value={note1}
                                 className="form-control"
                                 placeholder="Type Notes..."
                                 onChange={(e) => {
                                   setNote1(e.target.value);
                                 }}
                               ></textarea>
-                              <div
-                                className="nla_add-comment-toggle-btn"
-                                onClick={typeNoteExpHandler}
-                              >
+                              <div className="nla_add-comment-toggle-btn">
                                 <i
                                   className="fa-solid fa-floppy-disk"
                                   onClick={noteSaveHandler}
                                 ></i>
-                                <i className="fa-solid fa-plus"></i>
+                                <i
+                                  className="fa-solid fa-plus"
+                                  onClick={typeNoteExpHandler}
+                                ></i>
                               </div>
                             </div>
                             <div>
                               <h6>Previous Note:</h6>
-                              <p className="mt-2">{notes.note1}</p>
+                              <p className="mt-2">
+                                {notes?.note1}
+                                {/* {setNote1FromDB(notes?.note1)} */}
+                              </p>
                             </div>
                           </div>
                           <div className="col-lg-3">
                             <div class="nla_brand_logo">
-                              <h3>Brand Logo</h3>
+                              {/* <h3>Brand Logo</h3> */}
                               <img
                                 src={project.company_logo}
                                 height={100}
@@ -1603,12 +1620,7 @@ const Insights = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="col-lg-4">
-                          <div class="nla_brand_logo">
-                            <h3>Brand Logo</h3>
-                            <img src={project.company_logo} height={100}></img>
-                          </div>
-                        </div>
+
                         <div className="col-lg-8">
                           <div
                             className={
@@ -1620,26 +1632,36 @@ const Insights = () => {
                             <textarea
                               name="type_note"
                               id=""
+                              value={note2}
                               className="form-control"
                               placeholder="Type Notes..."
                               onChange={(e) => {
                                 setNote2(e.target.value);
                               }}
                             ></textarea>
-                            <div
-                              className="nla_add-comment-toggle-btn"
-                              onClick={typeNoteExpHandler}
-                            >
+                            <div className="nla_add-comment-toggle-btn">
                               <i
                                 className="fa-solid fa-floppy-disk"
                                 onClick={noteSaveHandler}
                               ></i>
-                              <i className="fa-solid fa-plus"></i>
+                              <i
+                                className="fa-solid fa-plus"
+                                onClick={typeNoteExpHandler}
+                              ></i>
                             </div>
                           </div>
                           <div>
                             <h6>Previous Note:</h6>
                             <p className="mt-2">{notes.note2}</p>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="nla_brand_logo">
+                              {/* <h3>Brand Logo</h3> */}
+                              <img
+                                src={project.company_logo}
+                                height={100}
+                              ></img>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -2514,21 +2536,22 @@ const Insights = () => {
                             <textarea
                               name="type_note"
                               id=""
+                              value={note3}
                               className="form-control"
                               placeholder="Type Notes..."
                               onChange={(e) => {
                                 setNote3(e.target.value);
                               }}
                             ></textarea>
-                            <div
-                              className="nla_add-comment-toggle-btn"
-                              onClick={typeNoteExpHandler}
-                            >
+                            <div className="nla_add-comment-toggle-btn">
                               <i
                                 className="fa-solid fa-floppy-disk"
                                 onClick={noteSaveHandler}
                               ></i>
-                              <i className="fa-solid fa-plus"></i>
+                              <i
+                                className="fa-solid fa-plus"
+                                onClick={typeNoteExpHandler}
+                              ></i>
                             </div>
                           </div>
                           <div>
@@ -2538,7 +2561,7 @@ const Insights = () => {
                         </div>
                         <div class="col-lg-4">
                           <div class="nla_brand_logo">
-                            <h3>Brand Logo</h3>
+                            {/* <h3>Brand Logo</h3> */}
                             <img src={project.company_logo} height={100}></img>
                           </div>
                         </div>
@@ -3176,18 +3199,22 @@ const Insights = () => {
                               <textarea
                                 name="type_note"
                                 id=""
+                                value={note1}
                                 className="form-control"
                                 placeholder="Type Notes..."
+                                onChange={(e) => {
+                                  setNote1(e.target.value);
+                                }}
                               ></textarea>
-                              <div
-                                className="nla_add-comment-toggle-btn"
-                                onClick={typeNoteExpHandler}
-                              >
+                              <div className="nla_add-comment-toggle-btn">
                                 <i
                                   className="fa-solid fa-floppy-disk"
                                   onClick={noteSaveHandler}
                                 ></i>
-                                <i className="fa-solid fa-plus"></i>
+                                <i
+                                  className="fa-solid fa-plus"
+                                  onClick={typeNoteExpHandler}
+                                ></i>
                               </div>
                             </div>
                             <div>
@@ -3197,7 +3224,7 @@ const Insights = () => {
                           </div>
                           <div className="col-lg-3">
                             <div class="nla_brand_logo">
-                              <h3>Brand Logo</h3>
+                              {/* <h3>Brand Logo</h3> */}
                               <img
                                 src={project.company_logo}
                                 height={100}
@@ -3743,12 +3770,7 @@ const Insights = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="col-lg-4">
-                          <div class="nla_brand_logo">
-                            <h3>Brand Logo</h3>
-                            <img src={project.company_logo} height={100}></img>
-                          </div>
-                        </div>
+
                         <div className="col-lg-8">
                           <div
                             className={
@@ -3760,23 +3782,36 @@ const Insights = () => {
                             <textarea
                               name="type_note"
                               id=""
+                              value={note2}
                               className="form-control"
                               placeholder="Type Notes..."
+                              onChange={(e) => {
+                                setNote2(e.target.value);
+                              }}
                             ></textarea>
-                            <div
-                              className="nla_add-comment-toggle-btn"
-                              onClick={typeNoteExpHandler}
-                            >
+                            <div className="nla_add-comment-toggle-btn">
                               <i
                                 className="fa-solid fa-floppy-disk"
                                 onClick={noteSaveHandler}
                               ></i>
-                              <i className="fa-solid fa-plus"></i>
+                              <i
+                                className="fa-solid fa-plus"
+                                onClick={typeNoteExpHandler}
+                              ></i>
                             </div>
                           </div>
                           <div>
                             <h6>Previous Note:</h6>
                             <p className="mt-2">{notes.note2}</p>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="nla_brand_logo">
+                              {/* <h3>Brand Logo</h3> */}
+                              <img
+                                src={project.company_logo}
+                                height={100}
+                              ></img>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -4655,18 +4690,22 @@ const Insights = () => {
                             <textarea
                               name="type_note"
                               id=""
+                              value={note3}
                               className="form-control"
                               placeholder="Type Notes..."
+                              onChange={(e) => {
+                                setNote3(e.target.value);
+                              }}
                             ></textarea>
-                            <div
-                              className="nla_add-comment-toggle-btn"
-                              onClick={typeNoteExpHandler}
-                            >
+                            <div className="nla_add-comment-toggle-btn">
                               <i
                                 className="fa-solid fa-floppy-disk"
                                 onClick={noteSaveHandler}
                               ></i>
-                              <i className="fa-solid fa-plus"></i>
+                              <i
+                                className="fa-solid fa-plus"
+                                onClick={typeNoteExpHandler}
+                              ></i>
                             </div>
                           </div>
                           <div>
@@ -4676,7 +4715,7 @@ const Insights = () => {
                         </div>
                         <div class="col-lg-4">
                           <div class="nla_brand_logo">
-                            <h3>Brand Logo</h3>
+                            {/* <h3>Brand Logo</h3> */}
                             <img src={project.company_logo} height={100}></img>
                           </div>
                         </div>
