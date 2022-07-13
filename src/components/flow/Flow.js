@@ -442,7 +442,7 @@ const Flow = () => {
         <div className="reactflow-wrapper" ref={reactFlowWrapper}>
           {nodes.length === 0 ? (
             <>
-              <div className="empty">So Empty</div>
+              <div className="empty">Drag an operator to start</div>
             </>
           ) : null}
           <ReactFlow

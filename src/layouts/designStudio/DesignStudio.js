@@ -365,7 +365,7 @@ const DesignStudio = () => {
                     </OverlayTrigger>
                   </div>
                   <div className="other-design-studio-buttons">
-                    <div>
+                    <div hidden={project_id ? false : true}>
                       <a
                         href="#"
                         className="btn btn-secondary"
@@ -418,7 +418,7 @@ const DesignStudio = () => {
                         </a>
                       </OverlayTrigger>
                     </div>
-                    <div>
+                    <div hidden={project_id ? false : true}>
                       <a className="btn btn-secondary">
                         Save As
                         <img src={saveAs} alt="" />
@@ -440,7 +440,7 @@ const DesignStudio = () => {
                         </a>
                       </OverlayTrigger>
                     </div>
-                    <div>
+                    <div hidden={project_id ? false : true}>
                       <button
                         // href=""
                         className="btn btn-primary"
