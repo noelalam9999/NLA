@@ -20,7 +20,7 @@ import { Link, useParams } from "react-router-dom";
 import Api from "../../services/Api";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
-
+import GoogleChart from "../../components/GoogleChart";
 const Insights = () => {
   const project_id = useParams().id;
 
@@ -2276,11 +2276,15 @@ const Insights = () => {
                                     </a>
                                   </div>
                                 </div>
-                                <canvas
+                                {/* <canvas
                                   id="areaOfOpportunityByRetailer"
                                   width="500"
                                   height="300"
-                                ></canvas>
+                                ></canvas> */}
+                                <div style={{ width: "100%", height: "100%" }}>
+                                  <GoogleChart />
+                                  {/* <Chartjs/> */}
+                                </div>
                               </div>
                               <div class="col-lg-6">
                                 <div class="nla_graph-heading">
@@ -2453,11 +2457,12 @@ const Insights = () => {
                                     </a>
                                   </div>
                                 </div>
-                                <canvas
+                                {/* <canvas
                                   id="areaOfOpportunityByRetailer"
                                   width="500"
                                   height="300"
-                                ></canvas>
+                                ></canvas> */}
+                                <GoogleChart />
                               </div>
                               <div class="col-lg-6">
                                 <div class="nla_graph-heading">
@@ -2517,11 +2522,12 @@ const Insights = () => {
                                     </div>
                                   </div>
                                 </div>
-                                <canvas
+                                {/* <canvas
                                   id="areaOfOpportunityByRetailer"
                                   width="500"
                                   height="300"
-                                ></canvas>
+                                ></canvas> */}
+                                <GoogleChart />
                               </div>
                             </div>
                           </div>
@@ -4430,11 +4436,12 @@ const Insights = () => {
                                     </a>
                                   </div>
                                 </div>
-                                <canvas
+                                {/* <canvas
                                   id="areaOfOpportunityByRetailer"
                                   width="500"
                                   height="300"
-                                ></canvas>
+                                ></canvas> */}
+                                <GoogleChart />
                               </div>
                               <div class="col-lg-6">
                                 <div class="nla_graph-heading">
@@ -4607,11 +4614,12 @@ const Insights = () => {
                                     </a>
                                   </div>
                                 </div>
-                                <canvas
+                                {/* <canvas
                                   id="areaOfOpportunityByRetailer"
                                   width="500"
                                   height="300"
-                                ></canvas>
+                                ></canvas> */}
+                                <GoogleChart />
                               </div>
                               <div class="col-lg-6">
                                 <div class="nla_graph-heading">
@@ -4671,11 +4679,12 @@ const Insights = () => {
                                     </div>
                                   </div>
                                 </div>
-                                <canvas
+                                {/* <canvas
                                   id="areaOfOpportunityByRetailer"
                                   width="500"
                                   height="300"
-                                ></canvas>
+                                ></canvas> */}
+                                <GoogleChart />
                               </div>
                             </div>
                           </div>
