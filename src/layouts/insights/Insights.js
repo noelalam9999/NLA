@@ -13,9 +13,9 @@ import featherFilePlus from "../../assets/images/feather-file-plus.svg";
 import downloadIcon from "../../assets/newIcons/icon-download.svg";
 import chartIcon from "../../assets/newIcons/icon-chart.svg";
 import featherInfo from "../../assets/images/feather-info.svg";
-// import Chartjs from "../../components/Chartjs";
+import Chartjs from "../../components/Chartjs";
 import { useClickAway } from "react-use";
-// import ChartjsBar from "../../components/ChartjsBar";
+import ChartjsBar from "../../components/ChartjsBar";
 import { Link, useParams } from "react-router-dom";
 import Api from "../../services/Api";
 import Alert from "@mui/material/Alert";
@@ -1041,7 +1041,7 @@ const Insights = () => {
                             </div>
                             <div className="nla_graph-block">
                               <div className="myChartDiv">
-                                {/* <Chartjs /> */}
+                                <Chartjs />
                               </div>
                             </div>
 
@@ -1616,7 +1616,7 @@ const Insights = () => {
 
                           <div className="nla_graph-block">
                             <div className="myChartDiv">
-                              {/* <ChartjsBar /> */}
+                              <ChartjsBar />
                             </div>
                           </div>
                         </div>
@@ -2045,9 +2045,9 @@ const Insights = () => {
                                         transform="translate(660.329 725.575)"
                                         fill="none"
                                         stroke="#ffffff"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="1"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="1"
                                       />
                                     </g>
                                   </svg>
@@ -2071,7 +2071,7 @@ const Insights = () => {
                                         transform="translate(647.904 723.938)"
                                         fill="none"
                                         stroke="#ffffff"
-                                        stroke-width="0.8"
+                                        strokeWidth="0.8"
                                       />
                                     </g>
                                   </svg>
@@ -2129,9 +2129,9 @@ const Insights = () => {
                                               transform="translate(660.329 725.575)"
                                               fill="none"
                                               stroke="#164f73"
-                                              stroke-linecap="round"
-                                              stroke-linejoin="round"
-                                              stroke-width="1"
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth="1"
                                             />
                                           </g>
                                         </svg>
@@ -2155,7 +2155,7 @@ const Insights = () => {
                                               transform="translate(647.904 723.938)"
                                               fill="none"
                                               stroke="#164f73"
-                                              stroke-width="0.8"
+                                              strokeWidth="0.8"
                                             />
                                           </g>
                                         </svg>
@@ -2195,9 +2195,9 @@ const Insights = () => {
                                                 transform="translate(-9.05 -9.05)"
                                                 fill="none"
                                                 stroke="#164f73"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="1"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="1"
                                               />
                                               <path
                                                 id="Path_20161"
@@ -2206,9 +2206,9 @@ const Insights = () => {
                                                 transform="translate(-3 -3)"
                                                 fill="none"
                                                 stroke="#164f73"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="1"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="1"
                                               />
                                             </g>
                                           </g>
@@ -2238,9 +2238,9 @@ const Insights = () => {
                                             transform="translate(660.329 725.575)"
                                             fill="none"
                                             stroke="#164f73"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="1"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="1"
                                           />
                                         </g>
                                       </svg>
@@ -2269,7 +2269,7 @@ const Insights = () => {
                                             transform="translate(647.904 723.938)"
                                             fill="none"
                                             stroke="#DC3912"
-                                            stroke-width="0.8"
+                                            strokeWidth="0.8"
                                           />
                                         </g>
                                       </svg>
@@ -2306,9 +2306,9 @@ const Insights = () => {
                                               transform="translate(660.329 725.575)"
                                               fill="none"
                                               stroke="#164f73"
-                                              stroke-linecap="round"
-                                              stroke-linejoin="round"
-                                              stroke-width="1"
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth="1"
                                             />
                                           </g>
                                         </svg>
@@ -2332,7 +2332,7 @@ const Insights = () => {
                                               transform="translate(647.904 723.938)"
                                               fill="none"
                                               stroke="#164f73"
-                                              stroke-width="0.8"
+                                              strokeWidth="0.8"
                                             />
                                           </g>
                                         </svg>
@@ -2372,9 +2372,9 @@ const Insights = () => {
                                                 transform="translate(-9.05 -9.05)"
                                                 fill="none"
                                                 stroke="#164f73"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="1"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="1"
                                               />
                                               <path
                                                 id="Path_20161"
@@ -2383,9 +2383,9 @@ const Insights = () => {
                                                 transform="translate(-3 -3)"
                                                 fill="none"
                                                 stroke="#164f73"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="1"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="1"
                                               />
                                             </g>
                                           </g>
@@ -2415,9 +2415,9 @@ const Insights = () => {
                                             transform="translate(660.329 725.575)"
                                             fill="none"
                                             stroke="#164f73"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="1"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="1"
                                           />
                                         </g>
                                       </svg>
@@ -2446,7 +2446,7 @@ const Insights = () => {
                                             transform="translate(647.904 723.938)"
                                             fill="none"
                                             stroke="#DC3912"
-                                            stroke-width="0.8"
+                                            strokeWidth="0.8"
                                           />
                                         </g>
                                       </svg>
@@ -2483,9 +2483,9 @@ const Insights = () => {
                                               transform="translate(660.329 725.575)"
                                               fill="none"
                                               stroke="#164f73"
-                                              stroke-linecap="round"
-                                              stroke-linejoin="round"
-                                              stroke-width="1"
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth="1"
                                             />
                                           </g>
                                         </svg>
@@ -2509,7 +2509,7 @@ const Insights = () => {
                                               transform="translate(647.904 723.938)"
                                               fill="none"
                                               stroke="#164f73"
-                                              stroke-width="0.8"
+                                              strokeWidth="0.8"
                                             />
                                           </g>
                                         </svg>
@@ -3185,7 +3185,7 @@ const Insights = () => {
 
                             <div className="nla_graph-block">
                               <div className="myChartDiv">
-                                {/* <Chartjs /> */}
+                                <Chartjs />
                               </div>
                             </div>
 
@@ -3766,7 +3766,7 @@ const Insights = () => {
 
                           <div className="nla_graph-block">
                             <div className="myChartDiv">
-                              {/* <ChartjsBar /> */}
+                              <ChartjsBar />
                             </div>
                           </div>
                         </div>
@@ -4199,9 +4199,9 @@ const Insights = () => {
                                         transform="translate(660.329 725.575)"
                                         fill="none"
                                         stroke="#ffffff"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="1"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="1"
                                       />
                                     </g>
                                   </svg>
@@ -4225,7 +4225,7 @@ const Insights = () => {
                                         transform="translate(647.904 723.938)"
                                         fill="none"
                                         stroke="#ffffff"
-                                        stroke-width="0.8"
+                                        strokeWidth="0.8"
                                       />
                                     </g>
                                   </svg>
@@ -4283,9 +4283,9 @@ const Insights = () => {
                                               transform="translate(660.329 725.575)"
                                               fill="none"
                                               stroke="#164f73"
-                                              stroke-linecap="round"
-                                              stroke-linejoin="round"
-                                              stroke-width="1"
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth="1"
                                             />
                                           </g>
                                         </svg>
@@ -4309,7 +4309,7 @@ const Insights = () => {
                                               transform="translate(647.904 723.938)"
                                               fill="none"
                                               stroke="#164f73"
-                                              stroke-width="0.8"
+                                              strokeWidth="0.8"
                                             />
                                           </g>
                                         </svg>
@@ -4349,9 +4349,9 @@ const Insights = () => {
                                                 transform="translate(-9.05 -9.05)"
                                                 fill="none"
                                                 stroke="#164f73"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="1"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="1"
                                               />
                                               <path
                                                 id="Path_20161"
@@ -4360,9 +4360,9 @@ const Insights = () => {
                                                 transform="translate(-3 -3)"
                                                 fill="none"
                                                 stroke="#164f73"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="1"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="1"
                                               />
                                             </g>
                                           </g>
@@ -4392,9 +4392,9 @@ const Insights = () => {
                                             transform="translate(660.329 725.575)"
                                             fill="none"
                                             stroke="#164f73"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="1"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="1"
                                           />
                                         </g>
                                       </svg>
@@ -4423,7 +4423,7 @@ const Insights = () => {
                                             transform="translate(647.904 723.938)"
                                             fill="none"
                                             stroke="#DC3912"
-                                            stroke-width="0.8"
+                                            strokeWidth="0.8"
                                           />
                                         </g>
                                       </svg>
@@ -4460,9 +4460,9 @@ const Insights = () => {
                                               transform="translate(660.329 725.575)"
                                               fill="none"
                                               stroke="#164f73"
-                                              stroke-linecap="round"
-                                              stroke-linejoin="round"
-                                              stroke-width="1"
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth="1"
                                             />
                                           </g>
                                         </svg>
@@ -4486,7 +4486,7 @@ const Insights = () => {
                                               transform="translate(647.904 723.938)"
                                               fill="none"
                                               stroke="#164f73"
-                                              stroke-width="0.8"
+                                              strokeWidth="0.8"
                                             />
                                           </g>
                                         </svg>
@@ -4526,9 +4526,9 @@ const Insights = () => {
                                                 transform="translate(-9.05 -9.05)"
                                                 fill="none"
                                                 stroke="#164f73"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="1"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="1"
                                               />
                                               <path
                                                 id="Path_20161"
@@ -4537,9 +4537,9 @@ const Insights = () => {
                                                 transform="translate(-3 -3)"
                                                 fill="none"
                                                 stroke="#164f73"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="1"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="1"
                                               />
                                             </g>
                                           </g>
@@ -4569,9 +4569,9 @@ const Insights = () => {
                                             transform="translate(660.329 725.575)"
                                             fill="none"
                                             stroke="#164f73"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="1"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="1"
                                           />
                                         </g>
                                       </svg>
@@ -4600,7 +4600,7 @@ const Insights = () => {
                                             transform="translate(647.904 723.938)"
                                             fill="none"
                                             stroke="#DC3912"
-                                            stroke-width="0.8"
+                                            strokeWidth="0.8"
                                           />
                                         </g>
                                       </svg>
@@ -4637,9 +4637,9 @@ const Insights = () => {
                                               transform="translate(660.329 725.575)"
                                               fill="none"
                                               stroke="#164f73"
-                                              stroke-linecap="round"
-                                              stroke-linejoin="round"
-                                              stroke-width="1"
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth="1"
                                             />
                                           </g>
                                         </svg>
@@ -4663,7 +4663,7 @@ const Insights = () => {
                                               transform="translate(647.904 723.938)"
                                               fill="none"
                                               stroke="#164f73"
-                                              stroke-width="0.8"
+                                              strokeWidth="0.8"
                                             />
                                           </g>
                                         </svg>
