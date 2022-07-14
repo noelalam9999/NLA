@@ -27,7 +27,7 @@ const GoogleChart = () => {
     vAxis: {
       ticks: [-15, -11, -7, -3, 0, 3, 7, 11, 15],
     },
-    height: "100%",
+    height: 300,
   };
   return (
     <Chart
