@@ -35,19 +35,24 @@ const Insights = () => {
   const [noteAlert, setNoteAlert] = useState("Note Added");
 
   const notesFromLocal = JSON.parse(localStorage.getItem("notesFromDB"));
-  // console.log("notesFromDB: ", notesFromLocal);
 
   //Notes state
   const [note1, setNote1] = useState(notesFromLocal?.note1);
   const [note2, setNote2] = useState(notesFromLocal?.note2);
   const [note3, setNote3] = useState(notesFromLocal?.note3);
 
-  // const [newNote1, setNewNote1] = useState();
+  //Take Away
+  const [editTakeAway, setEditTakeAway] = useState(false);
+  const [editIcon, setEditIcon] = useState(false);
 
-  // const newNote1 = notes?.note1;
+  const [takeAwayFromDB, setTakeAwayFromDB] = useState([]);
 
   // Load
   const [load, setLoad] = useState(false);
+  const [addInsights, setAddInsights] = useState(true);
+
+  // Slide Type
+  const [slideType, setSlideType] = useState("M.A");
 
   // console.log("Note 1: ", note1);
 
@@ -171,7 +176,67 @@ const Insights = () => {
   }, [load]);
 
   // console.log("note1: ", note1);
-  // --------------------------------------
+
+  // Take Away Stuff ---------------------------------------------------------
+  useEffect(() => {
+    // console.log("takeAwayText: ");
+    if (takeAwayFromDB) {
+      setTakeAwayText(takeAwayFromDB?.take_away_description);
+    }
+  }, [project]);
+
+  const editHandler = async () => {
+    editIcon === false ? setEditIcon(true) : setEditIcon(false);
+    editTakeAway === false ? setEditTakeAway(true) : setEditTakeAway(false);
+    if (editTakeAway === true) {
+      // const projectNotes = {
+      //   note1: note1,
+      //   note2: note2,
+      //   note3: note3,
+      // };
+      // addNoteAPIcall(projectNotes);
+      setLoad(false);
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const apiData = {
+        project_id,
+        slide_type: slideType,
+        take_away_title: "Take away",
+        take_away_description: takeAwayText,
+      };
+
+      const { data } = await Api(
+        "POST",
+        `api/insights/add/take-away`,
+        apiData,
+        config
+      );
+
+      if (data) {
+        setLoad(true);
+        setNoteAlert(data?.message);
+        console.log("Data from ADD Take Aways API: ", data);
+        setNoteSaved(true);
+
+        setTimeout(() => {
+          setNoteSaved(false);
+        }, 2000);
+      }
+    }
+  };
+
+  // Accordion Handler ----------------------------------------------------
+
+  const accordionSlideHanlder = (value) => {
+    // console.log("I am clicked", value);
+    setSlideType(value);
+  };
+
+  // ----------------------------------------------------------------------
   const addItemDropDownHandler = () => {
     addItemDropDown === false
       ? setAddItemDropDown(true)
@@ -223,7 +288,7 @@ const Insights = () => {
       : setValueDropDown2(false);
   };
 
-  //UseEffect
+  //Main UseEffect
 
   useEffect(() => {
     async function fetchProject() {
@@ -232,7 +297,80 @@ const Insights = () => {
       // console.log("Project data: ", data);
     }
     fetchProject();
+
+    if (addInsights === true) {
+      console.log("I am true");
+      async function addNoteAPIcall() {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+        const projectNotes = {
+          note1: note1,
+          note2: note2,
+          note3: note3,
+        };
+
+        const apiData = {
+          project_id,
+          project_notes: projectNotes,
+        };
+
+        const { data } = await Api(
+          "POST",
+          `api/insights/add/notes`,
+          apiData,
+          config
+        );
+
+        if (data) {
+          console.log("Data from ADD Notes API: ", data);
+        }
+      }
+
+      addNoteAPIcall();
+      setAddInsights(false);
+    }
   }, []);
+
+  useEffect(() => {
+    async function fetchTakeAways() {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const apiData = {
+        project_id,
+        slide_type: slideType,
+      };
+
+      const { data } = await Api(
+        "POST",
+        `api/insights/get/take-aways`,
+        apiData,
+        config
+      );
+
+      // const { data } = await Api(
+      //   "GET",
+      //   `api/insights/get/take-aways/${project_id}`
+      // );
+      console.log("Data: ", data);
+      setTakeAwayFromDB(data[0]);
+    }
+    fetchTakeAways();
+  }, [load, slideType]);
+
+  const [takeAwayText, setTakeAwayText] = useState(
+    takeAwayFromDB?.take_away_description
+  );
+
+  // console.log("takeAwayText: ", takeAwayText);
+
+  // console.log("Take aways from db: ", takeAwayFromDB);
   // =====================================================================================================================
   return (
     <div>
@@ -431,7 +569,9 @@ const Insights = () => {
                 <Sonnet />
                 <Accordion defaultActiveKey="0">
                   <Accordion.Item eventKey="0">
-                    <Accordion.Header>
+                    <Accordion.Header
+                      onClick={() => accordionSlideHanlder("M.A")}
+                    >
                       <strong>M.A</strong> <span className="nla_number">1</span>
                       <p>
                         What is the current pricing landscape across the
@@ -799,32 +939,50 @@ const Insights = () => {
                               <div className="nla_heading">
                                 Take Aways
                                 <div>
-                                  <a href="">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="13.058"
-                                      height="12.924"
-                                      viewBox="0 0 13.058 12.924"
-                                    >
-                                      <g
-                                        id="Group_127802"
-                                        data-name="Group 127802"
-                                        transform="translate(-662.829 -728.333)"
+                                  {editIcon == false ? (
+                                    <>
+                                      <a
+                                        onClick={editHandler}
+                                        style={{ cursor: "pointer" }}
                                       >
-                                        <path
-                                          id="Icon_feather-edit-2"
-                                          data-name="Icon feather-edit-2"
-                                          d="M12.021,3.756a1.7,1.7,0,0,1,2.406,2.406L6.308,14.28,3,15.182l.9-3.308Z"
-                                          transform="translate(660.329 725.575)"
-                                          fill="none"
-                                          stroke="#ffffff"
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth="1"
-                                        ></path>
-                                      </g>
-                                    </svg>
-                                  </a>
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="13.058"
+                                          height="12.924"
+                                          viewBox="0 0 13.058 12.924"
+                                        >
+                                          <g
+                                            id="Group_127802"
+                                            data-name="Group 127802"
+                                            transform="translate(-662.829 -728.333)"
+                                          >
+                                            <path
+                                              id="Icon_feather-edit-2"
+                                              data-name="Icon feather-edit-2"
+                                              d="M12.021,3.756a1.7,1.7,0,0,1,2.406,2.406L6.308,14.28,3,15.182l.9-3.308Z"
+                                              transform="translate(660.329 725.575)"
+                                              fill="none"
+                                              stroke="#ffffff"
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth="1"
+                                            ></path>
+                                          </g>
+                                        </svg>
+                                      </a>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <a
+                                        style={{ cursor: "pointer" }}
+                                        className="nla-edit-name mt-4"
+                                        onClick={editHandler}
+                                      >
+                                        <i className="fa-solid fa-check"></i>
+                                      </a>
+                                    </>
+                                  )}
+
                                   <a href="" id="editTakeAwayCOntent">
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -852,18 +1010,42 @@ const Insights = () => {
                                 </div>
                               </div>
                               <div className="nla_content">
-                                <ul contentEditable={false}>
-                                  <li>
-                                    Significant difference in pricing in 4 oz —
-                                    potential opportunity to take pricing at
-                                    WM/Amazon?
-                                  </li>
-                                  <li>
-                                    Main source of growth is Amazon and Dollar—
-                                    need for a Channel Based Strategy?
-                                  </li>
-                                  <li>Potential Opportunity at Grocery?</li>
-                                </ul>
+                                {editTakeAway == false ? (
+                                  <>
+                                    <ul contentEditable={false}>
+                                      <li>
+                                        {takeAwayFromDB?.take_away_description}
+                                      </li>
+                                      {/* <li>
+                                        Main source of growth is Amazon and
+                                        Dollar— need for a Channel Based
+                                        Strategy?
+                                      </li>
+                                      <li>Potential Opportunity at Grocery?</li> */}
+                                    </ul>
+                                  </>
+                                ) : (
+                                  <>
+                                    <div
+                                      className="nla-select-box-with-lbl mt-1"
+                                      // style={{ width: "250px" }}
+                                    >
+                                      <textarea
+                                        name="type_note"
+                                        id=""
+                                        value={
+                                          takeAwayText ||
+                                          takeAwayFromDB?.take_away_description
+                                        }
+                                        className="form-control"
+                                        placeholder="Type Notes..."
+                                        onChange={(e) => {
+                                          setTakeAwayText(e.target.value);
+                                        }}
+                                      ></textarea>
+                                    </div>
+                                  </>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -1095,7 +1277,9 @@ const Insights = () => {
                     </Accordion.Body>
                   </Accordion.Item>
                   <Accordion.Item eventKey="1">
-                    <Accordion.Header>
+                    <Accordion.Header
+                      onClick={() => accordionSlideHanlder("M.I")}
+                    >
                       <strong>M.I</strong> <span className="nla_number">2</span>
                       <p>
                         How sensitive is Client Brand's portfolio to price
@@ -1668,7 +1852,9 @@ const Insights = () => {
                     </Accordion.Body>
                   </Accordion.Item>
                   <Accordion.Item eventKey="2">
-                    <Accordion.Header>
+                    <Accordion.Header
+                      onClick={() => accordionSlideHanlder("B.I")}
+                    >
                       <strong>B.I</strong> <span className="nla_number">3</span>
                       <p>What are the areas of opportunity by retailer?</p>
                       <span className="nla_results">Results</span>
@@ -2022,37 +2208,55 @@ const Insights = () => {
                       </div>
                       <div class="row">
                         <div class="col-lg-3">
-                          <div class="nla_take-away-block">
-                            <div class="nla_heading">
+                          <div className="nla_take-away-block">
+                            <div className="nla_heading">
                               Take Aways
                               <div>
-                                <a href="#">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="13.058"
-                                    height="12.924"
-                                    viewBox="0 0 13.058 12.924"
-                                  >
-                                    <g
-                                      id="Group_127802"
-                                      data-name="Group 127802"
-                                      transform="translate(-662.829 -728.333)"
+                                {editIcon == false ? (
+                                  <>
+                                    <a
+                                      onClick={editHandler}
+                                      style={{ cursor: "pointer" }}
                                     >
-                                      <path
-                                        id="Icon_feather-edit-2"
-                                        data-name="Icon feather-edit-2"
-                                        d="M12.021,3.756a1.7,1.7,0,0,1,2.406,2.406L6.308,14.28,3,15.182l.9-3.308Z"
-                                        transform="translate(660.329 725.575)"
-                                        fill="none"
-                                        stroke="#ffffff"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="1"
-                                      />
-                                    </g>
-                                  </svg>
-                                </a>
-                                <a href="#">
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="13.058"
+                                        height="12.924"
+                                        viewBox="0 0 13.058 12.924"
+                                      >
+                                        <g
+                                          id="Group_127802"
+                                          data-name="Group 127802"
+                                          transform="translate(-662.829 -728.333)"
+                                        >
+                                          <path
+                                            id="Icon_feather-edit-2"
+                                            data-name="Icon feather-edit-2"
+                                            d="M12.021,3.756a1.7,1.7,0,0,1,2.406,2.406L6.308,14.28,3,15.182l.9-3.308Z"
+                                            transform="translate(660.329 725.575)"
+                                            fill="none"
+                                            stroke="#ffffff"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="1"
+                                          ></path>
+                                        </g>
+                                      </svg>
+                                    </a>
+                                  </>
+                                ) : (
+                                  <>
+                                    <a
+                                      style={{ cursor: "pointer" }}
+                                      className="nla-edit-name mt-4"
+                                      onClick={editHandler}
+                                    >
+                                      <i className="fa-solid fa-check"></i>
+                                    </a>
+                                  </>
+                                )}
+
+                                <a href="" id="editTakeAwayCOntent">
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="10.688"
@@ -2072,33 +2276,49 @@ const Insights = () => {
                                         fill="none"
                                         stroke="#ffffff"
                                         strokeWidth="0.8"
-                                      />
+                                      ></path>
                                     </g>
                                   </svg>
                                 </a>
                               </div>
                             </div>
-                            <div class="nla_content">
-                              <ul>
-                                <li>
-                                  Currently no competitor to 4 Oz Nighttime and
-                                  Gel; Private Label is the biggest competitor
-                                  to 4 Oz Original
-                                </li>
-                                <li>
-                                  Given fairly low elasticities In both GW
-                                  products, volume loss can be minimized and can
-                                  be offset by growth in dollars—opportunity to
-                                  take 4-6% price increase
-                                </li>
-                                <li>Key watch outs are the gap to PL</li>
-                                <li>
-                                  Other watch out is price gap to Amazon (which
-                                  seems to have grown strongly over the past 52
-                                  weeks) — there is a danger of the WM shopper
-                                  migrating to that channel.
-                                </li>
-                              </ul>
+                            <div className="nla_content">
+                              {editTakeAway == false ? (
+                                <>
+                                  <ul contentEditable={false}>
+                                    <li>
+                                      {takeAwayFromDB?.take_away_description}
+                                    </li>
+                                    {/* <li>
+                                        Main source of growth is Amazon and
+                                        Dollar— need for a Channel Based
+                                        Strategy?
+                                      </li>
+                                      <li>Potential Opportunity at Grocery?</li> */}
+                                  </ul>
+                                </>
+                              ) : (
+                                <>
+                                  <div
+                                    className="nla-select-box-with-lbl mt-1"
+                                    // style={{ width: "250px" }}
+                                  >
+                                    <textarea
+                                      name="type_note"
+                                      id=""
+                                      value={
+                                        takeAwayText ||
+                                        takeAwayFromDB?.take_away_description
+                                      }
+                                      className="form-control"
+                                      placeholder="Type Notes..."
+                                      onChange={(e) => {
+                                        setTakeAwayText(e.target.value);
+                                      }}
+                                    ></textarea>
+                                  </div>
+                                </>
+                              )}
                             </div>
                           </div>
                         </div>
