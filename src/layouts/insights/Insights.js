@@ -47,6 +47,26 @@ const Insights = () => {
 
   const [takeAwayFromDB, setTakeAwayFromDB] = useState([]);
 
+  //Edit Slide Name
+  const [editSlideIcon, setEditSlideIcon] = useState(false);
+  const [editSlideName, setEditSlideName] = useState(false);
+
+  //Edit Project Name
+
+  const [editProjectIcon, setEditProjectIcon] = useState(false);
+  const [editProjectName, setEditProjectName] = useState(false);
+
+  //Slide titles
+  const [slide1Title, setSlide1Title] = useState(
+    "Price Architecture Across Retailers M.I"
+  );
+  const [slide2Title, setSlide2Title] = useState(
+    "Price Architecture Across Retailers"
+  );
+  const [slide3Title, setSlide3Title] = useState(
+    "Area of Opportunity by Retailer"
+  );
+
   // Load
   const [load, setLoad] = useState(false);
   const [addInsights, setAddInsights] = useState(true);
@@ -163,18 +183,6 @@ const Insights = () => {
     }
   };
 
-  // UseEffect for Fetching notes:
-  useEffect(() => {
-    async function fetchNotes() {
-      const { data } = await Api("GET", `api/insights/get/notes/${project_id}`);
-      const notesData = JSON.parse(data[0].notes);
-      setNotes(notesData);
-      localStorage.setItem("notesFromDB", JSON.stringify(notesData));
-    }
-    fetchNotes();
-    setLoad(false);
-  }, [load]);
-
   // console.log("note1: ", note1);
 
   // Take Away Stuff ---------------------------------------------------------
@@ -183,7 +191,27 @@ const Insights = () => {
     if (takeAwayFromDB) {
       setTakeAwayText(takeAwayFromDB?.take_away_description);
     }
+
+    if (project) {
+      setProjectName(project?.project_name);
+    }
   }, [project]);
+
+  //Edit Project Name handler
+  const projectNameHandler = () => {
+    editProjectIcon === false
+      ? setEditProjectIcon(true)
+      : setEditProjectIcon(false);
+    editProjectName === false
+      ? setEditProjectName(true)
+      : setEditProjectName(false);
+  };
+
+  //Slide name Edit hanler
+  const slideNameEditHanlder = async () => {
+    editSlideIcon === false ? setEditSlideIcon(true) : setEditSlideIcon(false);
+    editSlideName === false ? setEditSlideName(true) : setEditSlideName(false);
+  };
 
   const editHandler = async () => {
     editIcon === false ? setEditIcon(true) : setEditIcon(false);
@@ -288,9 +316,24 @@ const Insights = () => {
       : setValueDropDown2(false);
   };
 
+  // UseEffect for Fetching notes:
+  useEffect(() => {
+    console.log("I am in notes useEffect");
+    async function fetchNotes() {
+      const { data } = await Api("GET", `api/insights/get/notes/${project_id}`);
+      const notesData = JSON.parse(data[0].notes);
+      setNotes(notesData);
+      localStorage.setItem("notesFromDB", JSON.stringify(notesData));
+    }
+    fetchNotes();
+    setLoad(false);
+  }, [load]);
+
   //Main UseEffect
 
   useEffect(() => {
+    console.log("\n\nI am in Main useEffect");
+
     async function fetchProject() {
       const { data } = await Api("GET", `api/project/${project_id}`);
       setProject(data[0]);
@@ -307,9 +350,9 @@ const Insights = () => {
           },
         };
         const projectNotes = {
-          note1: note1,
-          note2: note2,
-          note3: note3,
+          note1: notes?.note1 || note1,
+          note2: notes?.note2 || note2,
+          note3: notes?.note3 || note3,
         };
 
         const apiData = {
@@ -333,6 +376,8 @@ const Insights = () => {
       setAddInsights(false);
     }
   }, []);
+
+  // UseEffect for Fetching Take Aways:
 
   useEffect(() => {
     async function fetchTakeAways() {
@@ -368,6 +413,8 @@ const Insights = () => {
     takeAwayFromDB?.take_away_description
   );
 
+  const [projectName, setProjectName] = useState(project?.project_name);
+
   // console.log("takeAwayText: ", takeAwayText);
 
   // console.log("Take aways from db: ", takeAwayFromDB);
@@ -388,32 +435,79 @@ const Insights = () => {
                     </div>
                   </Link>
                   <div className="nla-name">
+                    {/* <span>Back to Home Page</span> */}
+                    {/* <p>{project?.project_name || "Project name here"}</p> */}
+
                     <span>Back to Home Page</span>
-                    <p>{project?.project_name || "Project name here"}</p>
+
+                    <div className="project_name">
+                      {editProjectName == false ? (
+                        <>
+                          <p>{projectName || "Project name here"}</p>
+                        </>
+                      ) : (
+                        <>
+                          <div
+                            className="nla-select-box-with-lbl mt-1"
+                            // style={{ width: "250px" }}
+                          >
+                            <input
+                              type="text"
+                              value={projectName}
+                              className="form-control"
+                              placeholder="Enter project name"
+                              aria-describedby="searchOperators"
+                              onChange={(e) => {
+                                setProjectName(e.target.value);
+                              }}
+                            ></input>
+                          </div>
+                        </>
+                      )}
+
+                      {editProjectIcon == false ? (
+                        <>
+                          <a
+                            onClick={projectNameHandler}
+                            className="nla-edit-name"
+                            style={{ cursor: "pointer" }}
+                          >
+                            {/* <i className="fa-solid fa-pen"></i> */}
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="44"
+                              height="37"
+                              viewBox="0 0 44 37"
+                            >
+                              <g
+                                id="Group_123037"
+                                data-name="Group 123037"
+                                transform="translate(-322 -75)"
+                              >
+                                <path
+                                  id="Icon_material-edit"
+                                  data-name="Icon material-edit"
+                                  d="M4.5,16.114v3.057H7.557l9.016-9.016L13.516,7.1ZM18.936,7.792a.812.812,0,0,0,0-1.149L17.029,4.735a.812.812,0,0,0-1.149,0L14.388,6.226l3.057,3.057,1.492-1.492Z"
+                                  transform="translate(332.163 81.504)"
+                                  fill="#164f73"
+                                ></path>
+                              </g>
+                            </svg>
+                          </a>
+                        </>
+                      ) : (
+                        <>
+                          <a
+                            className="nla-edit-name mt-2"
+                            onClick={projectNameHandler}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <i className="fa-solid fa-check"></i>
+                          </a>
+                        </>
+                      )}
+                    </div>
                   </div>
-                  <a href="#" className="nla-edit-name">
-                    {/* <i className="fa-solid fa-pen"></i> */}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="44"
-                      height="37"
-                      viewBox="0 0 44 37"
-                    >
-                      <g
-                        id="Group_123037"
-                        data-name="Group 123037"
-                        transform="translate(-322 -75)"
-                      >
-                        <path
-                          id="Icon_material-edit"
-                          data-name="Icon material-edit"
-                          d="M4.5,16.114v3.057H7.557l9.016-9.016L13.516,7.1ZM18.936,7.792a.812.812,0,0,0,0-1.149L17.029,4.735a.812.812,0,0,0-1.149,0L14.388,6.226l3.057,3.057,1.492-1.492Z"
-                          transform="translate(332.163 81.504)"
-                          fill="#164f73"
-                        ></path>
-                      </g>
-                    </svg>
-                  </a>
                 </div>
               </div>
               <div className="col-lg-8">
@@ -586,34 +680,83 @@ const Insights = () => {
                           <div className="col-lg-12">
                             <div className="nla_accordion-content-title-with-filter-block position-relative">
                               <div className="nla_heading">
-                                <h4>Price Architecture Across Retailers</h4>
-                                <a href="#">
-                                  {/* <i className="fa-solid fa-pen"></i> */}
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="13.058"
-                                    height="12.924"
-                                    viewBox="0 0 13.058 12.924"
-                                  >
-                                    <g
-                                      id="Group_127802"
-                                      data-name="Group 127802"
-                                      transform="translate(-662.829 -728.333)"
+                                {/* <h4>Price Architecture Across Retailers</h4> */}
+                                {/* <h4>
+                                  {takeAwayFromDB?.take_away_title ||
+                                    "Price Architecture Across Retailers"}
+                                </h4> */}
+
+                                {editSlideName == false ? (
+                                  <>
+                                    <h4>{slide1Title}</h4>
+                                  </>
+                                ) : (
+                                  <>
+                                    <div
+                                      className="nla-select-box-with-lbl mt-1"
+                                      style={{ width: "300px" }}
                                     >
-                                      <path
-                                        id="Icon_feather-edit-2"
-                                        data-name="Icon feather-edit-2"
-                                        d="M12.021,3.756a1.7,1.7,0,0,1,2.406,2.406L6.308,14.28,3,15.182l.9-3.308Z"
-                                        transform="translate(660.329 725.575)"
-                                        fill="none"
-                                        stroke="#164f73"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="1"
-                                      ></path>
-                                    </g>
-                                  </svg>
-                                </a>
+                                      <input
+                                        type="text"
+                                        value={slide1Title}
+                                        className="form-control"
+                                        placeholder="Enter slide name"
+                                        aria-describedby="searchOperators"
+                                        onChange={(e) => {
+                                          setSlide1Title(e.target.value);
+                                        }}
+                                      ></input>
+                                    </div>
+                                  </>
+                                )}
+
+                                {editSlideIcon == false ? (
+                                  <>
+                                    <a
+                                      onClick={slideNameEditHanlder}
+                                      style={{ cursor: "pointer" }}
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="13.058"
+                                        height="12.924"
+                                        viewBox="0 0 13.058 12.924"
+                                      >
+                                        <g
+                                          id="Group_127802"
+                                          data-name="Group 127802"
+                                          transform="translate(-662.829 -728.333)"
+                                        >
+                                          <path
+                                            id="Icon_feather-edit-2"
+                                            data-name="Icon feather-edit-2"
+                                            d="M12.021,3.756a1.7,1.7,0,0,1,2.406,2.406L6.308,14.28,3,15.182l.9-3.308Z"
+                                            transform="translate(660.329 725.575)"
+                                            fill="none"
+                                            stroke="#164f73"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="1"
+                                          />
+                                        </g>
+                                      </svg>
+                                    </a>
+                                  </>
+                                ) : (
+                                  <>
+                                    <a
+                                      onClick={slideNameEditHanlder}
+                                      style={{
+                                        cursor: "pointer",
+                                        marginLeft: 25,
+                                      }}
+                                      className=""
+                                    >
+                                      <i className="fa-solid fa-check"></i>
+                                    </a>
+                                  </>
+                                )}
+
                                 <a href="#">
                                   {/* <i className="fa-solid fa-trash"></i> */}
                                   <svg
@@ -1014,7 +1157,8 @@ const Insights = () => {
                                   <>
                                     <ul contentEditable={false}>
                                       <li>
-                                        {takeAwayFromDB?.take_away_description}
+                                        {takeAwayFromDB?.take_away_description ||
+                                          "Add new Take Away"}
                                       </li>
                                       {/* <li>
                                         Main source of growth is Amazon and
@@ -1292,33 +1436,84 @@ const Insights = () => {
                         <div className="col-lg-12">
                           <div className="nla_accordion-content-title-with-filter-block">
                             <div className="nla_heading">
-                              <h4>Price Architecture Across Retailers</h4>
-                              <a href="">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="13.058"
-                                  height="12.924"
-                                  viewBox="0 0 13.058 12.924"
-                                >
-                                  <g
-                                    id="Group_127802"
-                                    data-name="Group 127802"
-                                    transform="translate(-662.829 -728.333)"
+                              {/* <h4>Price Architecture Across Retailers</h4> */}
+
+                              {/* <h4>
+                                {takeAwayFromDB?.take_away_title ||
+                                  "Price Architecture Across Retailers"}
+                              </h4> */}
+
+                              {editSlideName == false ? (
+                                <>
+                                  <h4>{slide2Title}</h4>
+                                </>
+                              ) : (
+                                <>
+                                  <div
+                                    className="nla-select-box-with-lbl mt-1"
+                                    style={{ width: "300px" }}
                                   >
-                                    <path
-                                      id="Icon_feather-edit-2"
-                                      data-name="Icon feather-edit-2"
-                                      d="M12.021,3.756a1.7,1.7,0,0,1,2.406,2.406L6.308,14.28,3,15.182l.9-3.308Z"
-                                      transform="translate(660.329 725.575)"
-                                      fill="none"
-                                      stroke="#164f73"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth="1"
-                                    />
-                                  </g>
-                                </svg>
-                              </a>
+                                    <input
+                                      type="text"
+                                      value={slide2Title}
+                                      className="form-control"
+                                      placeholder="Enter slide name"
+                                      aria-describedby="searchOperators"
+                                      onChange={(e) => {
+                                        setSlide2Title(e.target.value);
+                                      }}
+                                    ></input>
+                                  </div>
+                                </>
+                              )}
+
+                              {editSlideIcon == false ? (
+                                <>
+                                  <a
+                                    onClick={slideNameEditHanlder}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="13.058"
+                                      height="12.924"
+                                      viewBox="0 0 13.058 12.924"
+                                    >
+                                      <g
+                                        id="Group_127802"
+                                        data-name="Group 127802"
+                                        transform="translate(-662.829 -728.333)"
+                                      >
+                                        <path
+                                          id="Icon_feather-edit-2"
+                                          data-name="Icon feather-edit-2"
+                                          d="M12.021,3.756a1.7,1.7,0,0,1,2.406,2.406L6.308,14.28,3,15.182l.9-3.308Z"
+                                          transform="translate(660.329 725.575)"
+                                          fill="none"
+                                          stroke="#164f73"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="1"
+                                        />
+                                      </g>
+                                    </svg>
+                                  </a>
+                                </>
+                              ) : (
+                                <>
+                                  <a
+                                    onClick={slideNameEditHanlder}
+                                    style={{
+                                      cursor: "pointer",
+                                      marginLeft: 25,
+                                    }}
+                                    className=""
+                                  >
+                                    <i className="fa-solid fa-check"></i>
+                                  </a>
+                                </>
+                              )}
+
                               <a href="">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -1864,33 +2059,79 @@ const Insights = () => {
                         <div className="col-lg-12">
                           <div className="nla_accordion-content-title-with-filter-block position-relative">
                             <div className="nla_heading">
-                              <h4>Area of Opportunity by Retailer</h4>
-                              <a href="#">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="13.058"
-                                  height="12.924"
-                                  viewBox="0 0 13.058 12.924"
-                                >
-                                  <g
-                                    id="Group_127802"
-                                    data-name="Group 127802"
-                                    transform="translate(-662.829 -728.333)"
+                              {/* <h4>Area of Opportunity by Retailer</h4> */}
+
+                              {editSlideName == false ? (
+                                <>
+                                  <h4>{slide3Title}</h4>
+                                </>
+                              ) : (
+                                <>
+                                  <div
+                                    className="nla-select-box-with-lbl mt-1"
+                                    style={{ width: "300px" }}
                                   >
-                                    <path
-                                      id="Icon_feather-edit-2"
-                                      data-name="Icon feather-edit-2"
-                                      d="M12.021,3.756a1.7,1.7,0,0,1,2.406,2.406L6.308,14.28,3,15.182l.9-3.308Z"
-                                      transform="translate(660.329 725.575)"
-                                      fill="none"
-                                      stroke="#164f73"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth="1"
-                                    />
-                                  </g>
-                                </svg>
-                              </a>
+                                    <input
+                                      type="text"
+                                      value={slide3Title}
+                                      className="form-control"
+                                      placeholder="Enter slide name"
+                                      aria-describedby="searchOperators"
+                                      onChange={(e) => {
+                                        setSlide3Title(e.target.value);
+                                      }}
+                                    ></input>
+                                  </div>
+                                </>
+                              )}
+
+                              {editSlideIcon == false ? (
+                                <>
+                                  <a
+                                    onClick={slideNameEditHanlder}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="13.058"
+                                      height="12.924"
+                                      viewBox="0 0 13.058 12.924"
+                                    >
+                                      <g
+                                        id="Group_127802"
+                                        data-name="Group 127802"
+                                        transform="translate(-662.829 -728.333)"
+                                      >
+                                        <path
+                                          id="Icon_feather-edit-2"
+                                          data-name="Icon feather-edit-2"
+                                          d="M12.021,3.756a1.7,1.7,0,0,1,2.406,2.406L6.308,14.28,3,15.182l.9-3.308Z"
+                                          transform="translate(660.329 725.575)"
+                                          fill="none"
+                                          stroke="#164f73"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="1"
+                                        />
+                                      </g>
+                                    </svg>
+                                  </a>
+                                </>
+                              ) : (
+                                <>
+                                  <a
+                                    onClick={slideNameEditHanlder}
+                                    style={{
+                                      cursor: "pointer",
+                                      marginLeft: 25,
+                                    }}
+                                    className=""
+                                  >
+                                    <i className="fa-solid fa-check"></i>
+                                  </a>
+                                </>
+                              )}
+
                               <a href="#">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -2328,34 +2569,79 @@ const Insights = () => {
                               <div class="col-lg-6">
                                 <div class="nla_graph-heading">
                                   <div class="nla_heading">
-                                    <h5>Area of Opportunity by Retailer</h5>
-                                    <div>
-                                      <a href="#">
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          width="13.058"
-                                          height="12.924"
-                                          viewBox="0 0 13.058 12.924"
+                                    {/* <h5>Area of Opportunity by Retailer</h5> */}
+
+                                    {editSlideName == false ? (
+                                      <>
+                                        <h5>{slide3Title}</h5>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <div
+                                          className="nla-select-box-with-lbl mt-1"
+                                          style={{ width: "300px" }}
                                         >
-                                          <g
-                                            id="Group_127802"
-                                            data-name="Group 127802"
-                                            transform="translate(-662.829 -728.333)"
+                                          <input
+                                            type="text"
+                                            value={slide3Title}
+                                            className="form-control"
+                                            placeholder="Enter slide name"
+                                            aria-describedby="searchOperators"
+                                            onChange={(e) => {
+                                              setSlide3Title(e.target.value);
+                                            }}
+                                          ></input>
+                                        </div>
+                                      </>
+                                    )}
+
+                                    {editSlideIcon == false ? (
+                                      <>
+                                        <a
+                                          onClick={slideNameEditHanlder}
+                                          style={{ cursor: "pointer" }}
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="13.058"
+                                            height="12.924"
+                                            viewBox="0 0 13.058 12.924"
                                           >
-                                            <path
-                                              id="Icon_feather-edit-2"
-                                              data-name="Icon feather-edit-2"
-                                              d="M12.021,3.756a1.7,1.7,0,0,1,2.406,2.406L6.308,14.28,3,15.182l.9-3.308Z"
-                                              transform="translate(660.329 725.575)"
-                                              fill="none"
-                                              stroke="#164f73"
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                              strokeWidth="1"
-                                            />
-                                          </g>
-                                        </svg>
-                                      </a>
+                                            <g
+                                              id="Group_127802"
+                                              data-name="Group 127802"
+                                              transform="translate(-662.829 -728.333)"
+                                            >
+                                              <path
+                                                id="Icon_feather-edit-2"
+                                                data-name="Icon feather-edit-2"
+                                                d="M12.021,3.756a1.7,1.7,0,0,1,2.406,2.406L6.308,14.28,3,15.182l.9-3.308Z"
+                                                transform="translate(660.329 725.575)"
+                                                fill="none"
+                                                stroke="#164f73"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="1"
+                                              />
+                                            </g>
+                                          </svg>
+                                        </a>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <a
+                                          onClick={slideNameEditHanlder}
+                                          style={{
+                                            cursor: "pointer",
+                                            marginLeft: 25,
+                                          }}
+                                          className=""
+                                        >
+                                          <i className="fa-solid fa-check"></i>
+                                        </a>
+                                      </>
+                                    )}
+                                    <div>
                                       <a href="#">
                                         <svg
                                           xmlns="http://www.w3.org/2000/svg"

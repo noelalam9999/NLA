@@ -559,7 +559,8 @@ const RightSideBarDesignStudio = ({
                         type="file"
                         id="file"
                         className="form-control"
-                        accept=".csv"
+                        // accept=".csv"
+                        accept=".xlsx, .xls, .csv"
                         // onClick={fileUploadHandler}
                         onChange={(e) => setUploadFile(e.target.files)}
 

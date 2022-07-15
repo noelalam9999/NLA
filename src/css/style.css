@@ -2019,10 +2019,20 @@ header .theme-title h1 span {
   -webkit-transform: rotate(135deg);
 }
 
+.nla-name {
+  min-width: 200px;
+}
+
+.project_name {
+  display: flex;
+  flex-direction: row;
+  /* background-color: #14b3a7; */
+}
+
 .design-studio-topbar .new-project-name .nla-name span {
   text-align: left;
   font-size: 14px;
-  line-height: 1.1;
+  line-height: 1.7;
   letter-spacing: 0px;
   color: #2a2725;
   opacity: 0.5;
@@ -2031,7 +2041,7 @@ header .theme-title h1 span {
 .design-studio-topbar .new-project-name .nla-name p {
   text-align: left;
   font-size: 18px;
-  line-height: 1.1;
+  line-height: 1.8;
   font-weight: 500;
   letter-spacing: 0px;
   color: #2a2725;

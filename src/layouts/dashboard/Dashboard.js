@@ -1135,13 +1135,38 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const fetchNodes = (project__id) => {
+  const fetchNodes = async (project__id) => {
     // console.log("I am in fetch Nodes", project__id);
     if (project__id) {
       dispatch(allActions.getNodesAction.getNodesState(project__id));
       setTimeout(() => {
         navigate(`/design-studio/${project__id}`);
       }, 1300);
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const modelData = {
+        user_id,
+        project_id: project__id,
+        edges: "",
+        nodes: "",
+        viewport: "",
+      };
+
+      let { data } = await Api(
+        "POST",
+        "api/add/model/edges",
+        modelData,
+        config
+      );
+
+      if (data) {
+        console.log("data of model table: ", data);
+      }
     }
   };
 
