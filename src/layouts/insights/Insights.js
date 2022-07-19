@@ -257,7 +257,7 @@ const Insights = () => {
       if (data) {
         setLoad(true);
         setNoteAlert(data?.message);
-        // console.log("Data from ADD Take Aways API: ", data);
+        console.log("Data from ADD Take Aways API: ", data);
         setNoteSaved(true);
 
         setTimeout(() => {
@@ -352,7 +352,7 @@ const Insights = () => {
     fetchProject();
 
     if (addInsights === true) {
-      // console.log("I am true");
+      console.log("I am true");
       async function addNoteAPIcall() {
         const config = {
           headers: {
@@ -367,18 +367,17 @@ const Insights = () => {
 
         const apiData = {
           project_id,
-          project_notes: projectNotes,
         };
 
         const { data } = await Api(
           "POST",
-          `api/insights/add/notes`,
+          `api/insights/add/insight`,
           apiData,
           config
         );
 
         if (data) {
-          // console.log("Data from ADD Notes API: ", data);
+          console.log("Data from ADD Notes API: ", data);
         }
       }
 
@@ -422,6 +421,8 @@ const Insights = () => {
   const [takeAwayText, setTakeAwayText] = useState(
     takeAwayFromDB?.take_away_description
   );
+
+  // console.log("takeAwayText: ", takeAwayText);
 
   const [projectName, setProjectName] = useState(project?.project_name);
 
@@ -1189,17 +1190,25 @@ const Insights = () => {
                                         onInit={(evt, editor) =>
                                           (editorRef.current = editor)
                                         }
-                                        // initialValue={
-                                        //   takeAwayText || takeAwayFromDB?.take_away_description
-                                        // }
-                                        value={
-                                          takeAwayText ||
-                                          takeAwayFromDB?.take_away_description ||
-                                          "Empty"
+                                        initialValue={
+                                          takeAwayFromDB?.take_away_description
                                         }
-                                        onEditorChange={(e) => {
-                                          setTakeAwayText(e.target.value);
+                                        // value={
+                                        //   takeAwayText ||
+                                        //   takeAwayFromDB?.take_away_description ||
+                                        //   "Empty"
+                                        // }
+                                        // onEditorChange={(e) => {
+                                        //   setTakeAwayText(e.target.value);
+                                        // }}
+                                        onEditorChange={(newValue, editor) => {
+                                          setTakeAwayText(
+                                            editor.getContent({
+                                              format: "text",
+                                            })
+                                          );
                                         }}
+                                        onCh
                                         init={{
                                           height: 500,
                                           menubar: false,
