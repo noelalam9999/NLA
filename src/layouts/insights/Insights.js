@@ -21,6 +21,8 @@ import Api from "../../services/Api";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import GoogleChart from "../../components/GoogleChart";
+import { Editor } from "@tinymce/tinymce-react";
+
 const Insights = () => {
   const project_id = useParams().id;
 
@@ -73,6 +75,14 @@ const Insights = () => {
 
   // Slide Type
   const [slideType, setSlideType] = useState("M.A");
+
+  //Editor
+  const editorRef = useRef(null);
+  const log = () => {
+    if (editorRef.current) {
+      console.log(editorRef.current.getContent());
+    }
+  };
 
   // console.log("Note 1: ", note1);
 
@@ -1174,7 +1184,40 @@ const Insights = () => {
                                       className="nla-select-box-with-lbl mt-1"
                                       // style={{ width: "250px" }}
                                     >
-                                      <textarea
+                                      <Editor
+                                        apiKey="emjv2s34941vlx26dl94ppc7t2a8g7iqva7v5ip7htwdmmcq"
+                                        onInit={(evt, editor) =>
+                                          (editorRef.current = editor)
+                                        }
+                                        // initialValue={
+                                        //   takeAwayText || takeAwayFromDB?.take_away_description
+                                        // }
+                                        value={
+                                          takeAwayText ||
+                                          takeAwayFromDB?.take_away_description ||
+                                          "Empty"
+                                        }
+                                        onEditorChange={(e) => {
+                                          setTakeAwayText(e.target.value);
+                                        }}
+                                        init={{
+                                          height: 500,
+                                          menubar: false,
+                                          plugins: [
+                                            "advlist autolink lists link image charmap print preview anchor",
+                                            "searchreplace visualblocks code fullscreen",
+                                            "insertdatetime media table paste code help wordcount",
+                                          ],
+                                          toolbar:
+                                            "undo redo | formatselect | " +
+                                            "bold italic backcolor | alignleft aligncenter " +
+                                            "alignright alignjustify | bullist numlist outdent indent | " +
+                                            "removeformat | help",
+                                          content_style:
+                                            "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                                        }}
+                                      />
+                                      {/* <textarea
                                         name="type_note"
                                         id=""
                                         value={
@@ -1186,7 +1229,7 @@ const Insights = () => {
                                         onChange={(e) => {
                                           setTakeAwayText(e.target.value);
                                         }}
-                                      ></textarea>
+                                      ></textarea> */}
                                     </div>
                                   </>
                                 )}
