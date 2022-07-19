@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -117,7 +118,27 @@ export const data = {
     },
   ],
 };
+const getdata = async () => {
+  try {
+    const config = {
+      headers: {
+        // Authorization: `${user.token_type} ${user.access_token}`,
+      },
+    };
+    const api = `https://35.239.41.208:8082/insights?userid=user1&projectid=project1`;
+    var res = await axios.get(api, config);
+    console.log(res);
+    if (res.status === 200) {
+    }
+  } catch (error) {
+    // setLoadingOn(false);
+    console.log("Error", error.response);
+  }
+};
 const Chartjs = () => {
+  useEffect(() => {
+    getdata();
+  }, []);
   return <Line options={options} data={data} />;
 };
 

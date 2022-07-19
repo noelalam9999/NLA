@@ -95,7 +95,7 @@ const Insights = () => {
     if (note1 === "" && note2 === "" && note3 === "") {
       alert("Please enter a note");
     } else {
-      console.log("Note 1 in else: ", note1);
+      // console.log("Note 1 in else: ", note1);
 
       if (note1 === "" && note2 !== "" && note3 !== "") {
         const projectNotes = {
@@ -138,7 +138,7 @@ const Insights = () => {
           note2: notes.note2,
           note3: notes.note3,
         };
-        console.log("In note 1");
+        // console.log("In note 1");
         addNoteAPIcall(projectNotes);
       } else {
         const projectNotes = {
@@ -174,7 +174,7 @@ const Insights = () => {
 
     if (data) {
       setNoteAlert(data?.message);
-      console.log("Data from ADD Notes API: ", data);
+      // console.log("Data from ADD Notes API: ", data);
       setNoteSaved(true);
       setTimeout(() => {
         setNoteSaved(false);
@@ -247,7 +247,7 @@ const Insights = () => {
       if (data) {
         setLoad(true);
         setNoteAlert(data?.message);
-        console.log("Data from ADD Take Aways API: ", data);
+        // console.log("Data from ADD Take Aways API: ", data);
         setNoteSaved(true);
 
         setTimeout(() => {
@@ -318,7 +318,7 @@ const Insights = () => {
 
   // UseEffect for Fetching notes:
   useEffect(() => {
-    console.log("I am in notes useEffect");
+    // console.log("I am in notes useEffect");
     async function fetchNotes() {
       const { data } = await Api("GET", `api/insights/get/notes/${project_id}`);
       const notesData = JSON.parse(data[0].notes);
@@ -332,7 +332,7 @@ const Insights = () => {
   //Main UseEffect
 
   useEffect(() => {
-    console.log("\n\nI am in Main useEffect");
+    // console.log("\n\nI am in Main useEffect");
 
     async function fetchProject() {
       const { data } = await Api("GET", `api/project/${project_id}`);
@@ -342,7 +342,7 @@ const Insights = () => {
     fetchProject();
 
     if (addInsights === true) {
-      console.log("I am true");
+      // console.log("I am true");
       async function addNoteAPIcall() {
         const config = {
           headers: {
@@ -368,7 +368,7 @@ const Insights = () => {
         );
 
         if (data) {
-          console.log("Data from ADD Notes API: ", data);
+          // console.log("Data from ADD Notes API: ", data);
         }
       }
 
@@ -403,7 +403,7 @@ const Insights = () => {
       //   "GET",
       //   `api/insights/get/take-aways/${project_id}`
       // );
-      console.log("Data: ", data);
+      // console.log("Data: ", data);
       setTakeAwayFromDB(data[0]);
     }
     fetchTakeAways();
