@@ -125,10 +125,11 @@ const getdata = async () => {
         // Authorization: `${user.token_type} ${user.access_token}`,
       },
     };
-    const api = `https://35.239.41.208:8082/insights?userid=user1&projectid=project1`;
-    var res = await axios.get(api, config);
-    console.log(res);
+    const api = `http://35.239.41.208:8082/insights?userid=user1&projectid=project1`;
+    var res = await axios.get(api);
+
     if (res.status === 200) {
+      // console.log("Graph Response: ", res);
     }
   } catch (error) {
     // setLoadingOn(false);
