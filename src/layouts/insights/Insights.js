@@ -2810,17 +2810,18 @@ const Insights = () => {
                             <div className="nla_content">
                               {editTakeAway == false ? (
                                 <>
-                                  <ul contentEditable={false}>
+                                  {/* <ul contentEditable={false}>
                                     <li>
                                       {takeAwayFromDB?.take_away_description}
                                     </li>
-                                    {/* <li>
-                                        Main source of growth is Amazon and
-                                        Dollar— need for a Channel Based
-                                        Strategy?
-                                      </li>
-                                      <li>Potential Opportunity at Grocery?</li> */}
-                                  </ul>
+                                  </ul> */}
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html:
+                                        takeAwayFromDB?.take_away_description ||
+                                        "Add new Take Away",
+                                    }}
+                                  />
                                 </>
                               ) : (
                                 <>
@@ -2829,6 +2830,41 @@ const Insights = () => {
                                     // style={{ width: "250px" }}
                                   >
                                     <Editor
+                                      apiKey="emjv2s34941vlx26dl94ppc7t2a8g7iqva7v5ip7htwdmmcq"
+                                      // value={takeAwayTextValue}
+                                      // onInit={(evt, editor) =>
+                                      //   (editorRef.current = editor)
+                                      // }
+                                      initialValue={
+                                        takeAwayFromDB?.take_away_description
+                                      }
+                                      onEditorChange={(newValue, editor) => {
+                                        setTakeAwayTextValue(newValue);
+                                        setTakeAwayText(
+                                          editor.getContent({
+                                            format: "text",
+                                          })
+                                        );
+                                      }}
+                                      // onCh
+                                      init={{
+                                        height: 400,
+                                        menubar: false,
+                                        plugins: [
+                                          "advlist autolink lists link image charmap print preview anchor",
+                                          "searchreplace visualblocks code fullscreen",
+                                          "insertdatetime media table paste code help wordcount",
+                                        ],
+                                        toolbar:
+                                          "undo redo | formatselect | " +
+                                          "bold italic backcolor | alignleft aligncenter " +
+                                          "alignright alignjustify | bullist numlist outdent indent | " +
+                                          "removeformat | help",
+                                        content_style:
+                                          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                                      }}
+                                    />
+                                    {/* <Editor
                                       apiKey="emjv2s34941vlx26dl94ppc7t2a8g7iqva7v5ip7htwdmmcq"
                                       onInit={(evt, editor) =>
                                         (editorRef.current = editor)
@@ -2860,7 +2896,8 @@ const Insights = () => {
                                         content_style:
                                           "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                                       }}
-                                    />
+                                    /> */}
+
                                     {/* <textarea
                                       name="type_note"
                                       id=""
