@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Chart as ChartJS,
@@ -80,66 +80,71 @@ const labels = [
   "Amazon",
   "Dollar General",
 ];
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "AW 4 Oz (Night Time)",
-      data: [16, 14, 13, 10, 9, 8.5, 8],
-      borderColor: "#3366CC",
-      fill: false,
-      backgroundColor: "#3366CC",
-    },
-    {
-      label: "AW 4 Oz (Original)",
-      data: [16, 14.5, 13.5, 9, 9, 7.5, 7.8],
-      borderColor: "#DC3912",
-      backgroundColor: "#DC3912",
-    },
-    {
-      label: "AW 4 Oz (Original)",
-      //data: [5,6],
-      data: [
-        { x: "Amazon", y: 5 },
-        { x: "Dollar General", y: 7 },
-      ],
-      borderColor: "#109618",
-      backgroundColor: "#109618",
-    },
-    {
-      label: "AW 4 Oz (Night Time)",
-      //data: [6, 6],
-      data: [
-        { x: "Amazon", y: 6 },
-        { x: "Dollar General", y: 7 },
-      ],
-      borderColor: "#FF9900",
-      backgroundColor: "#FF9900",
-    },
-  ],
-};
-const getdata = async () => {
-  try {
-    const config = {
-      headers: {
-        // Authorization: `${user.token_type} ${user.access_token}`,
-      },
-    };
-    const api = `http://35.239.41.208:8082/insights?userid=user1&projectid=project1`;
-    var res = await axios.get(api);
 
-    if (res.status === 200) {
-      // console.log("Graph Response: ", res);
-    }
-  } catch (error) {
-    // setLoadingOn(false);
-    console.log("Error", error.response);
-  }
-};
 const Chartjs = () => {
+  const [tableData, setTableData] = useState();
+
+  const getdata = async () => {
+    try {
+      const config = {
+        headers: {
+          // Authorization: `${user.token_type} ${user.access_token}`,
+        },
+      };
+      const api = `http://35.239.41.208:8082/insights?userid=user1&projectid=project1`;
+      var res = await axios.get(api);
+      console.log("Graph Response: ", res.data.data);
+      setTableData(res.data.data);
+      if (res.status === 200) {
+        // console.log("Graph Response: ", res);
+      }
+    } catch (error) {
+      // setLoadingOn(false);
+      console.log("Error", error.response);
+    }
+  };
+  const price = tableData?.elasticity?.map((val) => val.price);
   useEffect(() => {
     getdata();
   }, []);
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "AW 4 Oz (Night Time)",
+        data: [16, 14, 13, 10, 9, 8.5, 8],
+        borderColor: "#3366CC",
+        fill: false,
+        backgroundColor: "#3366CC",
+      },
+      // {
+      //   label: "AW 4 Oz (Original)",
+      //   data: price,
+      //   borderColor: "#DC3912",
+      //   backgroundColor: "#DC3912",
+      // },
+      // {
+      //   label: "AW 4 Oz (Original)",
+      //   //data: [5,6],
+      //   data: [
+      //     { x: "Amazon", y: 5 },
+      //     { x: "Dollar General", y: 7 },
+      //   ],
+      //   borderColor: "#109618",
+      //   backgroundColor: "#109618",
+      // },
+      // {
+      //   label: "AW 4 Oz (Night Time)",
+      //   //data: [6, 6],
+      //   data: [
+      //     { x: "Amazon", y: 6 },
+      //     { x: "Dollar General", y: 7 },
+      //   ],
+      //   borderColor: "#FF9900",
+      //   backgroundColor: "#FF9900",
+      // },
+    ],
+  };
   return <Line options={options} data={data} />;
 };
 

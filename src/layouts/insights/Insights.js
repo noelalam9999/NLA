@@ -653,7 +653,7 @@ const Insights = () => {
                       <a href="#">
                         {/* <i className="fa-solid fa-circle-info"></i> */}
                         <OverlayTrigger
-                          placement="bottom"
+                          placement="left"
                           delay={{ show: 50, hide: 250 }}
                           overlay={
                             <Tooltip id="overlay-example">
