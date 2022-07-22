@@ -117,32 +117,32 @@ const Chartjs = () => {
         fill: false,
         backgroundColor: "#3366CC",
       },
-      {
-        label: "AW 4 Oz (Original)",
-        data: price,
-        borderColor: "#DC3912",
-        backgroundColor: "#DC3912",
-      },
-      {
-        label: "AW 4 Oz (Original)",
-        //data: [5,6],
-        data: [
-          { x: "Amazon", y: 5 },
-          { x: "Dollar General", y: 7 },
-        ],
-        borderColor: "#109618",
-        backgroundColor: "#109618",
-      },
-      {
-        label: "AW 4 Oz (Night Time)",
-        //data: [6, 6],
-        data: [
-          { x: "Amazon", y: 6 },
-          { x: "Dollar General", y: 7 },
-        ],
-        borderColor: "#FF9900",
-        backgroundColor: "#FF9900",
-      },
+      // {
+      //   label: "AW 4 Oz (Original)",
+      //   data: price,
+      //   borderColor: "#DC3912",
+      //   backgroundColor: "#DC3912",
+      // },
+      // {
+      //   label: "AW 4 Oz (Original)",
+      //   //data: [5,6],
+      //   data: [
+      //     { x: "Amazon", y: 5 },
+      //     { x: "Dollar General", y: 7 },
+      //   ],
+      //   borderColor: "#109618",
+      //   backgroundColor: "#109618",
+      // },
+      // {
+      //   label: "AW 4 Oz (Night Time)",
+      //   //data: [6, 6],
+      //   data: [
+      //     { x: "Amazon", y: 6 },
+      //     { x: "Dollar General", y: 7 },
+      //   ],
+      //   borderColor: "#FF9900",
+      //   backgroundColor: "#FF9900",
+      // },
     ],
   };
   return <Line options={options} data={data} />;
