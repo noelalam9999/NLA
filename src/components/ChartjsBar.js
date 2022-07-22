@@ -102,8 +102,9 @@ const ChartjsBar = () => {
       const api = `http://35.239.41.208:8082/insights?userid=user1&projectid=project1`;
       var res = await axios.get(api);
       console.log("Graph Response: ", res.data.data);
-      setTableData(res.data.data);
+
       if (res.status === 200) {
+        setTableData(res.data.data);
         // console.log("Graph Response: ", res);
       }
     } catch (error) {
@@ -125,7 +126,7 @@ const ChartjsBar = () => {
         // barPercentage: 1.0,
         // categoryPercentage: 0.4,
         label: "AW 4 Oz (Night Time)",
-        data: [-0.4, -0.5, -0.2, -0.1, -2.0, -1.4, -0.3, -0.6],
+        data: price,
         borderColor: "#3366CC",
         fill: false,
         backgroundColor: "#3366CC",

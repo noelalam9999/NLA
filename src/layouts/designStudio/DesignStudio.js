@@ -268,7 +268,8 @@ const DesignStudio = () => {
           // Authorization: `${user.token_type} ${user.access_token}`,
         },
       };
-      const api = `http://35.239.41.208:8081/model?fileName=chart-data_user1_project1.csv&type=pricing`;
+      // const api = `https://35.239.41.208:8081/model?fileName=chart-data_user1_project1.csv&type=pricing`;
+      const api = `//35.239.41.208:8081/model?fileName=chart-data_user1_project1.csv&type=pricing`;
       var res = await axios.get(api);
 
       if (res.status === 200) {

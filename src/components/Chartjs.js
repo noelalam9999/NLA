@@ -92,10 +92,12 @@ const Chartjs = () => {
         },
       };
       const api = `http://35.239.41.208:8082/insights?userid=user1&projectid=project1`;
+      // const api = `//35.239.41.208:8082/insights?userid=user1&projectid=project1`;
       var res = await axios.get(api);
       console.log("Graph Response: ", res.data.data);
-      setTableData(res.data.data);
+
       if (res.status === 200) {
+        setTableData(res.data.data);
         // console.log("Graph Response: ", res);
       }
     } catch (error) {
@@ -104,6 +106,7 @@ const Chartjs = () => {
     }
   };
   const price = tableData?.elasticity?.map((val) => val.price);
+  const labels = tableData?.elasticity?.map((val) => val.retailer);
   useEffect(() => {
     getdata();
   }, []);
@@ -112,7 +115,7 @@ const Chartjs = () => {
     datasets: [
       {
         label: "AW 4 Oz (Night Time)",
-        data: [16, 14, 13, 10, 9, 8.5, 8],
+        data: price,
         borderColor: "#3366CC",
         fill: false,
         backgroundColor: "#3366CC",
