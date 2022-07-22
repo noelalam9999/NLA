@@ -348,7 +348,7 @@ const DesignStudio = () => {
                       Run <i className="fa-solid fa-play"></i>
                     </a>
                     <OverlayTrigger
-                      placement="bottom"
+                      placement="left"
                       delay={{ show: 250, hide: 250 }}
                       overlay={
                         <Tooltip id="overlay-example">
@@ -375,7 +375,7 @@ const DesignStudio = () => {
                         Output <img src={output} alt="" />
                       </a>
                       <OverlayTrigger
-                        placement="bottom"
+                        placement="left"
                         delay={{ show: 250, hide: 250 }}
                         overlay={
                           <Tooltip id="overlay-example">
@@ -402,7 +402,7 @@ const DesignStudio = () => {
                         Create Project <img src={plus} alt="" />{" "}
                       </a>
                       <OverlayTrigger
-                        placement="bottom"
+                        placement="left"
                         delay={{ show: 250, hide: 250 }}
                         overlay={
                           <Tooltip id="overlay-example">
