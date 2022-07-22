@@ -362,7 +362,7 @@ const Flow = () => {
     if (performance.navigation.type === 1) {
       onRestore();
     } else {
-      console.log("This page is not reloaded");
+      // console.log("This page is not reloaded");
     }
   }, [performance.navigation.type]);
   useEffect(() => {

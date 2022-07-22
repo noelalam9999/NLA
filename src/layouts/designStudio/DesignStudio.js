@@ -22,6 +22,7 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 // import { nodeState } from "../../store/nodesStore/nodeStoreAction";
 import allActions from "../../store/index";
 import progressModalImg from "../../assets/images/progress-status-modal-image.png";
+import axios from "axios";
 // import Api from "../../services/Api";
 
 // import {
@@ -241,20 +242,45 @@ const DesignStudio = () => {
       }, 3000);
     }
   };
+
   const [val, setVal] = useState(0);
+
   const animateProgressBar = () => {
     const intervalId = setInterval(() => {
       setVal((prev) => {
         if (prev >= 100) {
+          handleRunAPi();
           clearInterval(intervalId);
           return 100;
         } else {
-          return prev + 5;
+          return prev + 20;
         }
       });
     }, 1000);
+
     return () => clearInterval(intervalId);
   };
+
+  const handleRunAPi = async () => {
+    try {
+      const config = {
+        headers: {
+          // Authorization: `${user.token_type} ${user.access_token}`,
+        },
+      };
+      const api = `http://35.239.41.208:8081/model?fileName=chart-data_user1_project1.csv&type=pricing`;
+      var res = await axios.get(api);
+
+      if (res.status === 200) {
+        console.log("Model Response: ", res);
+        alert(res?.data?.statusmessage);
+      }
+    } catch (error) {
+      console.log("Error", error.response);
+    }
+  };
+
+  // ------------------------------------------------------------
   return (
     <div>
       <Header />
@@ -343,6 +369,7 @@ const DesignStudio = () => {
                       onClick={() => {
                         handleShow();
                         animateProgressBar();
+                        // handleRunAPi();
                       }}
                     >
                       Run <i className="fa-solid fa-play"></i>

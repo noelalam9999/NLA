@@ -156,8 +156,12 @@ const RightSideBarDesignStudio = ({
 
       console.log("Sliced File name: ", newFileName);
 
-      if (uploadProjectFile[0].type !== "text/csv") {
-        alert("Please upload .csv file");
+      if (
+        uploadProjectFile[0].type !== "text/csv" &&
+        uploadProjectFile[0].type !== "application/vnd.ms-excel"
+      ) {
+        console.log("in csv");
+        alert("Please upload .csv/.xls file");
       } else {
         if (uploadProjectFile !== null) {
           const formData = new FormData();

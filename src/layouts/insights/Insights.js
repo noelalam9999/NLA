@@ -22,8 +22,10 @@ import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import GoogleChart from "../../components/GoogleChart";
 import { Editor } from "@tinymce/tinymce-react";
+import parse from "html-react-parser";
 
 const Insights = () => {
+  const yourHtmlString = "<h1>Hello</h1>";
   const project_id = useParams().id;
 
   const [project, setProject] = useState([]);
@@ -117,6 +119,10 @@ const Insights = () => {
       console.log(editorRef.current.getContent());
     }
   };
+
+  const [takeAwayTextValue, setTakeAwayTextValue] = useState(
+    "<p>The quick brown fox jumps over the lazy dog</p>"
+  );
 
   // console.log("Note 1: ", note1);
 
@@ -333,6 +339,7 @@ const Insights = () => {
     editIcon === false ? setEditIcon(true) : setEditIcon(false);
     editTakeAway === false ? setEditTakeAway(true) : setEditTakeAway(false);
     if (editTakeAway === true) {
+      console.log("Valueee: ", takeAwayTextValue);
       // const projectNotes = {
       //   note1: note1,
       //   note2: note2,
@@ -350,7 +357,7 @@ const Insights = () => {
         project_id,
         slide_type: slideType,
         take_away_title: "Take away",
-        take_away_description: takeAwayText,
+        take_away_description: takeAwayTextValue,
       };
 
       const { data } = await Api(
@@ -535,6 +542,13 @@ const Insights = () => {
   // console.log("takeAwayText: ", takeAwayText);
 
   // console.log("Take aways from db: ", takeAwayFromDB);
+
+  function htmlDecode(input) {
+    console.log("input: ", input);
+    var e = document.createElement("div");
+    e.innerHTML = input;
+    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+  }
   // =====================================================================================================================
   return (
     <div>
@@ -1278,18 +1292,25 @@ const Insights = () => {
                               <div className="nla_content">
                                 {editTakeAway == false ? (
                                   <>
-                                    <ul contentEditable={false}>
+                                    {/* <ul contentEditable={false}>
                                       <li>
                                         {takeAwayFromDB?.take_away_description ||
                                           "Add new Take Away"}
                                       </li>
-                                      {/* <li>
-                                        Main source of growth is Amazon and
-                                        Dollar— need for a Channel Based
-                                        Strategy?
-                                      </li>
-                                      <li>Potential Opportunity at Grocery?</li> */}
-                                    </ul>
+                                    </ul> */}
+                                    <div
+                                      dangerouslySetInnerHTML={{
+                                        __html:
+                                          takeAwayFromDB?.take_away_description ||
+                                          "Add new Take Away",
+                                      }}
+                                    />
+                                    {/* <div>
+                                      {parse(
+                                        takeAwayFromDB?.take_away_description ||
+                                          "Empty"
+                                      )}
+                                    </div> */}
                                   </>
                                 ) : (
                                   <>
@@ -1299,22 +1320,24 @@ const Insights = () => {
                                     >
                                       <Editor
                                         apiKey="emjv2s34941vlx26dl94ppc7t2a8g7iqva7v5ip7htwdmmcq"
-                                        onInit={(evt, editor) =>
-                                          (editorRef.current = editor)
-                                        }
+                                        // value={takeAwayTextValue}
+                                        // onInit={(evt, editor) =>
+                                        //   (editorRef.current = editor)
+                                        // }
                                         initialValue={
                                           takeAwayFromDB?.take_away_description
                                         }
                                         onEditorChange={(newValue, editor) => {
+                                          setTakeAwayTextValue(newValue);
                                           setTakeAwayText(
                                             editor.getContent({
                                               format: "text",
                                             })
                                           );
                                         }}
-                                        onCh
+                                        // onCh
                                         init={{
-                                          height: 500,
+                                          height: 400,
                                           menubar: false,
                                           plugins: [
                                             "advlist autolink lists link image charmap print preview anchor",
