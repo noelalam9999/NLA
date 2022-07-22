@@ -3375,11 +3375,6 @@ const Insights = () => {
                                     </a>
                                   </div>
                                 </div>
-                                {/* <canvas
-                                  id="areaOfOpportunityByRetailer"
-                                  width="500"
-                                  height="300"
-                                ></canvas> */}
                                 <GoogleChart />
                               </div>
                               <div class="col-lg-6">
